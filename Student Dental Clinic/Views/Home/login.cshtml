@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+}
+
+<div class="login-bg d-flex align-items-center justify-content-center vh-100">
+
+    <div id="loginBox" class="login-card shadow-lg">
+
+        <!-- صورة أعلى البوكس -->
+        <div class="login-header"></div>
+
+        <div class="p-4 text-center">
+
+            <h4 class="mb-3">Login</h4>
+
+            <form>
+
+                <input type="text"
+                       class="form-control mb-3 rounded-pill"
+                       placeholder="Username">
+
+                <input type="password"
+                       class="form-control mb-2 rounded-pill"
+                       placeholder="Password">
+
+                <div class="d-flex justify-content-between small mb-3">
+                    <div>
+                        <input type="checkbox"> remember me
+                    </div>
+                    <a href="#" class="text-decoration-none">forgot password</a>
+                </div>
+
+                <button class="btn w-100 text-white"
+                        style="background:#6f42c1;">
+                    Login
+                </button>
+
+            </form>
+
+            <p class="small mt-3 mb-0">
+                Create Account
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+    /* ===== الخلفية ===== */
+    .login-bg {
+        background: url('@Url.Content("~/images/loginPage.jpg")') center/cover no-repeat;
+    }
+    /* ===== الكارد ===== */
+    .login-card {
+        width: 80%;
+        max-width: 500px;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        transform: translateY(40px);
+        opacity: 0;
+        transition: 0.6s;
+    }
+        /* حركة الظهور */
+        .login-card.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+    /* ===== صورة أعلى البوكس ===== */
+    .login-header {
+        height: 150px;
+        background: url('@Url.Content("~/images/loginPage.jpg")') center/cover no-repeat;
+    }
+
+    /* Hover احترافي */
+    .login-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 35px 60px rgba(0,0,0,0.3);
+    }
+
+</style>
+
+<script>
+
+    /* حركة عند تحميل الصفحة */
+    window.addEventListener("load", function () {
+        document.getElementById("loginBox").classList.add("show");
+    });
+
+</script>

@@ -1,0 +1,658 @@
+﻿﻿@{
+ViewData["Title"] = "Dental Clinic System";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container h-100 position-relative">
+        <div class="row h-100 align-items-center">
+            <div class="col-lg-8 mx-auto text-center text-white">
+                <div class="hero-content">
+                    <span class="hero-badge mb-3 d-inline-block">
+                        <i class="bi bi-shield-heart me-1"></i> Professional Dental Care
+                    </span>
+                    <h1 class="display-3 fw-bold mb-4">
+                        Your Smile, <br>
+                        <span class="text-gradient">Our Priority</span>
+                    </h1>
+                    <p class="lead mb-5 fs-4">
+                        Experience professional dental care in a comfortable educational environment.
+                        Where patients meet future dental experts.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#about" class="btn btn-primary btn-lg me-3 px-4">
+                            <i class="bi bi-info-circle me-2"></i>Learn More
+                        </a>
+                        <a href="#Services" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-stars me-2"></i>Our Services
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll Down Indicator -->
+    <div class="scroll-indicator">
+        <a href="#about">
+            <i class="bi bi-chevron-double-down"></i>
+        </a>
+    </div>
+</section>
+<!-- How It Works Section -->
+<section class="how-it-works py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">Simple Process</span>
+            <h2 class="section-title">
+                How <span class="text-primary">It Works</span>
+            </h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                Get started with our easy 3-step process
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="step-card text-center">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="bi bi-person-plus fs-1"></i>
+                    </div>
+                    <h5>Create Account</h5>
+                    <p>Register with your basic information</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card text-center">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="bi bi-calendar-plus fs-1"></i>
+                    </div>
+                    <h5>Book Appointment</h5>
+                    <p>Choose your preferred date and service</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card text-center">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="bi bi-emoji-smile fs-1"></i>
+                    </div>
+                    <h5>Get Treatment</h5>
+                    <p>Visit clinic and receive professional care</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="about-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="about-image position-relative">
+                    <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=600&h=400&fit=crop"
+                         alt="Dental Clinic"
+                         class="img-fluid rounded-4 shadow-lg">
+                    <div class="about-experience-card">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar-heart fs-1 text-primary me-3"></i>
+                            <div>
+                                <h3 class="mb-0 fw-bold">10+</h3>
+                                <p class="mb-0">Years Experience</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-content">
+                    <span class="section-badge">About Us</span>
+                    <h2 class="section-title mb-4">
+                        Welcome to <span class="text-primary">Dental Clinic System</span>
+                    </h2>
+                    <p class="text-muted mb-4">
+                        This innovative system helps improve communication and organize procedures between patients
+                        and dental students within the teaching clinic. It allows patients to create personal accounts
+                        and easily record their health condition and treatment needs.
+                    </p>
+                    <p class="text-muted mb-4">
+                        Each case is evaluated by dental students under the direct supervision of experienced specialist doctors.
+                        The system provides an effective way for the medical team and patients to communicate when needed.
+                    </p>
+                    <div class="row g-4 mb-4">
+                        <div class="col-sm-6">
+                            <div class="feature-list d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                                <span>Professional Supervision</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="feature-list d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                                <span>Free Treatment</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="feature-list d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                                <span>Smart Scheduling</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="feature-list d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                                <span>Educational Environment</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#Services" class="btn btn-primary">
+                        Explore Services <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="Services" class="services-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">Our Services</span>
+            <h2 class="section-title">
+                Comprehensive <span class="text-primary">Dental Care</span>
+            </h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                We offer a wide range of dental services to meet all your needs
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Cosmetic Fillings -->
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card" data-service="Cosmetic Fillings">
+                    <div class="service-icon">
+                        <i class="bi bi-brush fs-1"></i>
+                    </div>
+                    <h4>Cosmetic Fillings</h4>
+                    <p>Natural-looking restorations</p>
+                </div>
+            </div>
+
+            <!-- Root Canal -->
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card" data-service="Root Canal">
+                    <div class="service-icon">
+                        <i class="bi bi-bandaid fs-1"></i>
+                    </div>
+                    <h4>Root Canal</h4>
+                    <p>Save infected teeth</p>
+                </div>
+            </div>
+
+            <!-- Cavities -->
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card" data-service="Cavities">
+                    <div class="service-icon">
+                        <i class="bi bi-eyedropper fs-1"></i>
+                    </div>
+                    <h4>Cavities</h4>
+                    <p>Treat tooth decay</p>
+                </div>
+            </div>
+
+            <!-- Teeth Cleaning -->
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card" data-service="Teeth Cleaning">
+                    <div class="service-icon">
+                        <i class="bi bi-droplet fs-1"></i>
+                    </div>
+                    <h4>Teeth Cleaning</h4>
+                    <p>Remove tartar & plaque</p>
+                </div>
+            </div>
+
+            <!-- Complete Dentures -->
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card" data-service="Complete Dentures">
+                    <div class="service-icon">
+                        <i class="bi bi-teeth fs-1"></i>
+                    </div>
+                    <h4>Complete Dentures</h4>
+                    <p>Custom-fitted comfort</p>
+                </div>
+            </div>
+
+            <!-- Teeth Whitening -->
+            <div class="col-md-6 col-lg-4">
+                <div class="service-card" data-service="Teeth Whitening">
+                    <div class="service-icon">
+                        <i class="bi bi-stars fs-1"></i>
+                    </div>
+                    <h4>Teeth Whitening</h4>
+                    <p>Brighten your smile</p>
+                </div>
+            </div>
+        </div>
+
+</section>
+
+<!-- Feedback Section -->
+<section id="Feedback" class="feedback-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">Testimonials</span>
+            <h2 class="section-title">
+                What Our <span class="text-primary">Patients Say</span>
+            </h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                Real experiences from people who trusted us with their smile
+            </p>
+        </div>
+
+        <div id="feedbackCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Slide 1 -->
+                <div class="carousel-item active">
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-4">
+                            <div class="feedback-card">
+                                <div class="feedback-quote">
+                                    <i class="bi bi-quote"></i>
+                                </div>
+                                <div class="feedback-content">
+                                    <p>Excellent service and professional doctor. The clinic is very clean and organized.</p>
+                                </div>
+                                <div class="feedback-author">
+                                    <img src="https://i.pravatar.cc/120?img=1" alt="Ahmad" class="feedback-img">
+                                    <div>
+                                        <h6 class="mb-0">Ahmad Ali</h6>
+                                        <div class="text-warning small">★★★★★</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feedback-card">
+                                <div class="feedback-quote">
+                                    <i class="bi bi-quote"></i>
+                                </div>
+                                <div class="feedback-content">
+                                    <p>Amazing experience! The students were very professional and the doctors supervised everything.</p>
+                                </div>
+                                <div class="feedback-author">
+                                    <img src="https://i.pravatar.cc/120?img=5" alt="Sara" class="feedback-img">
+                                    <div>
+                                        <h6 class="mb-0">Sara Mohammad</h6>
+                                        <div class="text-warning small">★★★★★</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feedback-card">
+                                <div class="feedback-quote">
+                                    <i class="bi bi-quote"></i>
+                                </div>
+                                <div class="feedback-content">
+                                    <p>Fast appointment booking and very friendly staff. Highly recommended!</p>
+                                </div>
+                                <div class="feedback-author">
+                                    <img src="https://i.pravatar.cc/120?img=12" alt="Omar" class="feedback-img">
+                                    <div>
+                                        <h6 class="mb-0">Omar Khaled</h6>
+                                        <div class="text-warning small">★★★★★</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-item">
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-4">
+                            <div class="feedback-card">
+                                <div class="feedback-quote">
+                                    <i class="bi bi-quote"></i>
+                                </div>
+                                <div class="feedback-content">
+                                    <p>Very gentle treatment. I was nervous but they made me feel comfortable.</p>
+                                </div>
+                                <div class="feedback-author">
+                                    <img src="https://i.pravatar.cc/120?img=20" alt="Lina" class="feedback-img">
+                                    <div>
+                                        <h6 class="mb-0">Lina Hassan</h6>
+                                        <div class="text-warning small">★★★★★</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feedback-card">
+                                <div class="feedback-quote">
+                                    <i class="bi bi-quote"></i>
+                                </div>
+                                <div class="feedback-content">
+                                    <p>Best dental clinic ever! The system is easy to use and very efficient.</p>
+                                </div>
+                                <div class="feedback-author">
+                                    <img src="https://i.pravatar.cc/120?img=25" alt="Mohammad" class="feedback-img">
+                                    <div>
+                                        <h6 class="mb-0">Mohammad Saleh</h6>
+                                        <div class="text-warning small">★★★★★</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feedback-card">
+                                <div class="feedback-quote">
+                                    <i class="bi bi-quote"></i>
+                                </div>
+                                <div class="feedback-content">
+                                    <p>Free treatment with professional supervision - what more could you ask for?</p>
+                                </div>
+                                <div class="feedback-author">
+                                    <img src="https://i.pravatar.cc/120?img=30" alt="Noor" class="feedback-img">
+                                    <div>
+                                        <h6 class="mb-0">Noor Ahmad</h6>
+                                        <div class="text-warning small">★★★★★</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#feedbackCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#feedbackCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+<!-- Service Modal -->
+<div class="modal fade" id="serviceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="modalTitle">Service Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <div id="modalIcon" class="mb-4"></div>
+                <p id="modalDescription" class="lead mb-4"></p>
+                <div id="modalDetails" class="text-start bg-light p-3 rounded-3"></div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+<!-- Why Choose Us Section -->
+<section class="why-choose-us py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">Why Choose Us</span>
+            <h2 class="section-title">
+                Why <span class="text-primary">Dental Clinic</span>
+            </h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                We provide the best dental care with professional supervision
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="why-card text-center">
+                    <div class="why-icon">
+                        <i class="bi bi-person-badge fs-1"></i>
+                    </div>
+                    <h5>Expert Doctors</h5>
+                    <p>Supervised by experienced specialist doctors</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="why-card text-center">
+                    <div class="why-icon">
+                        <i class="bi bi-cash-stack fs-1"></i>
+                    </div>
+                    <h5>Free Treatment</h5>
+                    <p>Quality dental care at no cost</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="why-card text-center">
+                    <div class="why-icon">
+                        <i class="bi bi-calendar-check fs-1"></i>
+                    </div>
+                    <h5>Easy Booking</h5>
+                    <p>Simple appointment scheduling system</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="why-card text-center">
+                    <div class="why-icon">
+                        <i class="bi bi-shield-check fs-1"></i>
+                    </div>
+                    <h5>Safe & Clean</h5>
+                    <p>Sterilized equipment and safe environment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Statistics Section -->
+<section class="stats-section py-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <i class="bi bi-people-fill fs-1 text-primary"></i>
+                    <h2 class="counter fw-bold mt-2" data-target="5000">0</h2>
+                    <p class="text-muted">Happy Patients</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <i class="bi bi-calendar-check-fill fs-1 text-primary"></i>
+                    <h2 class="counter fw-bold mt-2" data-target="12000">0</h2>
+                    <p class="text-muted">Appointments</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <i class="bi bi-hospital-fill fs-1 text-primary"></i>
+                    <h2 class="counter fw-bold mt-2" data-target="25">0</h2>
+                    <p class="text-muted">Expert Doctors</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <i class="bi bi-star-fill fs-1 text-primary"></i>
+                    <h2 class="counter fw-bold mt-2" data-target="98">0</h2>
+                    <p class="text-muted">Satisfaction %</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<button id="backToTop" class="back-to-top">
+    <i class="bi bi-arrow-up"></i>
+</button>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="footer-widget">
+                    <h3 class="footer-logo">Dental<span>Clinic</span></h3>
+                    <p class="text-muted">Providing quality dental care while supporting future dental professionals.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5>Quick Links</h5>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#Services">Services</a></li>
+                    <li><a href="#Feedback">Feedback</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5>Services</h5>
+                <ul class="footer-links">
+                    <li><a href="#">Fillings</a></li>
+                    <li><a href="#">Root Canal</a></li>
+                    <li><a href="#">Whitening</a></li>
+                    <li><a href="#">Dentures</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h5>Contact Info</h5>
+                <ul class="footer-links">
+                    <li><i class="bi bi-geo-alt me-2"></i> Amman, Jordan</li>
+                    <li><i class="bi bi-envelope me-2"></i> info@dentalclinic.com</li>
+                    <li><i class="bi bi-telephone me-2"></i> +962 7 1234 5678</li>
+                </ul>
+            </div>
+        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <hr>
+                        <p class="text-center mb-5">
+
+                            © 2026 Dental Clinic System
+                        </p>
+                    </div>
+  
+</footer>
+
+@section Scripts {
+    <script>
+        // Service Data
+        const servicesData = {
+            'Cosmetic Fillings': {
+                icon: '<i class="bi bi-brush fs-1 text-primary"></i>',
+                description: 'Tooth-colored composite fillings that blend seamlessly with your natural teeth. Made from durable materials that match the color of your existing teeth.',
+                details: '<ul class="list-unstyled"><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Natural appearance</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Durable and long-lasting</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> No mercury content</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Completed in one visit</li></ul>'
+            },
+            'Root Canal': {
+                icon: '<i class="bi bi-bandaid fs-1 text-primary"></i>',
+                description: 'Root canal treatment removes infected pulp, cleans the canal, and seals it to prevent further infection. Saves your natural tooth from extraction.',
+                details: '<ul class="list-unstyled"><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Painless procedure</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Saves natural tooth</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Prevents infection spread</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Restores normal function</li></ul>'
+            },
+            'Cavities': {
+                icon: '<i class="bi bi-eyedropper fs-1 text-primary"></i>',
+                description: 'Remove decayed tooth structure and restore with appropriate filling material. Prevents further decay and tooth damage.',
+                details: '<ul class="list-unstyled"><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Quick procedure</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Prevents further decay</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Restores tooth structure</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Pain-free treatment</li></ul>'
+            },
+            'Teeth Cleaning': {
+                icon: '<i class="bi bi-droplet fs-1 text-primary"></i>',
+                description: 'Professional deep cleaning removes plaque, tartar, and surface stains. Essential for preventing gum disease.',
+                details: '<ul class="list-unstyled"><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Removes plaque & tartar</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Prevents gum disease</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Freshens breath</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Polishes teeth</li></ul>'
+            },
+            'Complete Dentures': {
+                icon: '<i class="bi bi-teeth fs-1 text-primary"></i>',
+                description: 'Custom-made complete dentures designed for comfort, fit, and natural appearance. Restore your smile and confidence.',
+                details: '<ul class="list-unstyled"><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Custom fitted</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Natural appearance</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Comfortable wear</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Durable materials</li></ul>'
+            },
+            'Teeth Whitening': {
+                icon: '<i class="bi bi-stars fs-1 text-primary"></i>',
+                description: 'Professional whitening treatment that safely removes stains and discoloration for a brighter, more confident smile.',
+                details: '<ul class="list-unstyled"><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Safe and effective</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Immediate results</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Removes stubborn stains</li><li><i class="bi bi-check-circle-fill text-primary me-2"></i> Professional supervision</li></ul>'
+            }
+        };
+
+        // Add click event to all service cards
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                const title = card.querySelector('h4').innerText;
+                const data = servicesData[title];
+                if (data) {
+                    document.getElementById('modalTitle').innerText = title;
+                    document.getElementById('modalIcon').innerHTML = data.icon;
+                    document.getElementById('modalDescription').innerText = data.description;
+                    document.getElementById('modalDetails').innerHTML = data.details;
+
+                    // Show modal using Bootstrap 5
+                    const modal = new bootstrap.Modal(document.getElementById('serviceModal'));
+                    modal.show();
+                }
+            });
+        });
+                // Counter Animation
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const count = parseInt(counter.innerText);
+                const increment = Math.ceil(target / speed);
+
+                if (count < target) {
+                    counter.innerText = count + increment;
+                    setTimeout(animateCounters, 30);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        };
+
+        // Start counters when visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+                // Back to Top
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.style.display = 'block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+
+        if (backToTop) {
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+    </script>
+}
