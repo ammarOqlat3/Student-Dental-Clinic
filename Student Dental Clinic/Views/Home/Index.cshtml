@@ -8,30 +8,40 @@ ViewData["Title"] = "Dental Clinic System";
 }
 
 <!-- Hero Section -->
-<section class="hero-section">
+<section id="home" class="hero-section">
     <div class="hero-overlay"></div>
     <div class="container h-100 position-relative">
         <div class="row h-100 align-items-center">
             <div class="col-lg-8 mx-auto text-center text-white">
                 <div class="hero-content">
                     <span class="hero-badge mb-3 d-inline-block">
-                        <i class="bi bi-shield-heart me-1"></i> Professional Dental Care
+                        <i class="bi bi-shield-heart me-1"></i>
+                        <span data-key="badge">Professional Dental Care</span>
                     </span>
+
                     <h1 class="display-3 fw-bold mb-4">
-                        Your Smile, <br>
-                        <span class="text-gradient">Our Priority</span>
+                        <span data-key="title1">Your Smile,</span><br>
+                        <span class="text-gradient" data-key="title2">Our Priority</span>
                     </h1>
-                    <p class="lead mb-5 fs-4">
+
+                    <p class="lead mb-5 fs-4" data-key="desc">
                         Experience professional dental care in a comfortable educational environment.
                         Where patients meet future dental experts.
                     </p>
-                    <div class="hero-buttons">
-                        <a href="#about" class="btn btn-primary btn-lg me-3 px-4">
-                            <i class="bi bi-info-circle me-2"></i>Learn More
-                        </a>
-                        <a href="#Services" class="btn btn-outline-light btn-lg px-4">
-                            <i class="bi bi-stars me-2"></i>Our Services
-                        </a>
+
+
+                    <a href="#about" class="btn btn-primary btn-lg me-3 px-4">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <span data-key="learn">Learn More</span>
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="Login"
+                       class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        <span data-key="login">Login</span>
+                    </a>
+                    
                     </div>
                 </div>
             </div>
@@ -49,11 +59,12 @@ ViewData["Title"] = "Dental Clinic System";
 <section class="how-it-works py-5 bg-light">
     <div class="container">
         <div class="text-center mb-5">
-            <span class="section-badge">Simple Process</span>
-            <h2 class="section-title">
-                How <span class="text-primary">It Works</span>
+            <span class="section-badge" data-key="processBadge">Simple Process</span>
+            <h2>
+                <span data-key="how1">How</span>
+                <span class="text-primary" data-key="how2">It Works</span>
             </h2>
-            <p class="text-muted mx-auto" style="max-width: 600px;">
+            <p class="text-muted mx-auto" style="max-width: 600px;" data-key="howDesc">
                 Get started with our easy 3-step process
             </p>
         </div>
@@ -65,8 +76,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="step-icon">
                         <i class="bi bi-person-plus fs-1"></i>
                     </div>
-                    <h5>Create Account</h5>
-                    <p>Register with your basic information</p>
+                    <h5 data-key="step1Title">Create Account</h5>
+                    <p data-key="step1Desc">Register with your basic information</p>
                 </div>
             </div>
             <div class="col-md-4">
@@ -75,8 +86,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="step-icon">
                         <i class="bi bi-calendar-plus fs-1"></i>
                     </div>
-                    <h5>Book Appointment</h5>
-                    <p>Choose your preferred date and service</p>
+                    <h5 data-key="step2Title">Book Appointment</h5>
+                    <p data-key="step2Desc">Choose your preferred date and service</p>
                 </div>
             </div>
             <div class="col-md-4">
@@ -85,8 +96,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="step-icon">
                         <i class="bi bi-emoji-smile fs-1"></i>
                     </div>
-                    <h5>Get Treatment</h5>
-                    <p>Visit clinic and receive professional care</p>
+                    <h5 data-key="step3Title">Get Treatment</h5>
+                    <p data-key="step3Desc"> Visit clinic and receive professional care</p>
                 </div>
             </div>
         </div>
@@ -102,60 +113,74 @@ ViewData["Title"] = "Dental Clinic System";
                     <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=600&h=400&fit=crop"
                          alt="Dental Clinic"
                          class="img-fluid rounded-4 shadow-lg">
+                    <!--
                     <div class="about-experience-card">
                         <div class="d-flex align-items-center">
                             <i class="bi bi-calendar-heart fs-1 text-primary me-3"></i>
+                            
                             <div>
                                 <h3 class="mb-0 fw-bold">10+</h3>
                                 <p class="mb-0">Years Experience</p>
                             </div>
-                        </div>
-                    </div>
+                            
+
+                        </div
+                    </div>-->
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="about-content">
-                    <span class="section-badge">About Us</span>
-                    <h2 class="section-title mb-4">
-                        Welcome to <span class="text-primary">Dental Clinic System</span>
+                    <span class="section-badge" data-key="aboutBadge">About Us</span>
+                    <!-- العنوان -->
+                    <h2>
+                        <span data-key="aboutTitle1">Welcome to</span>
+                        <span class="text-primary" data-key="aboutTitle2">Dental Clinic System</span>
                     </h2>
-                    <p class="text-muted mb-4">
+                    <p class="text-muted mb-4" data-key="aboutDesc1">
                         This innovative system helps improve communication and organize procedures between patients
                         and dental students within the teaching clinic. It allows patients to create personal accounts
                         and easily record their health condition and treatment needs.
                     </p>
-                    <p class="text-muted mb-4">
+                    <p class="text-muted mb-4" data-key="aboutDesc2">
                         Each case is evaluated by dental students under the direct supervision of experienced specialist doctors.
                         The system provides an effective way for the medical team and patients to communicate when needed.
                     </p>
+
                     <div class="row g-4 mb-4">
+
                         <div class="col-sm-6">
                             <div class="feature-list d-flex align-items-center">
                                 <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                                <span>Professional Supervision</span>
+                                <span data-key="feat1">Professional Supervision</span>
                             </div>
                         </div>
+
                         <div class="col-sm-6">
                             <div class="feature-list d-flex align-items-center">
                                 <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                                <span>Free Treatment</span>
+                                <span data-key="feat2">Free Treatment</span>
                             </div>
                         </div>
+
                         <div class="col-sm-6">
                             <div class="feature-list d-flex align-items-center">
                                 <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                                <span>Smart Scheduling</span>
+                                <span data-key="feat3">Smart Scheduling</span>
                             </div>
                         </div>
+
                         <div class="col-sm-6">
                             <div class="feature-list d-flex align-items-center">
                                 <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                                <span>Educational Environment</span>
+                                <span data-key="feat4">Educational Environment</span>
                             </div>
                         </div>
+
                     </div>
+
                     <a href="#Services" class="btn btn-primary">
-                        Explore Services <i class="bi bi-arrow-right ms-2"></i>
+                        <span data-key="explore">Explore Services</span>
+                        <i class="bi bi-arrow-right ms-2"></i>
                     </a>
                 </div>
             </div>
@@ -164,14 +189,14 @@ ViewData["Title"] = "Dental Clinic System";
 </section>
 
 <!-- Services Section -->
-<section id="Services" class="services-section py-5">
+<section id="services" class="services-section py-5">
     <div class="container">
         <div class="text-center mb-5">
-            <span class="section-badge">Our Services</span>
-            <h2 class="section-title">
-                Comprehensive <span class="text-primary">Dental Care</span>
+            <span class="section-badge" data-key="servicesBadge">Our Services</span>
+            <h2 class="section-title" data-key="servicesTitle1">
+                Comprehensive <span class="text-primary" data-key="servicesTitle2">Dental Care</span>
             </h2>
-            <p class="text-muted mx-auto" style="max-width: 600px;">
+            <p class="text-muted mx-auto" style="max-width: 600px;" data-key="servicesDesc">
                 We offer a wide range of dental services to meet all your needs
             </p>
         </div>
@@ -179,12 +204,12 @@ ViewData["Title"] = "Dental Clinic System";
         <div class="row g-4">
             <!-- Cosmetic Fillings -->
             <div class="col-md-6 col-lg-4">
-                <div class="service-card" data-service="Cosmetic Fillings">
+                <div class="service-card" data-service="Cosmetic Fillings" >
                     <div class="service-icon">
                         <i class="bi bi-brush fs-1"></i>
                     </div>
-                    <h4>Cosmetic Fillings</h4>
-                    <p>Natural-looking restorations</p>
+                    <h4 data-key="serv3Title">Cosmetic Fillings</h4>
+                    <p data-key="serv3Desc">Natural-looking restorations</p>
                 </div>
             </div>
 
@@ -194,8 +219,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="service-icon">
                         <i class="bi bi-bandaid fs-1"></i>
                     </div>
-                    <h4>Root Canal</h4>
-                    <p>Save infected teeth</p>
+                    <h4 data-key="serv2Title">Root Canal</h4>
+                    <p data-key="serv2Desc">Save infected teeth</p>
                 </div>
             </div>
 
@@ -205,8 +230,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="service-icon">
                         <i class="bi bi-eyedropper fs-1"></i>
                     </div>
-                    <h4>Cavities</h4>
-                    <p>Treat tooth decay</p>
+                    <h4 data-key="serv1Title">Cavities</h4>
+                    <p data-key="serv1Desc">Treat tooth decay</p>
                 </div>
             </div>
 
@@ -216,8 +241,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="service-icon">
                         <i class="bi bi-droplet fs-1"></i>
                     </div>
-                    <h4>Teeth Cleaning</h4>
-                    <p>Remove tartar & plaque</p>
+                    <h4 data-key="serv6Title">Teeth Cleaning</h4>
+                    <p data-key="serv6Desc">Remove tartar & plaque</p>
                 </div>
             </div>
 
@@ -227,8 +252,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="service-icon">
                         <i class="bi bi-teeth fs-1"></i>
                     </div>
-                    <h4>Complete Dentures</h4>
-                    <p>Custom-fitted comfort</p>
+                    <h4 data-key="serv5Title">Complete Dentures</h4>
+                    <p data-key="serv5Desc">Custom-fitted comfort</p>
                 </div>
             </div>
 
@@ -238,8 +263,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="service-icon">
                         <i class="bi bi-stars fs-1"></i>
                     </div>
-                    <h4>Teeth Whitening</h4>
-                    <p>Brighten your smile</p>
+                    <h4 data-key="serv4Title">Teeth Whitening</h4>
+                    <p data-key="serv4Desc">Brighten your smile</p>
                 </div>
             </div>
         </div>
@@ -247,14 +272,14 @@ ViewData["Title"] = "Dental Clinic System";
 </section>
 
 <!-- Feedback Section -->
-<section id="Feedback" class="feedback-section py-5">
+<section id="feedback" class="feedback-section py-5">
     <div class="container">
         <div class="text-center mb-5">
-            <span class="section-badge">Testimonials</span>
-            <h2 class="section-title">
-                What Our <span class="text-primary">Patients Say</span>
+            <span class="section-badge" data-key="testiBadge">Testimonials</span>
+            <h2 class="section-title" data-key="testiTitle1">
+                What Our <span class="text-primary" data-key="testiTitle2">Patients Say</span>
             </h2>
-            <p class="text-muted mx-auto" style="max-width: 600px;">
+            <p class="text-muted mx-auto" style="max-width: 600px;" data-key="testiDesc">
                 Real experiences from people who trusted us with their smile
             </p>
         </div>
@@ -408,11 +433,11 @@ ViewData["Title"] = "Dental Clinic System";
 <section class="why-choose-us py-5">
     <div class="container">
         <div class="text-center mb-5">
-            <span class="section-badge">Why Choose Us</span>
-            <h2 class="section-title">
-                Why <span class="text-primary">Dental Clinic</span>
+            <span class="section-badge" data-key="whyBadge">Why Choose Us</span>
+            <h2 class="section-title" data-key="whyTitle1">
+                Why <span class="text-primary" data-key="whyTitle2">Dental Clinic</span>
             </h2>
-            <p class="text-muted mx-auto" style="max-width: 600px;">
+            <p class="text-muted mx-auto" style="max-width: 600px;" data-key="whyDesc">
                 We provide the best dental care with professional supervision
             </p>
         </div>
@@ -423,8 +448,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="why-icon">
                         <i class="bi bi-person-badge fs-1"></i>
                     </div>
-                    <h5>Expert Doctors</h5>
-                    <p>Supervised by experienced specialist doctors</p>
+                    <h5 data-key="why4Title">Expert Doctors</h5>
+                    <p data-key="why4Desc">Supervised by experienced specialist doctors</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
@@ -432,8 +457,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="why-icon">
                         <i class="bi bi-cash-stack fs-1"></i>
                     </div>
-                    <h5>Free Treatment</h5>
-                    <p>Quality dental care at no cost</p>
+                    <h5 data-key="why3Title">Free Treatment</h5>
+                    <p data-key="why3Desc">Quality dental care at no cost</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
@@ -441,8 +466,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="why-icon">
                         <i class="bi bi-calendar-check fs-1"></i>
                     </div>
-                    <h5>Easy Booking</h5>
-                    <p>Simple appointment scheduling system</p>
+                    <h5 data-key="why2Title">Easy Booking</h5>
+                    <p data-key="why2Desc">Simple appointment scheduling system</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
@@ -450,8 +475,8 @@ ViewData["Title"] = "Dental Clinic System";
                     <div class="why-icon">
                         <i class="bi bi-shield-check fs-1"></i>
                     </div>
-                    <h5>Safe & Clean</h5>
-                    <p>Sterilized equipment and safe environment</p>
+                    <h5 data-key="why1Title">Safe & Clean</h5>
+                    <p data-key="why1Desc">Sterilized equipment and safe environment</p>
                 </div>
             </div>
         </div>
@@ -465,28 +490,28 @@ ViewData["Title"] = "Dental Clinic System";
                 <div class="stat-card">
                     <i class="bi bi-people-fill fs-1 text-primary"></i>
                     <h2 class="counter fw-bold mt-2" data-target="5000">0</h2>
-                    <p class="text-muted">Happy Patients</p>
+                    <p class="text-muted" data-key="stat4">Happy Patients</p>
                 </div>
             </div>
             <div class="col-md-3 col-6">
                 <div class="stat-card">
                     <i class="bi bi-calendar-check-fill fs-1 text-primary"></i>
                     <h2 class="counter fw-bold mt-2" data-target="12000">0</h2>
-                    <p class="text-muted">Appointments</p>
+                    <p class="text-muted" data-key="stat3">Appointments</p>
                 </div>
             </div>
             <div class="col-md-3 col-6">
                 <div class="stat-card">
                     <i class="bi bi-hospital-fill fs-1 text-primary"></i>
                     <h2 class="counter fw-bold mt-2" data-target="25">0</h2>
-                    <p class="text-muted">Expert Doctors</p>
+                    <p class="text-muted" data-key="stat2">Expert Doctors</p>
                 </div>
             </div>
             <div class="col-md-3 col-6">
                 <div class="stat-card">
                     <i class="bi bi-star-fill fs-1 text-primary"></i>
                     <h2 class="counter fw-bold mt-2" data-target="98">0</h2>
-                    <p class="text-muted">Satisfaction %</p>
+                    <p class="text-muted" data-key="stat1">Satisfaction %</p>
                 </div>
             </div>
         </div>
@@ -497,13 +522,20 @@ ViewData["Title"] = "Dental Clinic System";
 </button>
 
 <!-- Footer -->
+<!-- Footer -->
 <footer class="footer">
     <div class="container">
         <div class="row g-4">
+
+            <!-- Logo + Description -->
             <div class="col-lg-4">
                 <div class="footer-widget">
                     <h3 class="footer-logo">Dental<span>Clinic</span></h3>
-                    <p class="text-muted">Providing quality dental care while supporting future dental professionals.</p>
+
+                    <p class="text-muted" data-key="clinicDesc">
+                        Providing quality dental care while supporting future dental professionals.
+                    </p>
+
                     <div class="social-links">
                         <a href="#"><i class="bi bi-facebook"></i></a>
                         <a href="#"><i class="bi bi-twitter-x"></i></a>
@@ -512,43 +544,61 @@ ViewData["Title"] = "Dental Clinic System";
                     </div>
                 </div>
             </div>
+
+            <!-- Quick Links -->
             <div class="col-lg-2 col-md-6">
-                <h5>Quick Links</h5>
+                <h5 data-key="quickLinks">Quick Links</h5>
                 <ul class="footer-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#Services">Services</a></li>
-                    <li><a href="#Feedback">Feedback</a></li>
+                    <li><a href="#" data-key="home">Home</a></li>
+                    <li><a href="#about" data-key="about">About</a></li>
+                    <li><a href="#Services" data-key="service">Services</a></li>
+                    <li><a href="#Feedback" data-key="feedback">Feedback</a></li>
                 </ul>
             </div>
+
+            <!-- Services -->
             <div class="col-lg-2 col-md-6">
-                <h5>Services</h5>
+                <h5 data-key="footerServices">Services</h5>
                 <ul class="footer-links">
-                    <li><a href="#">Fillings</a></li>
-                    <li><a href="#">Root Canal</a></li>
-                    <li><a href="#">Whitening</a></li>
-                    <li><a href="#">Dentures</a></li>
+                    <li><a href="#" data-key="filling">Fillings</a></li>
+                    <li><a href="#" data-key="root">Root Canal</a></li>
+                    <li><a href="#" data-key="white">Whitening</a></li>
+                    <li><a href="#" data-key="dentures">Dentures</a></li>
                 </ul>
             </div>
+
+            <!-- Contact -->
             <div class="col-lg-4">
-                <h5>Contact Info</h5>
+                <h5 data-key="contactTitle">Contact Info</h5>
                 <ul class="footer-links">
-                    <li><i class="bi bi-geo-alt me-2"></i> Amman, Jordan</li>
-                    <li><i class="bi bi-envelope me-2"></i> info@dentalclinic.com</li>
-                    <li><i class="bi bi-telephone me-2"></i> +962 7 1234 5678</li>
+                    <li>
+                        <i class="bi bi-geo-alt me-2"></i>
+                        <span data-key="location">Amman, Jordan</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-envelope me-2"></i>
+                        <span data-key="email">info@dentalclinic.com</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-telephone me-2"></i>
+                        <span data-key="phone">+962 7 1234 5678</span>
+                    </li>
                 </ul>
+            </div>
+
+        </div>
+
+        <!-- Bottom -->
+        <div class="row">
+            <div class="col-md-12">
+                <hr>
+                <p class="text-center mb-3" data-key="copyright">
+                    © 2026 Dental Clinic System
+                </p>
             </div>
         </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <hr>
-                        <p class="text-center mb-5">
 
-                            © 2026 Dental Clinic System
-                        </p>
-                    </div>
-  
+    </div>
 </footer>
 
 @section Scripts {

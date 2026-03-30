@@ -573,3 +573,128 @@ body {
         transform: translateY(-5px);
         background: var(--primary-dark);
     }
+
+
+/* ===== NAVBAR BUTTONS DESIGN ===== */
+
+.navbar .btn {
+    height: 38px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* ✅ خلي بس nav-actions */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Dark Mode */
+#darkModeToggle {
+    width: 42px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
+    #darkModeToggle:hover {
+        background: #f1f1f1;
+        transform: scale(1.05);
+    }
+
+/* Language */
+.lang-container {
+    position: relative; /* مهم جدًا */
+    display: inline-block;
+}
+
+/* الزر */
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    padding: 8px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+/* القائمة */
+.lang-menu {
+    position: absolute;
+    top: 110%;
+    right: 0; /* عشان تكون مرتبة */
+
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    width: 140px;
+    display: none;
+    z-index: 9999; /* مهم جدًا */
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+    /* عناصر القائمة */
+    .lang-menu div {
+        padding: 10px;
+        cursor: pointer;
+    }
+
+        .lang-menu div:hover {
+            background: #f3f4f6;
+        }/* لف السهم */
+.lang-dropdown.active .arrow {
+    transform: rotate(180deg);
+}/* Dark mode */
+[data-bs-theme="dark"] .lang-menu {
+    background: #2a2a2a;
+    color: #fff;
+    border-color: #444;
+}
+
+[data-bs-theme="dark"] .lang-option:hover {
+    background: #3a3a3a;
+}
+/* Dark Mode */
+[data-bs-theme="dark"] .lang-btn {
+    background: #2a2a2a;
+    color: #fff;
+    border-color: #444;
+}
+
+    [data-bs-theme="dark"] .lang-btn:hover {
+        background: #3a3a3a;
+    }
+
+/* Login */
+#loginBtn {
+    padding: 0 18px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #0d6efd, #0099ff);
+    border: none;
+    color: #fff;
+}
+
+    #loginBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(13, 110, 253, 0.4);
+    }
+
+/* ===== RTL SUPPORT ===== */
+
+body[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+    /* بس الأزرار */
+    body[dir="rtl"] .nav-actions {
+        flex-direction: row-reverse;
+    }
+
+    /* زر اللغة */
+    body[dir="rtl"] .lang-btn {
+        flex-direction: row-reverse;
+    }

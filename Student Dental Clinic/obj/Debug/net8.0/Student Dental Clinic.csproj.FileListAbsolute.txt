@@ -64,3 +64,37 @@ C:\Users\LENOVO\Downloads\Student-Dental-Clinic-main\Student-Dental-Clinic-main\
 C:\Users\LENOVO\Downloads\Student-Dental-Clinic-main\Student-Dental-Clinic-main\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.pdb
 C:\Users\LENOVO\Downloads\Student-Dental-Clinic-main\Student-Dental-Clinic-main\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.genruntimeconfig.cache
 C:\Users\LENOVO\Downloads\Student-Dental-Clinic-main\Student-Dental-Clinic-main\Student Dental Clinic\obj\Debug\net8.0\ref\Student Dental Clinic.dll
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\bin\Debug\net8.0\appsettings.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\bin\Debug\net8.0\Student Dental Clinic.staticwebassets.runtime.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\bin\Debug\net8.0\Student Dental Clinic.staticwebassets.endpoints.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\bin\Debug\net8.0\Student Dental Clinic.exe
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\bin\Debug\net8.0\Student Dental Clinic.deps.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\bin\Debug\net8.0\Student Dental Clinic.runtimeconfig.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\bin\Debug\net8.0\Student Dental Clinic.dll
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\bin\Debug\net8.0\Student Dental Clinic.pdb
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.AssemblyInfoInputs.cache
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.AssemblyInfo.cs
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.csproj.CoreCompileInputs.cache
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.RazorAssemblyInfo.cache
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.RazorAssemblyInfo.cs
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.sourcelink.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\scopedcss\bundle\Student Dental Clinic.styles.css
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\scopedcss\projectbundle\Student Dental Clinic.bundle.scp.css
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.dll
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\refint\Student Dental Clinic.dll
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.pdb
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.genruntimeconfig.cache
+C:\Users\jaad\Desktop\Student-Dental-Clinic12\Student Dental Clinic\obj\Debug\net8.0\ref\Student Dental Clinic.dll

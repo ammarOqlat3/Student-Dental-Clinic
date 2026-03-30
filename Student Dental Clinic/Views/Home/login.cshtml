@@ -1,94 +1,302 @@
 ﻿@{
-    ViewData["Title"] = "Login Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="main-container">
 
-<div class="login-bg d-flex align-items-center justify-content-center vh-100">
+    <div class="container-box" id="container">
 
-    <div id="loginBox" class="login-card shadow-lg">
+        <div class="form-box login">
+            <h3 class="title" data-key="login">Login</h3>
 
-        <!-- صورة أعلى البوكس -->
-        <div class="login-header"></div>
+            <input type="text" class="form-control" placeholder="Username" data-key-placeholder="username">
+            <input type="password" class="form-control" placeholder="Password" data-key-placeholder="password">
 
-        <div class="p-4 text-center">
+            <div class="options">
+                <label>
+                    <input type="checkbox">
+                    <span data-key="remember">remember me</span>
+                </label>
+                <a href="#" data-key="forgot">forgot password</a>
+            </div>
 
-            <h4 class="mb-3">Login</h4>
+            <button class="btn btn-primary w-100" data-key="loginBtn">Login</button>
+        </div>
 
-            <form>
+        <div class="form-box register">
+            <h3 class="title" data-key="register">Register</h3>
 
-                <input type="text"
-                       class="form-control mb-3 rounded-pill"
-                       placeholder="Username">
+            <input type="text" class="form-control" placeholder="Username" data-key-placeholder="username">
+            <input type="email" class="form-control" placeholder="Email" data-key-placeholder="email">
+            <input type="password" class="form-control" placeholder="Password" data-key-placeholder="password">
 
-                <input type="password"
-                       class="form-control mb-2 rounded-pill"
-                       placeholder="Password">
+            <button class="btn btn-primary w-100" data-key="registerBtn">Register</button>
+        </div>
 
-                <div class="d-flex justify-content-between small mb-3">
-                    <div>
-                        <input type="checkbox"> remember me
-                    </div>
-                    <a href="#" class="text-decoration-none">forgot password</a>
-                </div>
+        <div class="overlay-box">
 
-                <button class="btn w-100 text-white"
-                        style="background:#6f42c1;">
-                    Login
-                </button>
+            <div class="overlay-content left">
+                <h2 data-key="welcome">Hello, Welcome!</h2>
+                <p data-key="noAccount">Don't have an account?</p>
+                <button type="button" id="goRegister" data-key="registerBtn">Register</button>
+            </div>
 
-            </form>
-
-            <p class="small mt-3 mb-0">
-                Create Account
-            </p>
+            <div class="overlay-content right">
+                <h2 data-key="welcomeBack">Welcome Back!</h2>
+                <p data-key="haveAccount">Already have an account?</p>
+                <button type="button" id="goLogin" data-key="loginBtn">Login</button>
+            </div>
 
         </div>
 
     </div>
 
+    <script src="@Url.Content("~/js/lang.js")?v=4"></script>
+
 </div>
 
 <style>
-
-    /* ===== الخلفية ===== */
-    .login-bg {
+    body {
         background: url('@Url.Content("~/images/loginPage.jpg")') center/cover no-repeat;
     }
-    /* ===== الكارد ===== */
-    .login-card {
-        width: 80%;
-        max-width: 500px;
-        background: white;
-        border-radius: 10px;
+
+    /* 1. عشان تزيح الأزرار عن بعض */
+    .nav-actions {
+        gap: 20px !important;
+    }
+
+    /* 2. زر الترجمة من برا (الكرة الأرضية والنص والسهم) بالدارك مود */
+    body.dark .lang-btn,
+    body.dark #currentLang,
+    body.dark .arrow {
+        color: black !important;
+    }
+
+    /* 3. القائمة المنسدلة (English / العربية) بالدارك مود */
+    body.dark #langMenu {
+        background-color: white !important; /* خلفية بيضاء */
+        border: 1px solid #ddd !important; /* إطار خفيف للترتيب */
+    }
+
+        body.dark #langMenu div {
+            color: black !important; /* النص أسود عشان يبين */
+        }
+
+            /* تأثير حلو لما تمرر الماوس على خيارات اللغة */
+            body.dark #langMenu div:hover {
+                background-color: #f1f1f1 !important;
+            }
+
+    /* container */
+    .main-container {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* card */
+    .container-box {
+        position: relative;
+        width: 850px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 20px;
         overflow: hidden;
-        transform: translateY(40px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    /* forms */
+    .form-box {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        padding: 40px;
+        text-align: center;
+        transition: 0.6s;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+    }
+
+        .form-box input {
+            margin: 10px 0;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+            .form-box input:focus {
+                background: rgba(255, 255, 255, 0.95);
+            }
+
+    /* login */
+    .login {
+        left: 0;
+    }
+
+    /* register */
+    .register {
+        left: 0;
         opacity: 0;
+        z-index: 1;
+    }
+
+    /* overlay */
+    .overlay-box {
+        position: absolute;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .overlay-content {
+        z-index: 2;
+    }
+
+    .overlay-box::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 100%;
+        left: -100%;
+        background: linear-gradient(135deg, rgba(90, 124, 255, 0.5), rgba(108, 99, 255, 0.5));
         transition: 0.6s;
     }
-        /* حركة الظهور */
-        .login-card.show {
-            transform: translateY(0);
+
+    /* overlay content */
+    .overlay-content {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        padding: 40px;
+        transition: 0.6s;
+    }
+
+        /* left */
+        .overlay-content.left {
+            left: 0;
             opacity: 1;
         }
 
-    /* ===== صورة أعلى البوكس ===== */
-    .login-header {
-        height: 150px;
-        background: url('@Url.Content("~/images/loginPage.jpg")') center/cover no-repeat;
+        /* right */
+        .overlay-content.right {
+            right: 0;
+            opacity: 0;
+        }
+
+        /* buttons */
+        .overlay-content button {
+            margin-top: 15px;
+            padding: 10px 25px;
+            border-radius: 20px;
+            border: 1px solid white;
+            background: transparent;
+            color: white;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+            .overlay-content button:hover {
+                background: white;
+                color: #5a7cff;
+            }
+
+        /* السماح بالكليك للزر الظاهر فقط */
+        .overlay-content.left button {
+            pointer-events: auto;
+        }
+
+        /* منع الكليك عن الزر المخفي */
+        .overlay-content.right button {
+            pointer-events: none;
+        }
+
+    /* animation */
+    .container-box.active .login {
+        transform: translateX(100%);
+        opacity: 0;
     }
 
-    /* Hover احترافي */
-    .login-card:hover {
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 35px 60px rgba(0,0,0,0.3);
+    .container-box.active .register {
+        transform: translateX(100%);
+        opacity: 1;
+        z-index: 5;
     }
 
+    .container-box.active .overlay-box {
+        transform: translateX(-100%);
+    }
+
+        .container-box.active .overlay-box::before {
+            transform: translateX(50%);
+        }
+
+    .container-box.active .overlay-content.left {
+        opacity: 0;
+    }
+
+    .container-box.active .overlay-content.right {
+        opacity: 1;
+    }
+
+    /* تبديل حالة الأزرار لما يتفعل الأنيميشن */
+    .container-box.active .overlay-content.left button {
+        pointer-events: none;
+    }
+
+    .container-box.active .overlay-content.right button {
+        pointer-events: auto;
+    }
+
+    /* fix النص */
+    .title {
+        position: relative;
+        z-index: 10;
+        text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+    }
+
+    /* options */
+    .options {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin: 10px 0;
+        font-weight: bold;
+    }
 </style>
 
 <script>
+    // تم تعديل الـ ID ليتطابق مع زر الدارك مود الموجود عندك (darkModeToggle)
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark");
+        });
+    }
 
-    /* حركة عند تحميل الصفحة */
-    window.addEventListener("load", function () {
-        document.getElementById("loginBox").classList.add("show");
-    });
+    // كود الحركة للـ Login والـ Register
+    const container = document.getElementById("container");
+    const goRegister = document.getElementById("goRegister");
+    const goLogin = document.getElementById("goLogin");
 
+    if (goRegister && goLogin && container) {
+        goRegister.addEventListener("click", () => {
+            container.classList.add("active");
+        });
+
+        goLogin.addEventListener("click", () => {
+            container.classList.remove("active");
+        });
+    }
 </script>
