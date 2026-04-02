@@ -1,0 +1,158 @@
+﻿/* منع التضارب مع الـ Layout */
+.login-page-wrapper {
+    min-height: 80vh; /* يعطي مساحة كافية للكرت */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+    /* نقلنا الخلفية لهنا بدل الـ Body */
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/loginPage.jpg') center/cover no-repeat fixed;
+}
+
+/* المتغيرات الخاصة بالصفحة */
+:root {
+    --primary-blue: #0d6efd;
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --overlay-grad: linear-gradient(135deg, rgba(13, 110, 253, 0.8), rgba(108, 99, 255, 0.8));
+}
+
+[data-bs-theme="dark"] .login-page-wrapper {
+    --glass-bg: rgba(0, 0, 0, 0.5);
+    --overlay-grad: linear-gradient(135deg, #0a0c15, #1e1e2e);
+}
+
+.container-box {
+    position: relative;
+    width: 850px;
+    max-width: 95%; /* للموبايل */
+    height: 550px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+}
+
+/* ... باقي تنسيقات الـ Form والأوفرلاي كما هي لديك ... */
+/* تأكد فقط من حذف أي سطر يخص body { ... } هنا */
+
+.form-box {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+    width: 50%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-container {
+    left: 0;
+    z-index: 2;
+}
+
+.register-container {
+    left: 0;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container-box.active .login-container {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.container-box.active .register-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+}
+
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.container-box.active .overlay-container {
+    transform: translateX(-100%);
+}
+
+.overlay {
+    background: var(--overlay-grad);
+    color: #FFFFFF;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.container-box.active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+}
+
+.overlay-right {
+    right: 0;
+}
+
+.ghost-btn {
+    background: transparent;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    border-radius: 20px;
+    padding: 8px 30px;
+    margin-top: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.custom-input {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: none !important;
+    color: white !important;
+}
+
+    .custom-input::placeholder {
+        color: rgba(255,255,255,0.7);
+    }
+
+.title {
+    color: white;
+    font-weight: bold;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 0.8rem;
+}
+
+.forgot-link {
+    color: white;
+    text-decoration: none;
+}

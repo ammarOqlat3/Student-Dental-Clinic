@@ -1,0 +1,185 @@
+﻿/* 1. تعريف المتغيرات للثيمين */
+:root {
+    --primary-color: #0d6efd;
+    --primary-dark: #0a58ca;
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --text-color: #ffffff;
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --blur-strength: 15px;
+}
+
+/* تنسيق الدارك مود بناءً على سمة Bootstrap */
+[data-bs-theme="dark"] {
+    --primary-color: #3d8bfd;
+    --primary-dark: #0d6efd;
+    --glass-bg: rgba(18, 18, 29, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-color: #f8f9fa;
+    --input-bg: rgba(0, 0, 0, 0.25);
+    --blur-strength: 25px;
+}
+
+body {
+    /* الخلفية المدمجة بـ Gradient دائم لضمان وضوح النص */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/images/infoimage1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+    color: var(--text-color);
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* تأثير الزجاج للقسم الترحيبي */
+.welcome-section {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--blur-strength)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur-strength)) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    transition: all 0.4s ease;
+}
+
+    .welcome-section h2 {
+        color: var(--primary-color) !important;
+    }
+
+/* تأثير الزجاج للفورم */
+.form-container {
+    display: none;
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--blur-strength)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--blur-strength)) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 40px !important;
+    animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* تحسين المدخلات */
+.form-control, .form-select {
+    background: var(--input-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-color) !important;
+    border-radius: 12px;
+    padding: 12px;
+    transition: all 0.3s ease;
+}
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 15px rgba(13, 110, 253, 0.3);
+        transform: translateY(-2px);
+    }
+
+/* الأزرار */
+.btn-primary {
+    background: var(--primary-color);
+    border: none;
+    border-radius: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
+    }
+
+.btn-success {
+    background: linear-gradient(45deg, #198754, #20c997);
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+}
+
+.form-select option {
+    background: #212529; /* لضمان الرؤية في كل المودز */
+    color: white;
+}
+
+/* انيميشن */
+@@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.border-bottom {
+    border-color: var(--glass-border) !important;
+}
+/* تحسين الهيدر الخاص بالداشبورد */
+.dashboard-header {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+}
+
+.glass-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    color: white;
+}
+
+/* تنسيق أزرار التنقل (Pills) */
+.custom-pills .nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    margin: 0 5px;
+    transition: 0.3s;
+}
+
+    .custom-pills .nav-link.active {
+        background: var(--primary-color) !important;
+        color: white;
+        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+    }
+
+/* تحسين الجدول */
+.custom-table {
+    color: white !important;
+}
+
+    .custom-table thead {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .custom-table td, .custom-table th {
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        padding: 15px;
+        vertical-align: middle;
+    }
+
+/* أيقونة رفع الصورة */
+.profile-pic-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.upload-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--primary-color);
+    padding: 5px;
+    border-radius: 50%;
+    font-size: 10px;
+    border: 2px solid white;
+}

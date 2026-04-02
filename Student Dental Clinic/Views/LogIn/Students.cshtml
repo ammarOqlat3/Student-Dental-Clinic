@@ -1,0 +1,221 @@
+﻿<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-bold text-primary">منصة الحالات السريرية</h2>
+            <p class="text-muted" id="subTitle">استعرض وحجز الحالات التدريبية المتاحة</p>
+        </div>
+       
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5 filter-card">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">نوع الحالة</label>
+                    <select id="typeFilter" class="form-select border-0 bg-light">
+                        <option value="all">كل الحالات</option>
+                        <option value="حشوة">حشوة (Filling)</option>
+                        <option value="سحب عصب">سحب عصب (Endo)</option>
+                        <option value="تقويم">تقويم (Ortho)</option>
+                        <option value="تنظيف">تنظيف (Scaling)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">الفئة العمرية</label>
+                    <select id="ageFilter" class="form-select border-0 bg-light">
+                        <option value="all">كل الأعمار</option>
+                        <option value="20-25">20 - 25 سنة</option>
+                        <option value="26-30">26 - 30 سنة</option>
+                        <option value="31-40">31 - 40 سنة</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button class="btn btn-primary w-100 fw-bold" onclick="executeFilter()">
+                        <i class="fas fa-search me-2"></i>تحديث النتائج
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4" id="patientsGrid">
+    </div>
+</div>
+
+<div class="modal fade" id="patientModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div id="modalContentHtml"></div>
+        </div>
+    </div>
+</div>
+<style>
+    :root {
+        --bg-color: #f8f9fc;
+        --card-bg: #ffffff;
+        --text-color: #2c3e50;
+        --primary-blue: #0061f2;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #1a1a2e;
+        --card-bg: #16213e;
+        --text-color: #e9ecef;
+        --primary-blue: #4e9af1;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: 0.3s;
+        font-family: 'Cairo', sans-serif;
+    }
+
+    .card {
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        border-radius: 15px;
+        transition: 0.3s;
+    }
+
+    .patient-card {
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .patient-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15) !important;
+        }
+
+    .status-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .bg-available {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .bg-booked {
+        background-color: #dc3545;
+        color: white;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // 1. البيانات (Mock Data)
+    let patients = [
+        { id: 1, name: "أحمد العلي", age: 22, type: "حشوة", gender: "ذكر", phone: "0791234567", email: "ahmed@mail.com", address: "عمان", status: "متاح" },
+        { id: 2, name: "سارة حسن", age: 28, type: "سحب عصب", gender: "أنثى", phone: "0785554433", email: "sara@mail.com", address: "إربد", status: "متاح" },
+        { id: 3, name: "محمد خالد", age: 35, type: "تقويم", gender: "ذكر", phone: "0770001122", email: "mhd@mail.com", address: "الزرقاء", status: "متاح" }
+    ];
+
+    // 2. دالة عرض الكروت
+    function renderPatients(data) {
+        const grid = document.getElementById('patientsGrid');
+        grid.innerHTML = '';
+        data.forEach(p => {
+            const statusClass = p.status === 'متاح' ? 'bg-available' : 'bg-booked';
+            grid.innerHTML += `
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm patient-card border-0" onclick="openDetails(${p.id})">
+                        <span class="status-badge ${statusClass}">${p.status}</span>
+                        <div class="card-body text-center pt-5">
+                            <img src="https://ui-avatars.com/api/?name=${p.name}&background=random" class="rounded-circle mb-3" width="80">
+                            <h5 class="fw-bold">${p.name}</h5>
+                            <p class="badge bg-light text-primary border">${p.type}</p>
+                            <div class="small text-muted mt-2">العمر: ${p.age} سنة | السكن: ${p.address}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // 3. دالة البحث والفلترة (شغالة 100%)
+    function executeFilter() {
+        const type = document.getElementById('typeFilter').value;
+        const ageRange = document.getElementById('ageFilter').value;
+
+        const filtered = patients.filter(p => {
+            const matchType = (type === 'all' || p.type === type);
+            let matchAge = true;
+            if (ageRange === '20-25') matchAge = (p.age >= 20 && p.age <= 25);
+            else if (ageRange === '26-30') matchAge = (p.age >= 26 && p.age <= 30);
+            else if (ageRange === '31-40') matchAge = (p.age >= 31 && p.age <= 40);
+
+            return matchType && matchAge;
+        });
+        renderPatients(filtered);
+    }
+
+    // 4. دالة الحجز (تغير الحالة فوراً)
+    function bookCase(id) {
+        const index = patients.findIndex(p => p.id === id);
+        if (patients[index].status === 'محجوز') {
+            Swal.fire('عذراً', 'هذه الحالة محجوزة بالفعل!', 'error');
+            return;
+        }
+
+        Swal.fire({
+            title: 'تأكيد الحجز؟',
+            text: "هل ترغب في حجز هذه الحالة تحت إشرافك؟",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم، احجز'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                patients[index].status = 'محجوز'; // تغيير الحالة في الـ Array
+                renderPatients(patients); // إعادة رندرة الصفحة فوراً
+                bootstrap.Modal.getInstance(document.getElementById('patientModal')).hide();
+                Swal.fire('تم الحجز!', 'يمكنك الآن التواصل مع المريض.', 'success');
+            }
+        });
+    }
+
+    // 5. نافذة التفاصيل (Modal)
+    function openDetails(id) {
+        const p = patients.find(item => item.id === id);
+        const btnClass = p.status === 'متاح' ? 'btn-primary' : 'btn-secondary disabled';
+        const btnText = p.status === 'متاح' ? 'حجز الحالة الآن' : 'الحالة محجوزة';
+
+        document.getElementById('modalContentHtml').innerHTML = `
+            <div class="modal-header border-0 pb-0"><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body text-center p-4">
+                <img src="https://ui-avatars.com/api/?name=${p.name}&size=128" class="rounded-circle mb-3 shadow">
+                <h3 class="fw-bold">${p.name}</h3>
+                <hr>
+                <div class="row text-start g-3">
+                    <div class="col-6"><b>رقم الهاتف:</b><br>${p.phone}</div>
+                    <div class="col-6"><b>الجنس:</b><br>${p.gender}</div>
+                    <div class="col-12"><b>الايميل:</b><br>${p.email}</div>
+                    <div class="col-12"><b>مكان السكن:</b><br>${p.address}</div>
+                </div>
+                <div class="mt-4 d-grid gap-2">
+                    <button class="btn ${btnClass} py-3 fw-bold" onclick="bookCase(${p.id})">${btnText}</button>
+                    <button class="btn btn-outline-info" onclick="Swal.fire('تم!', 'تم إرسال الملف للدكتور.', 'info')">إرسال للدكتور</button>
+                </div>
+            </div>
+        `;
+        new bootstrap.Modal(document.getElementById('patientModal')).show();
+    }
+
+    // 6. نظام الـ Dark Mode
+    const toggleBtn = document.getElementById('darkModeToggle');
+    toggleBtn.addEventListener('click', () => {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        toggleBtn.innerHTML = isDark ? '<i class="fas fa-moon"></i> وضع الليلي' : '<i class="fas fa-sun"></i> وضع النهاري';
+    });
+
+    // التشغيل الأولي
+    renderPatients(patients);
+</script>
