@@ -23,7 +23,7 @@
     <header>
         <nav class="navbar navbar-expand-lg shadow-sm px-lg-5">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold" href="/">Studint Dental Clinic</a>
+                <a class="navbar-brand fw-bold" href="/" data-key="title">Studint Dental Clinic</a>
 
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                     <span class="navbar-toggler-icon"></span>
@@ -31,22 +31,23 @@
 
                 <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav mx-auto text-center">
-                        <li class="nav-item"><a class="nav-link" href="/#home">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/#about">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/#services">Service</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/#feedback">Feedback</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#home" data-key="home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#about" data-key="about">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#services" data-key="service">Service</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/#feedback" data-key="feedback">Feedback</a></li>
                     </ul>
 
                     <div class="nav-actions d-flex align-items-center justify-content-center" style="gap: 15px;">
                         <button id="darkModeToggle" style="border:none; background:none; cursor:pointer; font-size:1.2rem;">🌙</button>
 
                         <div class="lang-container">
-                            <button class="btn btn-outline-primary btn-sm" id="langBtnToggle">
+                            <button class="btn btn-outline-primary btn-sm" id="langBtnToggle" onclick="toggleLangMenu(event)">
                                 🌐 <span id="currentLangDisplay">English</span> <small>▼</small>
                             </button>
                             <div id="langMenuBox" class="lang-menu">
-                                <div onclick="changeLanguage('en')">English</div>
-                                <div onclick="changeLanguage('ar')">العربية</div>
+                                <div onclick="changeLang('ar', event)">العربية</div>
+
+                                <div onclick="changeLang('en', event)">English</div>
                             </div>
                         </div>
                     </div>
@@ -64,7 +65,7 @@
             <div class="row g-4">
                 <div class="col-lg-4">
                     <div class="footer-widget">
-                        <h3 class="footer-logo">Dental<span>Clinic</span></h3>
+                        <h3 class="footer-logo" data-key="footerLogo">Dental<span>Clinic</span></h3>     
                         <p class="opacity-75" data-key="clinicDesc">
                             Providing quality dental care while supporting future dental professionals.
                         </p>
@@ -135,6 +136,7 @@
         };
 
         // 2. Language Menu Logic
+        /*
         const langBtn = document.getElementById('langBtnToggle');
         const langMenu = document.getElementById('langMenuBox');
 
@@ -152,7 +154,7 @@
                 changeLang(lang);
             }
             document.getElementById('currentLangDisplay').textContent = (lang === 'ar') ? 'العربية' : 'English';
-        }
+        }*/
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

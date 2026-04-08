@@ -1,10 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\",
+  "WorkspaceRootPath": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\ammar\\onedrive\\desktop\\asp.netorange\\student dental clinic\\student dental clinic\\views\\login\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\jaad\\desktop\\student-dental-clinic\\student dental clinic\\views\\login\\students.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\views\\login\\students.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\jaad\\desktop\\student-dental-clinic\\student dental clinic\\wwwroot\\js\\lang.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\wwwroot\\js\\lang.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\jaad\\desktop\\student-dental-clinic\\student dental clinic\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\jaad\\desktop\\student-dental-clinic\\student dental clinic\\views\\login\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\views\\login\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\jaad\\desktop\\student-dental-clinic\\student dental clinic\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,15 +35,64 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Views\\LogIn\\Index.cshtml",
-              "RelativeDocumentMoniker": "Student Dental Clinic\\Views\\LogIn\\Index.cshtml",
-              "ToolTip": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Views\\LogIn\\Index.cshtml",
-              "RelativeToolTip": "Student Dental Clinic\\Views\\LogIn\\Index.cshtml",
-              "ViewState": "AgIAAGMAAAAAAAAAAAAowG4AAAA8AAAAAAAAAA==",
+              "Title": "Students.cshtml",
+              "DocumentMoniker": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\Views\\LogIn\\Students.cshtml",
+              "RelativeDocumentMoniker": "Student Dental Clinic\\Views\\LogIn\\Students.cshtml",
+              "ToolTip": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\Views\\LogIn\\Students.cshtml",
+              "RelativeToolTip": "Student Dental Clinic\\Views\\LogIn\\Students.cshtml",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAwwG4AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-02T11:37:40.759Z",
+              "WhenOpened": "2026-04-06T18:12:47.486Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\Views\\LogIn\\Index.cshtml",
+              "RelativeDocumentMoniker": "Student Dental Clinic\\Views\\LogIn\\Index.cshtml",
+              "ToolTip": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\Views\\LogIn\\Index.cshtml",
+              "RelativeToolTip": "Student Dental Clinic\\Views\\LogIn\\Index.cshtml",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAAAMQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-06T16:35:18.706Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Student Dental Clinic\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Student Dental Clinic\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAMkAAAAAAAAAAAAAAPEBAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-06T16:34:50.154Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "lang.js",
+              "DocumentMoniker": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\wwwroot\\js\\lang.js",
+              "RelativeDocumentMoniker": "Student Dental Clinic\\wwwroot\\js\\lang.js",
+              "ToolTip": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\wwwroot\\js\\lang.js",
+              "RelativeToolTip": "Student Dental Clinic\\wwwroot\\js\\lang.js",
+              "ViewState": "AgIAAEYBAAAAAAAAAAAYwGUBAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-04-05T19:51:46.091Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Student Dental Clinic\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\jaad\\Desktop\\Student-Dental-Clinic\\Student Dental Clinic\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Student Dental Clinic\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAwwIIAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-05T19:51:23.733Z"
             }
           ]
         }

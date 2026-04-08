@@ -1,13 +1,90 @@
-﻿
 ﻿@{
     ViewData["Title"] = "loginPage";
 }
 @section Styles {
-    <link rel="stylesheet" href="~/css/loginPage.css" />
+    <link rel="stylesheet" href="~/css/loginPage.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+     <!--
+    <style>
+        /* 1. تثبيت الهيكل لـ LTR لمنع المتصفح من تخريب إحداثيات المربع */
+        body[dir="rtl"] .container-box {
+            direction: ltr !important;
+        }
+
+        /* 2. تحويل النصوص للغة العربية (RTL) */
+        body[dir="rtl"] .form-box,
+        body[dir="rtl"] .overlay-panel {
+            direction: rtl !important;
+            text-align: right !important;
+        }
+
+        /* 3. ترتيب أماكن الفورم والمربع الأزرق بشكل فيزيائي دقيق */
+        body[dir="rtl"] .login-container,
+        body[dir="rtl"] .register-container {
+            left: 50% !important;
+            right: auto !important;
+        }
+
+        body[dir="rtl"] .overlay-container {
+            left: 0 !important;
+            right: auto !important;
+        }
+
+        /* 4. تثبيت المربع الأزرق الداخلي لمنعه من الاختفاء */
+        body[dir="rtl"] .overlay {
+            left: 0 !important;
+            right: auto !important;
+            transform: translateX(0) !important;
+        }
+
+        /* 5. حركة الانتقال السلسة عند النقر (بدون تداخل) */
+        body[dir="rtl"] .container-box.active .login-container,
+        body[dir="rtl"] .container-box.active .register-container {
+            transform: translateX(-100%) !important;
+        }
+
+        body[dir="rtl"] .container-box.active .overlay-container {
+            transform: translateX(100%) !important;
+        }
+
+        body[dir="rtl"] .container-box.active .overlay {
+            transform: translateX(-50%) !important;
+        }
+
+        /* 6. منع تداخل النصوص (مريض جديد / لديك حساب) بوضع كل نص في مكانه */
+        body[dir="rtl"] .overlay-left {
+            left: 50% !important;
+            right: auto !important;
+            transform: none !important;
+        }
+
+        body[dir="rtl"] .overlay-right {
+            left: 0 !important;
+            right: auto !important;
+            transform: none !important;
+        }
+
+        body[dir="rtl"] .container-box.active .overlay-left {
+            transform: none !important;
+        }
+
+        body[dir="rtl"] .container-box.active .overlay-right {
+            transform: none !important;
+        }
+
+        /* 7. ترتيب خيارات (تذكرني / نسيان كلمة المرور) */
+        body[dir="rtl"] .options {
+            direction: rtl !important;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    </style>
+    -->
 }
 @section Scripts {
-    <script src="~/js/loginPage.js"></script>
+    <script src="~/js/loginPage.js" asp-append-version="true"></script>
 }
 
 <div class="login-page-wrapper">
@@ -18,13 +95,13 @@
                 <input type="text" class="form-control custom-input mb-3" placeholder="Username" data-key-placeholder="username">
                 <input type="email" class="form-control custom-input mb-3" placeholder="Email" data-key-placeholder="email">
                 <input type="password" class="form-control custom-input mb-3" placeholder="Password" data-key-placeholder="password">
-                <button type="button" class="btn btn-success-glass w-100 py-2 mt-2">Register</button>
+                <button type="button" class="btn btn-success-glass w-100 py-2 mt-2" data-key="registerBtn">Register</button>
             </form>
         </div>
 
         <div class="form-box login-container">
             <form asp-controller="LogIn" asp-action="Index" method="get">
-                <h3 class="title mb-4" data-key="login">Welcome Back</h3>
+                <h3 class="title mb-4" data-key="welcomeBack">Welcome Back</h3>
                 <input type="text" class="form-control custom-input mb-3" placeholder="Username" data-key-placeholder="username">
                 <input type="password" class="form-control custom-input mb-3" placeholder="Password" data-key-placeholder="password">
 
@@ -34,21 +111,21 @@
                     </label>
                     <a href="#" class="forgot-link" data-key="forgot">Forgot password?</a>
                 </div>
-                <button type="submit" class="btn btn-primary-glass w-100 py-2">Login</button>
+                <button type="submit" class="btn btn-primary-glass w-100 py-2" data-key="loginBtn">Login</button>
             </form>
         </div>
 
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h2 class="fw-bold">Already Member?</h2>
-                    <p>Login to keep track of your clinic appointments</p>
-                    <button class="ghost-btn" id="goLogin">Login</button>
+                    <h2 class="fw-bold" data-key="haveAccount">Already Member?</h2>
+                    <p data-key="haveAccountDesc">Login to keep track of your clinic appointments</p>
+                    <button class="ghost-btn" id="goLogin" data-key="loginBtn">Login</button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <h2 class="fw-bold">New Patient?</h2>
-                    <p>Register now to get the best professional medical care</p>
-                    <button class="ghost-btn" id="goRegister">Register</button>
+                    <h2 class="fw-bold" data-key="noAccount">New Patient?</h2>
+                    <p data-key="noAccountDesc">Register now to get the best professional medical care</p>
+                    <button class="ghost-btn" id="goRegister" data-key="registerBtn">Register</button>
                 </div>
             </div>
         </div>
@@ -57,18 +134,8 @@
 <br />
 <br />
 <div>
-
-
-
-
     <a asp-controller="LogIn" asp-action="Students"
        class="btn btn-outline-light btn-lg px-4 text-black text-center">
-       
-       Students
+        Students
     </a>
-
-
-
-
 </div>
-

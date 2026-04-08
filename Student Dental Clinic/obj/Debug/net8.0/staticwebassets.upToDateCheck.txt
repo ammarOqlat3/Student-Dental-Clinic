@@ -9,8 +9,10 @@ wwwroot\images\infoimage1.jpg
 wwwroot\images\loginPage.jpg
 wwwroot\js\HomePage.js
 wwwroot\js\infoPatient.js
+wwwroot\js\JavaScript.js
 wwwroot\js\lang.js
 wwwroot\js\loginPage.js
+wwwroot\js\student_lang.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css

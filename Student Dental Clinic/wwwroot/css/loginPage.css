@@ -1,11 +1,10 @@
 ﻿/* منع التضارب مع الـ Layout */
 .login-page-wrapper {
-    min-height: 80vh; /* يعطي مساحة كافية للكرت */
+    min-height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 50px 0;
-    /* نقلنا الخلفية لهنا بدل الـ Body */
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/loginPage.jpg') center/cover no-repeat fixed;
 }
 
@@ -25,7 +24,7 @@
 .container-box {
     position: relative;
     width: 850px;
-    max-width: 95%; /* للموبايل */
+    max-width: 95%;
     height: 550px;
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
@@ -34,9 +33,6 @@
     overflow: hidden;
     box-shadow: 0 25px 45px rgba(0,0,0,0.2);
 }
-
-/* ... باقي تنسيقات الـ Form والأوفرلاي كما هي لديك ... */
-/* تأكد فقط من حذف أي سطر يخص body { ... } هنا */
 
 .form-box {
     position: absolute;
@@ -119,6 +115,10 @@
     right: 0;
 }
 
+.overlay-left {
+    left: 0;
+}
+
 .ghost-btn {
     background: transparent;
     border: 2px solid #ffffff;
@@ -155,4 +155,67 @@
 .forgot-link {
     color: white;
     text-decoration: none;
+}
+
+/* =======================================================
+   الحل السحري النظيف 100% للغة العربية (RTL)
+   ======================================================= */
+
+/* 1. تجميد الهيكل: نمنع المتصفح من قلب العناصر، ونقلب فقط النصوص */
+[dir="rtl"] .container-box {
+    direction: ltr !important;
+}
+
+[dir="rtl"] .form-box,
+[dir="rtl"] .overlay-panel {
+    direction: rtl !important;
+}
+
+[dir="rtl"] .form-box {
+    text-align: right !important;
+}
+
+/* 2. أماكن البداية: الفورم يمين، والمربع الأزرق يسار */
+[dir="rtl"] .login-container,
+[dir="rtl"] .register-container {
+    left: 50% !important;
+    right: auto !important;
+}
+
+[dir="rtl"] .overlay-container {
+    left: 0 !important;
+    right: auto !important;
+}
+
+/* نحافظ على مكان الأوفرلاي الداخلي ليعرض "مريض جديد؟" بدون ما يتراكب النص */
+[dir="rtl"] .overlay {
+    left: -100% !important;
+    right: auto !important;
+    transform: translateX(0) !important;
+}
+
+/* 3. حركة العناصر عند النقر على (تسجيل/دخول) */
+[dir="rtl"] .container-box.active .login-container,
+[dir="rtl"] .container-box.active .register-container {
+    transform: translateX(-100%) !important;
+}
+
+[dir="rtl"] .container-box.active .overlay-container {
+    transform: translateX(100%) !important;
+}
+
+[dir="rtl"] .container-box.active .overlay {
+    transform: translateX(50%) !important;
+}
+
+/* 4. ترتيب شريط (تذكرني / نسيت كلمة المرور) ليكون مقروء بشكل سليم */
+[dir="rtl"] .options {
+    direction: rtl !important;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* تعديل بسيط لمحاذاة النص جوا مربعات الإدخال */
+[dir="rtl"] .custom-input {
+    text-align: right;
 }

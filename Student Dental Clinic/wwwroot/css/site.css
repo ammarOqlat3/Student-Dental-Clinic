@@ -1,210 +1,140 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
-body.dark-mode {
+
+    body.dark-mode {
         background: #121212; /* œ«ﬂ‰ √”«”Ì */
         color: #e0e0e0; /* ‰’ Ê«÷Õ */
         transition: background 0.3s, color 0.3s;
-    
-        
-}
- body.dark-mode .bg-light {
+    }
+
+        body.dark-mode .bg-light {
             background-color: #1e1e1e !important; /* Œ·›Ì… «·ﬂ«—œ«  */
-
- }
-    /* ·Ê‰ «·Â«„»—€— √»Ì÷ ›Ì Dark Mode */
-    body.dark-mode .navbar-toggler .fas {
-        color: #fff !important;
-    }
-    body.dark-mode .navbar,
-    body.dark-mode .navbar .navbar-brand,
-    body.dark-mode .navbar .nav-link {
-        background-color: #1a1a1a; /* Œ·›Ì… œ«ﬂ‰… ··‹ navbar */
-        color: #fff !important; /* —Ê«»ÿ Ê⁄·«„… «·⁄·«„… «·»Ì÷«¡ */
-    }
-
-        body.dark-mode .navbar .nav-link:hover {
-            color: #0d6efd !important; /*  √ÀÌ— hover √“—ﬁ ›« Õ */
-        }
-    body.dark-mode .card {
-        background: #1f1f1f; /* œ«ﬂ‰ ‰«⁄„ */
-        color: #f0f0f0;
-        border: 1px solid #333;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        transition: all 0.3s;
-    }
-
-        body.dark-mode .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
 
-    body.dark-mode .btn-info {
-        background-color: #0d6efd;
-        color: #fff;
-        border: none;
-        transition: transform 0.2s, background 0.2s;
-    }
-
-        body.dark-mode .btn-info:hover {
-            background-color: #0b5ed7;
-            transform: scale(1.05);
+        /* ·Ê‰ «·Â«„»—€— √»Ì÷ ›Ì Dark Mode */
+        body.dark-mode .navbar-toggler .fas {
+            color: #fff !important;
         }
 
-    body.dark-mode .btn-outline-secondary {
-        color: #f0f0f0;
-        border-color: #aaa;
-    }
+        body.dark-mode .navbar,
+        body.dark-mode .navbar .navbar-brand,
+        body.dark-mode .navbar .nav-link {
+            background-color: #1a1a1a; /* Œ·›Ì… œ«ﬂ‰… ··‹ navbar */
+            color: #fff !important; /* —Ê«»ÿ Ê⁄·«„… «·⁄·«„… «·»Ì÷«¡ */
+        }
 
-        body.dark-mode .btn-outline-secondary:hover {
+            body.dark-mode .navbar .nav-link:hover {
+                color: #0d6efd !important; /*  √ÀÌ— hover √“—ﬁ ›« Õ */
+            }
+
+        body.dark-mode .card {
+            background: #1f1f1f; /* œ«ﬂ‰ ‰«⁄„ */
+            color: #f0f0f0;
+            border: 1px solid #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+            body.dark-mode .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            }
+
+        body.dark-mode .btn-info {
             background-color: #0d6efd;
             color: #fff;
+            border: none;
+            transition: transform 0.2s, background 0.2s;
         }
-    body.dark-mode h1,
-    body.dark-mode h3,
-    body.dark-mode h5 {
-        color: #f0f0f0;
-    }
 
-    body.dark-mode .text-muted {
-        color: #aaa !important;
-    }
-    body.dark-mode .custom-arrow {
-        background: #0d6efd;
-        color: #fff;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 15px #0d6efd;
-        transition: all 0.3s;
-    }
+            body.dark-mode .btn-info:hover {
+                background-color: #0b5ed7;
+                transform: scale(1.05);
+            }
 
-        body.dark-mode .custom-arrow:hover {
-            transform: scale(1.1);
-            background: #0b5ed7;
+        body.dark-mode .btn-outline-secondary {
+            color: #f0f0f0;
+            border-color: #aaa;
         }
-    body.dark-mode .d-flex.align-items-center {
-        position: relative;
-    }
 
-        body.dark-mode .d-flex.align-items-center::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: rgba(0,0,0,0.2);
-            z-index: 0;
+            body.dark-mode .btn-outline-secondary:hover {
+                background-color: #0d6efd;
+                color: #fff;
+            }
+
+        body.dark-mode h1,
+        body.dark-mode h3,
+        body.dark-mode h5 {
+            color: #f0f0f0;
         }
+
+        body.dark-mode .text-muted {
+            color: #aaa !important;
+        }
+
+        body.dark-mode .custom-arrow {
+            background: #0d6efd;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 15px #0d6efd;
+            transition: all 0.3s;
+        }
+
+            body.dark-mode .custom-arrow:hover {
+                transform: scale(1.1);
+                background: #0b5ed7;
+            }
+
+        body.dark-mode .d-flex.align-items-center {
+            position: relative;
+        }
+
+            body.dark-mode .d-flex.align-items-center::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-color: rgba(0,0,0,0.2);
+                z-index: 0;
+            }
+
 .d-flex.align-items-center > div {
     position: relative;
-    z-index: 1; 
+    z-index: 1;
 }
-    body.dark-mode,
-    body.dark-mode .card,
-    body.dark-mode .btn,
-    body.dark-mode .navbar,
-    body.dark-mode h1,
-    body.dark-mode h2,
-    body.dark-mode h3,
-    body.dark-mode p {
-        transition: all 0.3s ease;
+
+body.dark-mode,
+body.dark-mode .card,
+body.dark-mode .btn,
+body.dark-mode .navbar,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode p {
+    transition: all 0.3s ease;
+}
+
+    body.dark-mode #Services h2 {
+        color: black !important;
     }
-        body.dark-mode #Services h2 {
-            color: black !important;
-        }
-    <header>
-
-
-/* ===== Language Button ===== */
-.lang-container {
-    position: relative;
-    display: inline-block;
-}
-
-.lang-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: #fff;
-    border: 1px solid #d1d5db;
-    padding: 8px 16px;
-    border-radius: 12px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.lang-menu {
-    position: absolute;
-    top: 110%;
-    right: 0;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    width: 140px;
-    display: none;
-    z-index: 9999;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-    .lang-menu div {
-        padding: 10px;
-        cursor: pointer;
-    }
-
-        .lang-menu div:hover {
-            background: #f3f4f6;
-        }
-
-.lang-btn {
-    all: unset;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: #fff;
-    border: 1px solid #d1d5db;
-    padding: 8px 16px;
-    border-radius: 12px;
-    cursor: pointer;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* 1.  ⁄—Ì› «·√·Ê«‰ «·À«» … ·ﬂ· „Êœ */
@@ -254,6 +184,7 @@ main {
         .navbar .nav-link:hover {
             color: #0d6efd !important;
         }
+
 /* ≈Ã»«— √ÌﬁÊ‰… «·Â«„»—€— ⁄·Ï «·ŸÂÊ— */
 .navbar-toggler-icon {
     /* »«··«Ì  „Êœ: »Œ·ÌÂ« €«„ﬁ… */
@@ -273,7 +204,6 @@ main {
 [data-bs-theme="dark"] .navbar-toggler {
     border: 1px solid rgba(255,255,255,0.2) !important;
 }
-
 
 
 /* 4. «·‹ Footer (À»«  «·√·Ê«‰ 100%) */
@@ -323,31 +253,90 @@ main {
     margin-right: 10px;
 }
 
-/* 5.  ‰”Ìﬁ«  «··€… */
+/* =========================================
+   5.  ‰”Ìﬁ«  “— «··€… Ê«·ﬁ«∆„… «·„‰”œ·… ( ’„Ì„ „ÊÕœ)
+   ========================================= */
+
 .lang-container {
     position: relative;
 }
 
-.lang-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: var(--nav-bg);
-    border: 1px solid var(--footer-border);
-    display: none;
-    flex-direction: column;
-    min-width: 120px;
-    z-index: 1050;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+/* ‘ﬂ· «·“— «·Œ«—ÃÌ */
+#langBtnToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 18px;
+    border-radius: 50px !important; /* ‘ﬂ· »Ì÷«ÊÌ (Pill) */
+    border: 1.5px solid #0d6efd !important;
+    background-color: transparent !important;
+    color: #0d6efd !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
 }
 
-    .lang-menu div {
-        padding: 10px;
-        cursor: pointer;
-        color: var(--nav-text);
+    /*  √ÀÌ— «·“— «·Œ«—ÃÌ */
+    #langBtnToggle:hover {
+        background-color: #0d6efd !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+        transform: translateY(-2px);
     }
 
+/* ‘ﬂ· «·ﬁ«∆„… «·„‰”œ·… („ÿ«»ﬁ ··“—) */
+.lang-menu {
+    position: absolute;
+    top: 130%;
+    right: 0;
+    background: var(--nav-bg);
+    border: 1.5px solid #0d6efd !important; /* ‰›” ·Ê‰ Ê”„«ﬂ… ≈ÿ«— «·“— */
+    display: none;
+    flex-direction: column;
+    min-width: 130px;
+    z-index: 1050;
+    border-radius: 20px; /* “Ê«Ì« œ«∆—Ì…   ‰«”» „⁄ «·“— */
+    box-shadow: 0 8px 24px rgba(13, 110, 253, 0.15); /* Ÿ· √“—ﬁ ‰«⁄„ */
+    padding: 6px; /* „”«›… œ«Œ·Ì… */
+    overflow: hidden;
+}
+
+    /* ‘ﬂ· «·⁄‰«’— ÃÊ« «·ﬁ«∆„… */
+    .lang-menu div {
+        padding: 10px 15px;
+        cursor: pointer;
+        color: var(--nav-text);
+        border-radius: 14px; /* “Ê«Ì« œ«∆—Ì… ··⁄‰’— „‰ «·œ«Œ· */
+        transition: all 0.2s ease;
+        text-align: center;
+        font-weight: 500;
+    }
+
+        /*  √ÀÌ— «·⁄‰«’— ÃÊ« «·ﬁ«∆„… („ÿ«»ﬁ · √ÀÌ— «·“—) */
         .lang-menu div:hover {
-            background: rgba(13, 110, 253, 0.1);
+            background-color: #0d6efd !important;
+            color: #ffffff !important;
         }
+
+/* =========================================
+    Ê«›ﬁ “— «··€… Ê«·ﬁ«∆„… „⁄ «·‹ Dark Mode
+   ========================================= */
+
+[data-bs-theme="dark"] #langBtnToggle,
+[data-bs-theme="dark"] .lang-menu {
+    border-color: #6ea8fe !important; /* √“—ﬁ ›« Õ „—ÌÕ »«·œ«—ﬂ „Êœ */
+    color: #6ea8fe !important;
+}
+
+    [data-bs-theme="dark"] #langBtnToggle:hover,
+    [data-bs-theme="dark"] .lang-menu div:hover {
+        background-color: #6ea8fe !important;
+        color: #0a0c15 !important; /* ‰’ €«„ﬁ ÃÊ« «·“— «·„÷Ì¡ */
+        box-shadow: 0 4px 12px rgba(110, 168, 254, 0.3);
+    }
+
+    [data-bs-theme="dark"] .lang-menu div {
+        color: #ffffff; /* ·Ê‰ «·‰’ «·«› —«÷Ì ÃÊ« «·ﬁ«∆„… »«·œ«—ﬂ „Êœ */
+    }
