@@ -1,13 +1,15 @@
-﻿@{
+﻿@model List<Patient>
+
+@{
     ViewData["Title"] = "info Patient ";
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/infoPatient.css" />
 }
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="~/js/infoPatient.js"></script>
+    @* أضفنا v=1 لنجبر المتصفح على تحميل الملف من جديد *@
+    <script src="~/js/infoPatient.js?v=1.1"></script>
 
 }
 
@@ -53,87 +55,87 @@
                     <button class="btn btn-primary btn-lg mt-3 px-5 shadow-sm" id="startBtn">Click here to fill in your information</button>
                 </div> *@
 
-                <div id="patientFormSection" class="form-container p-4 shadow-lg">
-                    <h4 class="mb-4 text-center border-bottom pb-3 text-white">Patient Information Form</h4>
+            <div id="patientFormSection" class="form-container p-4 shadow-lg">
+                <h4 class="mb-4 text-center border-bottom pb-3 text-white">Patient Information Form</h4>
 
-                    <form asp-action="Create" asp-controller="Patients" method="post" enctype="multipart/form-data" id="patientForm">
-                        <div class="row g-4">
+                <form asp-action="Create" asp-controller="LogIn" method="post" enctype="multipart/form-data" id="patientForm">
+                    <div class="row g-4">
 
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">First Name</label>
-                                <input class="form-control" name="FirstName" placeholder="First Name" required />
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Middle Name</label>
-                                <input class="form-control" name="MiddleName" placeholder="Middle Name" required />
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Last Name</label>
-                                <input class="form-control" name="LastName" placeholder="Last Name" required />
-                            </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">First Name</label>
+                            <input class="form-control" name="FirstName" placeholder="First Name" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Middle Name</label>
+                            <input class="form-control" name="MiddleName" placeholder="Middle Name" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Last Name</label>
+                            <input class="form-control" name="LastName" placeholder="Last Name" required />
+                        </div>
 
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Age</label>
-                                <input type="number" class="form-control" name="Age" placeholder="Age" required />
-                            </div>
-                            <div class="col-md-8">
-                                <label class="form-label fw-bold">Email Address</label>
-                                <input type="email" class="form-control" name="Email" placeholder="example@mail.com" required />
-                            </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Age</label>
+                            <input type="number" class="form-control" name="Age" placeholder="Age" required />
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold">Email Address</label>
+                            <input type="email" class="form-control" name="Email" placeholder="example@mail.com" required />
+                        </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Phone Number</label>
-                                <input type="tel" class="form-control" name="PhoneNumber" placeholder="07XXXXXXXX" required />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Gender</label>
-                                <select class="form-select" name="Gender" required>
-                                    <option value="">Select Gender...</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Phone Number</label>
+                            <input type="tel" class="form-control" name="PhoneNumber" placeholder="07XXXXXXXX" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Gender</label>
+                            <select class="form-select" name="Gender" required>
+                                <option value="">Select Gender...</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
 
-                            <div class="col-md-12">
-                                <label class="form-label fw-bold">Do you suffer from any chronic diseases or allergies?</label>
-                                <div class="mt-2">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="hasAllergy" id="yesRadio" value="yes">
-                                        <label class="form-check-label" for="yesRadio">Yes</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="hasAllergy" id="noRadio" value="no" checked>
-                                        <label class="form-check-label" for="noRadio">No</label>
-                                    </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold">Do you suffer from any chronic diseases or allergies?</label>
+                            <div class="mt-2">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="hasAllergy" id="yesRadio" value="yes">
+                                    <label class="form-check-label" for="yesRadio">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="hasAllergy" id="noRadio" value="no" checked>
+                                    <label class="form-check-label" for="noRadio">No</label>
                                 </div>
                             </div>
-
-                            <div class="col-md-12 d-none" id="allergyDetailsBox">
-                                <label class="form-label fw-bold text-danger">Please provide details:</label>
-                                <textarea class="form-control" name="AllergyDetails" rows="3" placeholder="Describe your condition here..."></textarea>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Type of Treatment</label>
-                                <select class="form-select" name="TreatmentType" required>
-                                    <option value="">Select treatment...</option>
-                                    <option value="CosmeticFilling">Cosmetic Filling</option>
-                                    <option value="RootCanal">Root Canal</option>
-                                    <option value="Cleaning">Teeth Cleaning</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Upload Tooth Photo</label>
-                                <input type="file" name="ToothImage" class="form-control" accept="image/*" />
-                            </div>
-
-                            <div class="col-12 mt-5">
-                                <button type="submit" class="btn btn-success btn-lg w-100 py-3 shadow">Submit Request</button>
-                            </div>
                         </div>
-                    </form>
-                </div>
-</div>
+
+                        <div class="col-md-12 d-none" id="allergyDetailsBox">
+                            <label class="form-label fw-bold text-danger">Please provide details:</label>
+                            <textarea class="form-control" name="AllergyDetails" rows="3" placeholder="Describe your condition here..."></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Type of Treatment</label>
+                            <select class="form-select" name="TreatmentType" required>
+                                <option value="">Select treatment...</option>
+                                <option value="CosmeticFilling">Cosmetic Filling</option>
+                                <option value="RootCanal">Root Canal</option>
+                                <option value="Cleaning">Teeth Cleaning</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Upload Tooth Photo</label>
+                            <input type="file" name="ToothImage" class="form-control" accept="image/*" />
+                        </div>
+
+                        <div class="col-12 mt-5">
+                            <button type="submit" class="btn btn-success btn-lg w-100 py-3 shadow">Submit Request</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
 
         <div class="tab-pane fade" id="pills-history">
@@ -151,20 +153,46 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>20/03/2026</td>
-                                <td>Root Canal</td>
-                                <td>Dr. Sami</td>
-                                <td><span class="badge bg-warning">Pending</span></td>
-                                <td><button class="btn btn-sm btn-outline-light">View Details</button></td>
-                            </tr>
-                            <tr>
-                                <td>15/01/2026</td>
-                                <td>Teeth Cleaning</td>
-                                <td>Dr. Layla</td>
-                                <td><span class="badge bg-success">Completed</span></td>
-                                <td><button class="btn btn-sm btn-outline-light">View Details</button></td>
-                            </tr>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
+
+                                        <td>@item.TreatmentType</td>
+
+                                        <td>
+                                            @(item.DoctorName != null ? item.DoctorName : "Not Assigned")
+                                        </td>
+
+                                        <td>
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <span class="badge bg-warning">Pending</span>
+                                            }
+                                            else if (item.Status == "Completed")
+                                            {
+                                                <span class="badge bg-success">Completed</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">@item.Status</span>
+                                            }
+                                        </td>
+
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-light">View Details</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center">No cases found</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -196,7 +224,7 @@
                                 <p class="fw-bold">07XXXXXXXX</p>
                             </div>
                             <div class="col-12 mt-4">
-                                <button class="btn btn-primary">Update Profile Info</button>
+                                  <button class="btn btn-primary">Update Profile Info</button>
                             </div>
                         </div>
                     </div>

@@ -90,20 +90,20 @@
 <div class="login-page-wrapper">
     <div class="container-box" id="container">
         <div class="form-box register-container">
-            <form action="#">
+            <form asp-controller="Home" asp-action="Register" method="post">
                 <h3 class="title mb-4" data-key="register">Create Account</h3>
-                <input type="text" class="form-control custom-input mb-3" placeholder="Username" data-key-placeholder="username">
-                <input type="email" class="form-control custom-input mb-3" placeholder="Email" data-key-placeholder="email">
-                <input type="password" class="form-control custom-input mb-3" placeholder="Password" data-key-placeholder="password">
-                <button type="button" class="btn btn-success-glass w-100 py-2 mt-2" data-key="registerBtn">Register</button>
+                <input type="text" name="Username" class="form-control custom-input mb-3" placeholder="Username" data-key-placeholder="username">
+                <input type="email" name="Email" class="form-control custom-input mb-3" placeholder="Email" data-key-placeholder="email">
+                <input type="password" name="Password" class="form-control custom-input mb-3" placeholder="Password" data-key-placeholder="password">
+                <button type="submit" class="btn btn-success-glass w-100 py-2 mt-2" data-key="registerBtn">Register</button>
             </form>
         </div>
 
         <div class="form-box login-container">
-            <form asp-controller="LogIn" asp-action="Index" method="get">
+            <form asp-controller="Home" asp-action="login" method="post">
                 <h3 class="title mb-4" data-key="welcomeBack">Welcome Back</h3>
-                <input type="text" class="form-control custom-input mb-3" placeholder="Username" data-key-placeholder="username">
-                <input type="password" class="form-control custom-input mb-3" placeholder="Password" data-key-placeholder="password">
+                <input type="text" name="Username" class="form-control custom-input mb-3" placeholder="Username" data-key-placeholder="username">
+                <input type="password" name="Password" class="form-control custom-input mb-3" placeholder="Password" data-key-placeholder="password">
 
                 <div class="options mb-4">
                     <label class="remember-me">
@@ -112,6 +112,19 @@
                     <a href="#" class="forgot-link" data-key="forgot">Forgot password?</a>
                 </div>
                 <button type="submit" class="btn btn-primary-glass w-100 py-2" data-key="loginBtn">Login</button>
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success">
+                        @TempData["Success"]
+                    </div>
+                }
+
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger">
+                        @TempData["Error"]
+                    </div>
+                }
             </form>
         </div>
 
@@ -137,5 +150,9 @@
     <a asp-controller="LogIn" asp-action="Students"
        class="btn btn-outline-light btn-lg px-4 text-black text-center">
         Students
+    </a>
+    <a asp-controller="LogIn" asp-action="doctor"
+       class="btn btn-outline-light btn-lg px-4 text-black text-center">
+        doctor
     </a>
 </div>

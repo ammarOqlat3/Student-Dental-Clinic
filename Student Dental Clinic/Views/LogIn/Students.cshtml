@@ -1,171 +1,1652 @@
-﻿<div class="container py-5" dir="rtl">
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <div>
-            <h2 class="fw-bold text-primary" data-key="studentTitle">Clinical Cases Platform</h2>
-            <p class="text-muted" data-key="studentSubtitle">Browse and book available training cases</p>
-        </div>
-    </div>
-
-    <div class="card shadow-sm border-0 mb-5 filter-card">
-        <div class="card-body">
-            <div class="row g-3">
-
-                <div class="col-md-4">
-                    <label data-key="caseType">Case Type</label>
-                    <select id="typeFilter" class="form-select">
-                        <option value="all" data-key="allCases">All Cases</option>
-                        <option value="حشوة" data-key="filling">Filling</option>
-                        <option value="سحب عصب" data-key="rootCanal">Root Canal</option>
-                        <option value="تقويم" data-key="orthodontics">Orthodontics</option>
-                        <option value="تنظيف" data-key="scaling">Scaling</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label data-key="ageGroup">Age Group</label>
-                    <select id="ageFilter" class="form-select">
-                        <option value="الكل" data-key="allAges">All Ages</option>
-                        <option value="20-25" data-key="age1">20-25</option>
-                        <option value="26-30" data-key="age2">26-30</option>
-                        <option value="31-40" data-key="age3">31-40</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4 d-flex align-items-end">
-                    <button class="btn btn-primary w-100" onclick="executeFilter()">
-                        <span data-key="updateResults">Update Results</span>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- مهم: row -->
-    <div class="row" id="patientsGrid"></div>
-</div>
-
-<style>
-    /* الإعدادات العامة */
-    body {
-        font-family: 'Cairo', sans-serif;
-        margin: 0;
-        transition: all 0.3s ease;
-    }
-
-        /* التحكم بالاتجاه بناءً على الكلاس اللي بضيفه الـ JS */
-        body.rtl {
-            direction: rtl;
-            text-align: right;
+﻿
+    <style>
+        /* =====================================================
+           المتغيرات العامة - ألوان الطالب (أخضر مائل للفيروزي)
+           مختلف عن ألوان الدكتور (أزرق داكن) عشان يتميز
+        ===================================================== */
+        :root {
+          --st-primary:   #0d6e5c;   /* أخضر داكن رئيسي */
+          --st-light:     #1a9e85;   /* أخضر فاتح */
+          --st-accent:    #00c9a7;   /* فيروزي مميز */
+          --st-accent2:   #00e5c3;   /* فيروزي فاتح */
+          --st-bg:        #f0f7f5;   /* خلفية خضراء فاتحة جداً */
+          --st-sidebar:   #083d31;   /* سيدبار أخضر داكن جداً */
+          --st-dark:      #1a2e28;   /* نص داكن */
+          --st-muted:     #5a7a72;   /* نص خافت */
+          --st-shadow:    0 4px 24px rgba(13,110,92,0.10);
+          --st-radius:    14px;
+          --st-success:   #22c55e;
+          --st-warning:   #f59e0b;
+          --st-danger:    #ef4444;
+          --st-info:      #0ea5e9;
         }
 
-        body.ltr {
-            direction: ltr;
-            text-align: left;
+        /* =====================================================
+           كل عناصر الداشبورد تأخذ الخط العربي
+        ===================================================== */
+        .st-dashboard * {
+          font-family: 'Tajawal', sans-serif;
+          box-sizing: border-box;
         }
 
-    /* حل مشكلة الهيدر (Header/Navbar) */
-    /* افترضنا أن الكلاس اسمه navbar أو header */
-    .header-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between; /* هذا سيجعل اللوجو في طرف والقائمة في طرف تلقائياً */
-        padding: 10px 5%;
-    }
+        /* =====================================================
+           الكونتينر الرئيسي - مفصول تماماً عن النافبار والفوتر
+           position:relative لأن السيدبار absolute بداخله
+        ===================================================== */
+        .st-dashboard {
+          position: relative;
+          display: flex;
+          background: var(--st-bg);
+          border-radius: 18px;
+          overflow: hidden;
+          height: 86vh;           /* 86% من ارتفاع الشاشة */
+          min-height: 580px;
+          color: var(--st-dark);
+          box-shadow: 0 10px 50px rgba(0,0,0,0.12);
+        }
 
-    /* القائمة داخل الهيدر */
-    .nav-links {
-        display: flex;
-        gap: 20px;
-        list-style: none;
-        /* نستخدم margin-inline-start بدلاً من margin-left */
-        margin-inline-start: auto;
-    }
+        /* =====================================================
+           الشريط الجانبي - position:absolute داخل الكونتينر
+        ===================================================== */
+        .st-sidebar {
+          position: absolute;
+          right: 0; top: 0; bottom: 0;
+          width: 230px;
+          background: var(--st-sidebar);
+          display: flex;
+          flex-direction: column;
+          z-index: 20;
+          overflow-y: auto;
+        }
 
-    /* العلامة الخضراء (Status Badge) */
-    .status-badge {
-        position: absolute;
-        top: 15px;
-        /* سحر الـ Logical Properties */
-        inset-inline-start: 15px;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: bold;
-    }
+        /* شعار السيدبار */
+        .st-logo {
+          padding: 22px 16px 16px;
+          border-bottom: 1px solid rgba(255,255,255,0.07);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .st-logo .ico {
+          width: 42px; height: 42px;
+          background: linear-gradient(135deg, var(--st-accent), var(--st-accent2));
+          border-radius: 11px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 19px; color: white; flex-shrink: 0;
+        }
+        .st-logo h6 { color: white; font-weight: 700; font-size: 14px; margin: 0; }
+        .st-logo small { color: rgba(255,255,255,0.4); font-size: 10px; }
 
-    /* البطاقة (Card) */
-    .card {
-        border-radius: 15px;
-        position: relative;
-    }
+        /* قسم النوافيج في السيدبار */
+        .st-nav { padding: 14px 10px; flex: 1; }
+        .st-nav-title {
+          color: rgba(255,255,255,0.28);
+          font-size: 10px; font-weight: 700;
+          letter-spacing: 1px; text-transform: uppercase;
+          padding: 10px 8px 4px;
+        }
 
-    /* أي أيقونات أو عناصر داخلية يفضل تستخدم لها */
-    .icon {
-        margin-inline-end: 10px; /* تعطي مسافة بعد الأيقونة حسب اللغة */
-    }
+        /* رابط تنقل */
+        .st-nav-link {
+          display: flex; align-items: center; gap: 10px;
+          padding: 9px 12px; border-radius: 9px;
+          color: rgba(255,255,255,0.58);
+          text-decoration: none; font-size: 13px; font-weight: 500;
+          cursor: pointer; transition: all .2s; margin-bottom: 2px;
+        }
+        .st-nav-link i { width: 18px; text-align: center; font-size: 14px; }
+        .st-nav-link:hover { background: rgba(255,255,255,0.08); color: white; }
+        .st-nav-link.active {
+          background: linear-gradient(90deg, var(--st-accent), var(--st-light));
+          color: white;
+        }
 
-    /* لضمان عدم تفكك الحروف */
-    * {
-        letter-spacing: normal !important;
-    }
-</style>
-<script>
-    let patients = [
-        { id: 1, name: "أحمد العلي", age: 22, type: "حشوة", gender: "ذكر", phone: "0791234567", email: "ahmed@mail.com", address: "عمان", status: "متاح" },
-        { id: 2, name: "سارة حسن", age: 28, type: "سحب عصب", gender: "أنثى", phone: "0785554433", email: "sara@mail.com", address: "إربد", status: "متاح" },
-        { id: 3, name: "محمد خالد", age: 35, type: "تقويم", gender: "ذكر", phone: "0770001122", email: "mhd@mail.com", address: "الزرقاء", status: "متاح" }
-    ];
+        /* شارة العداد */
+        .st-nav-badge {
+          margin-right: auto;
+          background: var(--st-accent);
+          color: white; font-size: 10px; font-weight: 700;
+          padding: 1px 7px; border-radius: 20px;
+        }
 
-    function renderPatients(data) {
-        const grid = document.getElementById('patientsGrid');
-        grid.innerHTML = '';
+        /* بروفايل أسفل السيدبار */
+        .st-sidebar-profile {
+          padding: 14px;
+          border-top: 1px solid rgba(255,255,255,0.07);
+          display: flex; align-items: center; gap: 10px;
+        }
+        .st-sidebar-profile .name { color: white; font-size: 12px; font-weight: 600; }
+        .st-sidebar-profile .role { color: rgba(255,255,255,0.38); font-size: 10px; }
 
-        data.forEach(p => {
-            const statusClass = p.status === 'متاح' ? 'bg-available' : 'bg-booked';
+        /* =====================================================
+           المحتوى الرئيسي
+        ===================================================== */
+        .st-main {
+          margin-right: 230px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          min-width: 0;
+        }
 
-            grid.innerHTML += `
-            <div class="col-md-4 mb-4">
-                <div class="card patient-card p-3 position-relative" onclick="openDetails(${p.id})">
+        /* التوبار */
+        .st-topbar {
+          background: white;
+          padding: 11px 22px;
+          display: flex; align-items: center; justify-content: space-between;
+          box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+          flex-shrink: 0;
+        }
+        .st-topbar .pg-title { font-size: 16px; font-weight: 700; color: var(--st-primary); }
 
-                    <span class="status-badge ${statusClass}">${p.status}</span>
+        .st-icon-btn {
+          width: 34px; height: 34px; border-radius: 8px; border: none;
+          background: var(--st-bg); color: var(--st-muted);
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; font-size: 14px; position: relative; transition: all .2s;
+        }
+        .st-icon-btn:hover { background: var(--st-primary); color: white; }
+        .st-notif-dot {
+          width: 7px; height: 7px; border-radius: 50%;
+          background: var(--st-danger);
+          position: absolute; top: 5px; right: 5px;
+          border: 1.5px solid white;
+        }
 
-                    <div class="text-center">
-                        <img src="https://ui-avatars.com/api/?name=${p.name}&background=random"
-                             class="rounded-circle mb-3" width="80">
+        /* منطقة المحتوى مع السكرول */
+        .st-body {
+          padding: 20px;
+          flex: 1;
+          overflow-y: auto;  /* السكرول هنا فقط داخل الداشبورد */
+        }
 
-                        <h5 class="fw-bold">${p.name}</h5>
+        /* =====================================================
+           الفيوهات
+        ===================================================== */
+        .st-view { display: none; }
+        .st-view.active { display: block; }
 
-                        <span class="badge bg-light text-primary border">${p.type}</span>
+        /* =====================================================
+           بطاقة إحصائية
+        ===================================================== */
+        .st-stat-card {
+          background: white;
+          border-radius: var(--st-radius);
+          padding: 16px 18px;
+          box-shadow: var(--st-shadow);
+          display: flex; align-items: center; gap: 14px;
+          transition: transform .2s;
+        }
+        .st-stat-card:hover { transform: translateY(-2px); }
+        .st-stat-ico {
+          width: 46px; height: 46px; border-radius: 11px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 19px; flex-shrink: 0;
+        }
+        .st-stat-card .num  { font-size: 22px; font-weight: 800; }
+        .st-stat-card .lbl  { font-size: 12px; color: var(--st-muted); margin-top: 1px; }
+        .st-stat-card .chng { font-size: 11px; margin-top: 2px; }
 
-                        <div class="small text-muted mt-2">
-                            العمر: ${p.age} سنة | السكن: ${p.address}
+        /* =====================================================
+           كرت عام
+        ===================================================== */
+        .st-card {
+          background: white;
+          border-radius: var(--st-radius);
+          box-shadow: var(--st-shadow);
+          overflow: hidden;
+        }
+        .st-card-header {
+          padding: 13px 18px;
+          border-bottom: 1px solid #edf2f0;
+          display: flex; align-items: center; justify-content: space-between;
+        }
+        .st-card-header h6 { font-size: 14px; font-weight: 700; margin: 0; }
+
+        /* =====================================================
+           أزرار
+        ===================================================== */
+        .st-btn {
+          background: linear-gradient(135deg, var(--st-primary), var(--st-light));
+          color: white; border: none;
+          padding: 7px 16px; border-radius: 8px;
+          font-family: 'Tajawal', sans-serif;
+          font-size: 12px; font-weight: 600;
+          cursor: pointer; transition: all .2s;
+        }
+        .st-btn:hover { opacity: .9; transform: translateY(-1px); }
+        .st-btn-outline {
+          background: transparent; color: var(--st-primary);
+          border: 1.5px solid var(--st-primary);
+          padding: 6px 14px; border-radius: 8px;
+          font-family: 'Tajawal', sans-serif;
+          font-size: 12px; font-weight: 600;
+          cursor: pointer; transition: all .2s;
+        }
+        .st-btn-outline:hover { background: var(--st-primary); color: white; }
+        .st-btn-sm {
+          width: 28px; height: 28px; border-radius: 7px; border: none;
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer; font-size: 12px; transition: all .2s;
+        }
+
+        /* =====================================================
+           الأفاتار (دائرة الحرف الأول)
+        ===================================================== */
+        .st-avatar {
+          border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 700; color: white; flex-shrink: 0;
+        }
+
+        /* =====================================================
+           بطاقة بروفايل الطالب (Hero)
+        ===================================================== */
+        .st-hero {
+          background: linear-gradient(135deg, var(--st-primary) 0%, var(--st-light) 55%, var(--st-accent) 100%);
+          border-radius: var(--st-radius);
+          padding: 26px 28px;
+          color: white;
+          display: flex; align-items: center; gap: 20px;
+          position: relative; overflow: hidden;
+        }
+        /* عناصر زخرفية */
+        .st-hero::before {
+          content: '';
+          position: absolute; top: -40px; left: -40px;
+          width: 180px; height: 180px; border-radius: 50%;
+          background: rgba(255,255,255,0.05);
+        }
+        .st-hero::after {
+          content: '';
+          position: absolute; bottom: -50px; left: 80px;
+          width: 220px; height: 220px; border-radius: 50%;
+          background: rgba(255,255,255,0.04);
+        }
+        .st-hero .hero-info { position: relative; z-index: 1; flex: 1; }
+        .st-hero .hero-info h3 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+        .st-hero .hero-info p  { opacity: .8; font-size: 13px; margin: 0; }
+
+        /* شريط إنجاز الحالات */
+        .st-progress-hero {
+          position: relative; z-index: 1;
+          background: rgba(255,255,255,0.18);
+          border-radius: 12px; padding: 14px 18px;
+          min-width: 170px; text-align: center;
+        }
+        .st-progress-hero .big-num { font-size: 36px; font-weight: 800; line-height: 1; }
+        .st-progress-hero .sub     { font-size: 11px; opacity: .75; margin-top: 2px; }
+
+        /* =====================================================
+           شريط التقدم
+        ===================================================== */
+        .st-prog { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.2); overflow: hidden; }
+        .st-prog-fill { height: 100%; border-radius: 3px; background: var(--st-accent2); }
+        .st-prog-dark { height: 6px; border-radius: 3px; background: #edf2f0; overflow: hidden; }
+        .st-prog-dark-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--st-primary), var(--st-accent)); }
+
+        /* =====================================================
+           بطاقة الحالة الحالية (الجلسة القادمة)
+        ===================================================== */
+        .st-session-card {
+          background: linear-gradient(135deg, #f0fdf9, #dcfce7);
+          border: 1.5px solid #a7f3d0;
+          border-radius: var(--st-radius);
+          padding: 18px 20px;
+        }
+        .st-session-card .patient-name { font-size: 17px; font-weight: 800; color: var(--st-primary); }
+
+        /* شارات الحالة */
+        .st-badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .st-badge-pending  { background: #fff7ed; color: #c2410c; }
+        .st-badge-done     { background: #f0fdf4; color: #15803d; }
+        .st-badge-progress { background: #eff6ff; color: #1d4ed8; }
+        .st-badge-new      { background: #fdf4ff; color: #7e22ce; }
+
+        /* =====================================================
+           كرت التقرير في سجل الإنجازات
+        ===================================================== */
+        .st-report-card {
+          background: white; border-radius: var(--st-radius);
+          box-shadow: var(--st-shadow); overflow: hidden;
+          transition: transform .2s;
+        }
+        .st-report-card:hover { transform: translateY(-2px); }
+
+        .st-report-imgs { display: grid; grid-template-columns: 1fr 1fr; height: 120px; }
+        .st-img-slot {
+          overflow: hidden; position: relative;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .st-img-slot img { width: 100%; height: 100%; object-fit: cover; }
+        .st-img-lbl {
+          position: absolute; bottom: 5px; right: 5px;
+          background: rgba(0,0,0,0.6); color: white;
+          font-size: 9px; font-weight: 600;
+          padding: 1px 7px; border-radius: 20px;
+        }
+
+        /* دائرة العلامة */
+        .st-grade-circle {
+          width: 42px; height: 42px; border-radius: 50%;
+          background: linear-gradient(135deg, var(--st-primary), var(--st-accent));
+          color: white; font-size: 13px; font-weight: 800;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .st-grade-pending {
+          width: 42px; height: 42px; border-radius: 50%;
+          background: #fff7ed; border: 2px dashed var(--st-warning);
+          color: var(--st-warning); font-size: 10px; font-weight: 700;
+          display: flex; align-items: center; justify-content: center;
+        }
+
+        /* =====================================================
+           المودال العام
+        ===================================================== */
+        .st-modal-overlay {
+          display: none;
+          position: fixed; inset: 0;
+          background: rgba(0,0,0,0.5);
+          z-index: 4000;
+          align-items: center; justify-content: center;
+        }
+        .st-modal-overlay.open { display: flex; }
+        .st-modal-box {
+          background: white; border-radius: 18px;
+          width: 580px; max-width: 96vw;
+          max-height: 90vh; overflow-y: auto;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+          animation: stModalIn .22s ease;
+        }
+        @@keyframes stModalIn {
+          from { transform: scale(.95) translateY(12px); opacity: 0; }
+          to   { transform: scale(1)   translateY(0);    opacity: 1; }
+        }
+        .st-modal-header {
+          padding: 18px 22px 14px;
+          border-bottom: 1px solid #edf2f0;
+          display: flex; align-items: center; justify-content: space-between;
+        }
+        .st-modal-body { padding: 20px 22px; }
+        .st-close-btn {
+          width: 28px; height: 28px; border-radius: 7px; border: none;
+          background: #f0f7f5; cursor: pointer; font-size: 14px; color: #666;
+          display: flex; align-items: center; justify-content: center;
+        }
+
+        /* =====================================================
+           نموذج رفع التقرير - منطقة رفع الصور
+        ===================================================== */
+        .st-upload-zone {
+          border: 2px dashed #a7f3d0;
+          border-radius: 10px;
+          padding: 20px;
+          text-align: center;
+          background: #f0fdf9;
+          cursor: pointer;
+          transition: all .2s;
+        }
+        .st-upload-zone:hover { border-color: var(--st-accent); background: #dcfce7; }
+        .st-upload-zone i { font-size: 28px; color: var(--st-accent); margin-bottom: 6px; display: block; }
+        .st-upload-zone p { font-size: 12px; color: var(--st-muted); margin: 0; }
+
+        /* =====================================================
+           كرت معلومة مريض (في مودال تفاصيل المريض)
+        ===================================================== */
+        .st-info-row {
+          display: flex; gap: 8px;
+          padding: 9px 0; border-bottom: 1px solid #f0f7f5; font-size: 13px;
+        }
+        .st-info-row:last-child { border-bottom: none; }
+        .st-info-row .lbl { color: var(--st-muted); min-width: 120px; font-weight: 500; }
+        .st-info-row .val { font-weight: 600; }
+
+        /* =====================================================
+           Toast داخل الكونتينر
+        ===================================================== */
+        .st-toast-wrap {
+          position: absolute; bottom: 16px; left: 16px; z-index: 5000;
+        }
+        .st-toast-item {
+          background: var(--st-dark); color: white;
+          padding: 10px 16px; border-radius: 9px;
+          font-size: 13px; font-weight: 500;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+          display: flex; align-items: center; gap: 8px;
+          margin-top: 6px;
+          animation: stToastIn .25s ease;
+        }
+        @@keyframes stToastIn {
+          from { transform: translateY(12px); opacity: 0; }
+          to   { transform: translateY(0);    opacity: 1; }
+        }
+
+        /* =====================================================
+           بطاقة طلب الحالة
+        ===================================================== */
+        .st-request-card {
+          background: linear-gradient(135deg, #fffbeb, #fef9c3);
+          border: 1.5px solid #fde68a;
+          border-radius: var(--st-radius); padding: 16px 18px;
+          transition: all .2s;
+        }
+        .st-request-card:hover { transform: translateY(-2px); box-shadow: var(--st-shadow); }
+
+        /* =====================================================
+           قسيمة التقدير
+        ===================================================== */
+        .st-grade-badge {
+          display: inline-flex; align-items: center; gap: 5px;
+          padding: 4px 12px; border-radius: 20px;
+          font-size: 12px; font-weight: 700;
+        }
+        .grade-excellent { background: #dcfce7; color: #15803d; }
+        .grade-good      { background: #dbeafe; color: #1d4ed8; }
+        .grade-pass      { background: #fef9c3; color: #a16207; }
+        .grade-pending   { background: #f3f4f6; color: #6b7280; }
+
+        /* صندوق البحث */
+        .st-search { position: relative; }
+        .st-search input {
+          background: var(--st-bg); border: 1.5px solid transparent;
+          border-radius: 8px; padding: 7px 12px 7px 32px;
+          font-family: 'Tajawal', sans-serif; font-size: 12px; width: 190px;
+          transition: all .2s; outline: none;
+        }
+        .st-search input:focus { border-color: var(--st-accent); background: white; }
+        .st-search i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--st-muted); font-size: 12px; }
+
+        /* تاب الفلتر */
+        .st-filter-tab {
+          padding: 5px 12px; border-radius: 7px;
+          border: 1.5px solid #d1e9e3;
+          font-family: 'Tajawal', sans-serif; font-size: 12px; font-weight: 600;
+          cursor: pointer; background: white; color: var(--st-muted); transition: all .2s;
+        }
+        .st-filter-tab.active { background: var(--st-primary); color: white; border-color: var(--st-primary); }
+
+        /* عنصر الجدول */
+        .st-table { width: 100%; border-collapse: collapse; }
+        .st-table th {
+          background: #f4faf8; padding: 10px 14px;
+          font-size: 11px; font-weight: 700; color: var(--st-muted);
+          text-transform: uppercase; letter-spacing: .4px;
+          border-bottom: 1px solid #edf2f0; white-space: nowrap;
+        }
+        .st-table td {
+          padding: 11px 14px; font-size: 13px;
+          border-bottom: 1px solid #f0f7f5; vertical-align: middle;
+        }
+        .st-table tr:last-child td { border-bottom: none; }
+        .st-table tr:hover td { background: #f4faf8; }
+
+        /* الإشعارات */
+        .st-notif-item {
+          display: flex; gap: 12px; align-items: flex-start;
+          padding: 12px 16px; border-bottom: 1px solid #edf2f0;
+          transition: background .2s; cursor: pointer;
+        }
+        .st-notif-item:hover { background: #f4faf8; }
+        .st-notif-item:last-child { border-bottom: none; }
+        .st-notif-dot-big {
+          width: 8px; height: 8px; border-radius: 50%;
+          flex-shrink: 0; margin-top: 5px;
+        }
+    </style>
+
+
+    <!-- wrapper خارجي بـ Bootstrap container - يتكيف مع النافبار/الفوتر -->
+    <div class="container-fluid py-3 px-3 px-md-4">
+
+        <!-- الداشبورد الرئيسي - معزول كلياً -->
+        <div class="st-dashboard">
+
+            <!-- ==================== SIDEBAR ==================== -->
+            <aside class="st-sidebar">
+
+                <!-- شعار -->
+                <div class="st-logo">
+                    <div class="ico"><i class="fa-solid fa-tooth"></i></div>
+                    <div>
+                        <h6>DentalEdu</h6>
+                        <small>بوابة الطالب</small>
+                    </div>
+                </div>
+
+                <!-- روابط التنقل -->
+                <nav class="st-nav">
+                    <div class="st-nav-title">الرئيسية</div>
+                    <a class="st-nav-link active" onclick="showView('dashboard')">
+                        <i class="fa-solid fa-house-medical"></i><span>لوحتي</span>
+                    </a>
+                    <a class="st-nav-link" onclick="showView('profile')">
+                        <i class="fa-solid fa-id-card"></i><span>ملفي الشخصي</span>
+                    </a>
+
+                    <div class="st-nav-title">حالاتي</div>
+                    <a class="st-nav-link" onclick="showView('session')">
+                        <i class="fa-solid fa-calendar-check"></i><span>الجلسة القادمة</span>
+                        <span class="st-nav-badge">1</span>
+                    </a>
+                    <a class="st-nav-link" onclick="showView('reports')">
+                        <i class="fa-solid fa-file-waveform"></i><span>تقاريري</span>
+                        <span class="st-nav-badge">3</span>
+                    </a>
+                    <a class="st-nav-link" onclick="showView('upload')">
+                        <i class="fa-solid fa-cloud-arrow-up"></i><span>رفع تقرير جديد</span>
+                    </a>
+
+                    <div class="st-nav-title">الطلبات</div>
+                    <a class="st-nav-link" onclick="showView('request')">
+                        <i class="fa-solid fa-hand-point-up"></i><span>طلب حالة</span>
+                    </a>
+                    <a class="st-nav-link" onclick="showView('requests-list')">
+                        <i class="fa-solid fa-list-check"></i><span>طلباتي</span>
+                        <span class="st-nav-badge">2</span>
+                    </a>
+
+                    <div class="st-nav-title">أخرى</div>
+                    <a class="st-nav-link" onclick="showView('notifications')">
+                        <i class="fa-solid fa-bell"></i><span>الإشعارات</span>
+                        <span class="st-nav-badge">4</span>
+                    </a>
+                </nav>
+
+                <!-- بروفايل الطالب -->
+                <div class="st-sidebar-profile">
+                    <div class="st-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#0d6e5c,#00c9a7);">أ</div>
+                    <div>
+                        <div class="name">أحمد سالم</div>
+                        <div class="role">2021-D-001</div>
+                    </div>
+                </div>
+            </aside>
+            <!-- /SIDEBAR -->
+            <!-- ==================== MAIN ==================== -->
+            <div class="st-main">
+
+                <!-- التوبار -->
+                <div class="st-topbar">
+                    <div class="pg-title" id="stPageTitle">لوحتي</div>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="st-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" placeholder="بحث..." />
+                        </div>
+                        <button class="st-icon-btn" onclick="showView('notifications')">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="st-notif-dot"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- محتوى الصفحات -->
+                <div class="st-body">
+
+                    <!-- ============================================================
+                         VIEW: لوحة التحكم الرئيسية
+                    ============================================================ -->
+                    <div class="st-view active" id="st-view-dashboard">
+
+                        <!-- بطاقة الترحيب + إحصائيات سريعة -->
+                        <div class="st-hero mb-3">
+                            <div class="st-avatar" style="width:72px;height:72px;font-size:26px;background:rgba(255,255,255,0.2);border:3px solid rgba(255,255,255,0.35);position:relative;z-index:1;">أ</div>
+                            <div class="hero-info">
+                                <h3>أهلاً، أحمد سالم 👋</h3>
+                                <p><i class="fa-solid fa-graduation-cap me-1"></i>السنة الرابعة · DENT-301 · د. عمر خالد</p>
+                                <div class="d-flex gap-2 mt-2 flex-wrap">
+                                    <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;font-weight:500;"><i class="fa-solid fa-star me-1"></i>GPA: 3.7</span>
+                                    <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;font-weight:500;"><i class="fa-solid fa-check-circle me-1"></i>2 حالة مكتملة</span>
+                                    <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;font-weight:500;"><i class="fa-solid fa-clock me-1"></i>جلسة الأحد القادم</span>
+                                </div>
+                            </div>
+                            <div class="st-progress-hero">
+                                <div class="big-num">2/3</div>
+                                <div class="sub">حالات مطلوبة</div>
+                                <div class="st-prog mt-2">
+                                    <div class="st-prog-fill" style="width:66%"></div>
+                                </div>
+                                <div style="font-size:10px;opacity:.7;margin-top:4px;">66% إنجاز</div>
+                            </div>
+                        </div>
+
+                        <!-- الإحصائيات الأربع -->
+                        <div class="row g-2 mb-3">
+                            <div class="col-6 col-md-3">
+                                <div class="st-stat-card">
+                                    <div class="st-stat-ico" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-tooth"></i></div>
+                                    <div><div class="num">2</div><div class="lbl">حالات مكتملة</div></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="st-stat-card">
+                                    <div class="st-stat-ico" style="background:#dbeafe;color:#1d4ed8;"><i class="fa-solid fa-file-waveform"></i></div>
+                                    <div><div class="num">3</div><div class="lbl">تقارير مرفوعة</div></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="st-stat-card">
+                                    <div class="st-stat-ico" style="background:#fdf4ff;color:#9333ea;"><i class="fa-solid fa-star"></i></div>
+                                    <div><div class="num">17</div><div class="lbl">متوسط العلامات</div><div class="chng" style="color:var(--st-muted);">من 20</div></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="st-stat-card">
+                                    <div class="st-stat-ico" style="background:#fff7ed;color:#ea580c;"><i class="fa-solid fa-calendar-day"></i></div>
+                                    <div><div class="num">الأحد</div><div class="lbl">الجلسة القادمة</div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <!-- الجلسة القادمة - ملخص -->
+                            <div class="col-lg-5">
+                                <div class="st-card h-100">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-calendar-check me-2" style="color:var(--st-accent);"></i>جلستي القادمة</h6>
+                                        <button class="st-btn-outline" onclick="showView('session')">التفاصيل</button>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="st-session-card">
+                                            <div class="d-flex align-items-center gap-2 mb-2">
+                                                <div class="st-avatar" style="width:44px;height:44px;font-size:17px;background:linear-gradient(135deg,#ec4899,#f43f5e);">ن</div>
+                                                <div>
+                                                    <div class="patient-name">نور محمد الأحمد</div>
+                                                    <div style="font-size:11px;color:var(--st-muted);">0791234567 · ذكر · 28 سنة</div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                                <span class="st-badge st-badge-progress"><i class="fa-solid fa-tooth me-1"></i>تقويم أسنان</span>
+                                                <span class="st-badge" style="background:#dcfce7;color:#15803d;"><i class="fa-solid fa-clock me-1"></i>الأحد 18 مايو</span>
+                                            </div>
+                                            <div style="font-size:12px;color:var(--st-muted);">
+                                                <i class="fa-solid fa-map-pin me-1"></i>عيادة رقم 5 - المبنى B
+                                            </div>
+                                            <!-- زر مشاهدة كامل بيانات المريض -->
+                                            <button class="st-btn w-100 mt-2" onclick="openPatientModal()">
+                                                <i class="fa-solid fa-eye me-1"></i>عرض كامل بيانات المريض
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- آخر التقارير -->
+                            <div class="col-lg-7">
+                                <div class="st-card h-100">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-file-waveform me-2" style="color:var(--st-accent);"></i>آخر تقاريري</h6>
+                                        <button class="st-btn-outline" onclick="showView('reports')">عرض الكل</button>
+                                    </div>
+                                    <table class="st-table">
+                                        <thead>
+                                            <tr><th>الحالة</th><th>المريض</th><th>التاريخ</th><th>العلامة</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><span class="fw-600">حشو ضرسي</span></td>
+                                                <td style="color:var(--st-muted);">سارة الحسن</td>
+                                                <td style="color:var(--st-muted);">11 أبريل</td>
+                                                <td><span class="st-grade-badge grade-excellent"><i class="fa-solid fa-star"></i>17/20</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="fw-600">خلع ضرس</span></td>
+                                                <td style="color:var(--st-muted);">محمد نور</td>
+                                                <td style="color:var(--st-muted);">5 أبريل</td>
+                                                <td><span class="st-grade-badge grade-good"><i class="fa-solid fa-star"></i>16/20</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="fw-600">تنظيف أسنان</span></td>
+                                                <td style="color:var(--st-muted);">ليلى خير</td>
+                                                <td style="color:var(--st-muted);">29 مارس</td>
+                                                <td><span class="st-grade-badge grade-pending"><i class="fa-solid fa-clock"></i>بانتظار التقييم</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- طلباتي المعلقة - ملخص -->
+                            <div class="col-12">
+                                <div class="st-card">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-hand-point-up me-2 text-warning"></i>آخر طلباتي للحالات</h6>
+                                        <button class="st-btn" onclick="showView('request')">
+                                            <i class="fa-solid fa-plus me-1"></i>طلب حالة جديدة
+                                        </button>
+                                    </div>
+                                    <div class="row g-2 p-3">
+                                        <!-- طلب 1 -->
+                                        <div class="col-md-6">
+                                            <div class="st-request-card">
+                                                <div class="d-flex align-items-start justify-content-between mb-2">
+                                                    <div>
+                                                        <div style="font-size:13px;font-weight:700;">طارق العمري</div>
+                                                        <div style="font-size:11px;color:var(--st-muted);">صديق · علاج عصب</div>
+                                                    </div>
+                                                    <span class="st-badge st-badge-pending">بانتظار الموافقة</span>
+                                                </div>
+                                                <div style="font-size:11px;color:var(--st-muted);"><i class="fa-solid fa-calendar me-1"></i>طُلب: 10 أبريل 2025</div>
+                                            </div>
+                                        </div>
+                                        <!-- طلب 2 -->
+                                        <div class="col-md-6">
+                                            <div class="st-request-card">
+                                                <div class="d-flex align-items-start justify-content-between mb-2">
+                                                    <div>
+                                                        <div style="font-size:13px;font-weight:700;">ريم سالم</div>
+                                                        <div style="font-size:11px;color:var(--st-muted);">قريبة · تبييض أسنان</div>
+                                                    </div>
+                                                    <span class="st-badge st-badge-done">موافق عليه ✓</span>
+                                                </div>
+                                                <div style="font-size:11px;color:var(--st-muted);"><i class="fa-solid fa-calendar me-1"></i>طُلب: 3 أبريل 2025</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <!-- /dashboard -->
+                    <!-- ============================================================
+                         VIEW: الملف الشخصي
+                    ============================================================ -->
+                    <div class="st-view" id="st-view-profile">
+                        <div class="row g-3">
+
+                            <!-- بطاقة الترحيب -->
+                            <div class="col-12">
+                                <div class="st-hero">
+                                    <div class="st-avatar" style="width:80px;height:80px;font-size:30px;background:rgba(255,255,255,0.2);border:3px solid rgba(255,255,255,0.35);position:relative;z-index:1;">أ</div>
+                                    <div class="hero-info">
+                                        <h3>أحمد سالم</h3>
+                                        <p><i class="fa-solid fa-id-badge me-1"></i>2021-D-001 · السنة الرابعة</p>
+                                        <div class="d-flex gap-2 mt-2 flex-wrap">
+                                            <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;"><i class="fa-solid fa-star me-1"></i>GPA: 3.7</span>
+                                            <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;"><i class="fa-solid fa-graduation-cap me-1"></i>DENT-301</span>
+                                            <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;"><i class="fa-solid fa-user-doctor me-1"></i>د. عمر خالد</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- المعلومات الشخصية -->
+                            <div class="col-md-6">
+                                <div class="st-card">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-circle-info me-2" style="color:var(--st-accent);"></i>المعلومات الشخصية</h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="st-info-row"><span class="lbl">الاسم الكامل</span><span class="val">أحمد محمد سالم</span></div>
+                                        <div class="st-info-row"><span class="lbl">الرقم الجامعي</span><span class="val">2021-D-001</span></div>
+                                        <div class="st-info-row"><span class="lbl">البريد الإلكتروني</span><span class="val">ahmad@uni.edu</span></div>
+                                        <div class="st-info-row"><span class="lbl">رقم الهاتف</span><span class="val">0791001001</span></div>
+                                        <div class="st-info-row"><span class="lbl">السنة الدراسية</span><span class="val">الرابعة</span></div>
+                                        <div class="st-info-row"><span class="lbl">الفصل الدراسي</span><span class="val">الثاني 2025</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- إحصائيات أكاديمية -->
+                            <div class="col-md-6">
+                                <div class="st-card">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-chart-line me-2" style="color:var(--st-accent);"></i>الأداء الأكاديمي</h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="st-info-row"><span class="lbl">المعدل التراكمي</span><span class="val">3.7 / 4.0</span></div>
+                                        <div class="st-info-row"><span class="lbl">حالات مكتملة</span><span class="val">2 / 3 مطلوبة</span></div>
+                                        <div class="st-info-row"><span class="lbl">تقارير مرفوعة</span><span class="val">3 تقارير</span></div>
+                                        <div class="st-info-row"><span class="lbl">متوسط التقييم</span><span class="val">17 / 20</span></div>
+                                        <div class="st-info-row"><span class="lbl">الحضور</span><span class="val">92%</span></div>
+                                        <div class="p-0 mt-2">
+                                            <div class="d-flex justify-content-between mb-1" style="font-size:11px;color:var(--st-muted);">
+                                                <span>تقدم إنجاز الحالات</span><span>66%</span>
+                                            </div>
+                                            <div class="st-prog-dark">
+                                                <div class="st-prog-dark-fill" style="width:66%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- إحصائيات مرئية -->
+                            <div class="col-4">
+                                <div class="st-stat-card">
+                                    <div class="st-stat-ico" style="background:#dcfce7;color:#16a34a;"><i class="fa-solid fa-check-double"></i></div>
+                                    <div><div class="num">2</div><div class="lbl">حالات مكتملة</div></div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="st-stat-card">
+                                    <div class="st-stat-ico" style="background:#dbeafe;color:#1d4ed8;"><i class="fa-solid fa-star"></i></div>
+                                    <div><div class="num">17</div><div class="lbl">متوسط العلامة</div></div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="st-stat-card">
+                                    <div class="st-stat-ico" style="background:#fdf4ff;color:#9333ea;"><i class="fa-solid fa-hand-point-up"></i></div>
+                                    <div><div class="num">2</div><div class="lbl">طلبات مفتوحة</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /profile -->
+                    <!-- ============================================================
+                         VIEW: الجلسة القادمة - بيانات المريض الكاملة
+                    ============================================================ -->
+                    <div class="st-view" id="st-view-session">
+                        <div class="row g-3">
+
+                            <!-- بطاقة المريض الرئيسية -->
+                            <div class="col-12">
+                                <div class="st-card">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-calendar-check me-2" style="color:var(--st-accent);"></i>جلستي القادمة - الأحد 18 مايو 2025</h6>
+                                        <span class="badge text-bg-success">حالة نشطة</span>
+                                    </div>
+                                    <div class="p-3">
+                                        <!-- معلومات المريض المدخلة من قبله عند التسجيل -->
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="p-3 rounded-3" style="background:var(--st-bg);">
+                                                    <h6 class="fw-bold mb-3" style="color:var(--st-primary);font-size:13px;">
+                                                        <i class="fa-solid fa-user me-2"></i>بيانات المريض
+                                                        <span class="badge ms-2" style="background:#dcfce7;color:#15803d;font-size:10px;">أدخلها المريض</span>
+                                                    </h6>
+                                                    <div class="st-info-row"><span class="lbl">الاسم</span><span class="val">نور محمد الأحمد</span></div>
+                                                    <div class="st-info-row"><span class="lbl">العمر</span><span class="val">28 سنة</span></div>
+                                                    <div class="st-info-row"><span class="lbl">الجنس</span><span class="val">ذكر</span></div>
+                                                    <div class="st-info-row"><span class="lbl">رقم الهاتف</span><span class="val">0791234567</span></div>
+                                                    <div class="st-info-row"><span class="lbl">البريد الإلكتروني</span><span class="val">nour@email.com</span></div>
+                                                    <div class="st-info-row"><span class="lbl">تاريخ التسجيل</span><span class="val">14 مايو 2025</span></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="p-3 rounded-3" style="background:var(--st-bg);">
+                                                    <h6 class="fw-bold mb-3" style="color:var(--st-primary);font-size:13px;">
+                                                        <i class="fa-solid fa-notes-medical me-2"></i>معلومات طبية
+                                                        <span class="badge ms-2" style="background:#dcfce7;color:#15803d;font-size:10px;">أدخلها المريض</span>
+                                                    </h6>
+                                                    <div class="st-info-row"><span class="lbl">الشكوى الرئيسية</span><span class="val">ألم وتراكم في الأسنان</span></div>
+                                                    <div class="st-info-row"><span class="lbl">نوع العلاج المطلوب</span><span class="val">تقويم أسنان</span></div>
+                                                    <div class="st-info-row"><span class="lbl">أمراض مزمنة</span><span class="val">لا يوجد</span></div>
+                                                    <div class="st-info-row"><span class="lbl">الأدوية الحالية</span><span class="val">لا يوجد</span></div>
+                                                    <div class="st-info-row"><span class="lbl">حساسية من أدوية</span><span class="val">لا يوجد</span></div>
+                                                    <div class="st-info-row"><span class="lbl">آخر زيارة لطبيب أسنان</span><span class="val">منذ سنتين</span></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="p-3 rounded-3" style="background:#fffbeb;border:1px solid #fde68a;">
+                                                    <h6 class="fw-bold mb-2" style="color:#92400e;font-size:13px;">
+                                                        <i class="fa-solid fa-comment-medical me-2"></i>ملاحظات إضافية من المريض
+                                                    </h6>
+                                                    <p style="font-size:13px;color:#78350f;margin:0;line-height:1.7;">
+                                                        "أعاني من ألم عند مضغ الطعام على الجانب الأيسر منذ شهر تقريباً. لدي قلق من حقن التخدير. أفضل أن يكون الدكتور لطيفاً في التعامل."
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- معلومات الجلسة -->
+                            <div class="col-md-6">
+                                <div class="st-card h-100">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-map-pin me-2 text-danger"></i>تفاصيل الجلسة</h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="st-info-row"><span class="lbl">التاريخ</span><span class="val">الأحد 18 مايو 2025</span></div>
+                                        <div class="st-info-row"><span class="lbl">الوقت</span><span class="val">10:00 - 12:00</span></div>
+                                        <div class="st-info-row"><span class="lbl">المكان</span><span class="val">عيادة رقم 5 - المبنى B</span></div>
+                                        <div class="st-info-row"><span class="lbl">المشرف</span><span class="val">د. عمر خالد الرشيد</span></div>
+                                        <div class="st-info-row"><span class="lbl">نوع العلاج</span><span class="val">تقويم أسنان - جلسة أولى</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- تعليمات ما قبل الجلسة -->
+                            <div class="col-md-6">
+                                <div class="st-card h-100">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-clipboard-list me-2 text-warning"></i>تذكير بالجلسة</h6>
+                                    </div>
+                                    <div class="p-3">
+                                        <ul class="list-unstyled mb-0" style="font-size:13px;">
+                                            <li class="d-flex gap-2 mb-2"><i class="fa-solid fa-check-circle text-success mt-1"></i><span>حضّر الأدوات اللازمة للتقويم</span></li>
+                                            <li class="d-flex gap-2 mb-2"><i class="fa-solid fa-check-circle text-success mt-1"></i><span>راجع بروتوكول التخدير الموضعي</span></li>
+                                            <li class="d-flex gap-2 mb-2"><i class="fa-solid fa-check-circle text-success mt-1"></i><span>المريض يعاني من قلق - تعامل بلطف</span></li>
+                                            <li class="d-flex gap-2 mb-2"><i class="fa-solid fa-triangle-exclamation text-warning mt-1"></i><span>لا حساسية من الأدوية</span></li>
+                                            <li class="d-flex gap-2"><i class="fa-solid fa-camera text-info mt-1"></i><span>التقط صور قبل وبعد العلاج</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- زر رفع تقرير بعد الجلسة -->
+                            <div class="col-12">
+                                <div class="alert d-flex align-items-center justify-content-between" style="background:#dcfce7;border:1px solid #86efac;border-radius:12px;">
+                                    <div>
+                                        <i class="fa-solid fa-circle-info me-2" style="color:#16a34a;"></i>
+                                        <span style="font-size:13px;font-weight:600;color:#15803d;">بعد إتمام الجلسة، لا تنس رفع تقريرك!</span>
+                                    </div>
+                                    <button class="st-btn" onclick="showView('upload')">
+                                        <i class="fa-solid fa-cloud-arrow-up me-1"></i>رفع تقرير
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /session -->
+                    <!-- ============================================================
+                         VIEW: تقاريري (سجل الإنجازات)
+                    ============================================================ -->
+                    <div class="st-view" id="st-view-reports">
+                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                            <div class="d-flex gap-1 flex-wrap">
+                                <button class="st-filter-tab active" onclick="filterMyReports('all',this)">الكل (3)</button>
+                                <button class="st-filter-tab" onclick="filterMyReports('graded',this)">مُقيَّمة (2)</button>
+                                <button class="st-filter-tab" onclick="filterMyReports('pending',this)">بانتظار التقييم (1)</button>
+                            </div>
+                            <button class="st-btn" onclick="showView('upload')">
+                                <i class="fa-solid fa-plus me-1"></i>رفع تقرير جديد
+                            </button>
+                        </div>
+
+                        <!-- شبكة التقارير - تُملأ بالجافاسكريبت -->
+                        <div class="row g-3" id="myReportsGrid"></div>
+                    </div>
+                    <!-- /reports -->
+                    <!-- ============================================================
+                         VIEW: رفع تقرير جديد
+                    ============================================================ -->
+                    <div class="st-view" id="st-view-upload">
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="st-card">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-cloud-arrow-up me-2" style="color:var(--st-accent);"></i>رفع تقرير حالة جديدة</h6>
+                                    </div>
+                                    <div class="p-4">
+
+                                        <!-- اختيار المريض -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">
+                                                <i class="fa-solid fa-hospital-user me-1"></i>المريض المرتبط بالتقرير
+                                            </label>
+                                            <select class="form-select form-select-sm" style="font-family:'Tajawal',sans-serif;">
+                                                <option>نور محمد الأحمد - تقويم أسنان</option>
+                                                <option>سارة الحسن - حشو ضرسي</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- نوع العلاج -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">
+                                                <i class="fa-solid fa-tooth me-1"></i>نوع الإجراء المُنجز
+                                            </label>
+                                            <input type="text" class="form-control form-control-sm" placeholder="مثال: حشو مركب، خلع بسيط، تنظيف..." style="font-family:'Tajawal',sans-serif;" />
+                                        </div>
+
+                                        <!-- تاريخ الإجراء -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">
+                                                <i class="fa-solid fa-calendar me-1"></i>تاريخ الإجراء
+                                            </label>
+                                            <input type="date" class="form-control form-control-sm" style="font-family:'Tajawal',sans-serif;" />
+                                        </div>
+
+                                        <!-- وصف ما تم -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">
+                                                <i class="fa-solid fa-pen-to-square me-1"></i>وصف الإجراء وما تم عمله
+                                            </label>
+                                            <textarea rows="4" class="form-control form-control-sm" placeholder="اشرح بالتفصيل ما قمت به في هذه الجلسة..." style="font-family:'Tajawal',sans-serif;resize:none;"></textarea>
+                                        </div>
+
+                                        <!-- المواد المستخدمة -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">
+                                                <i class="fa-solid fa-syringe me-1"></i>المواد والأدوات المستخدمة
+                                            </label>
+                                            <input type="text" class="form-control form-control-sm" placeholder="مثال: مادة كومبوزيت، مخدر موضعي..." style="font-family:'Tajawal',sans-serif;" />
+                                        </div>
+
+                                        <!-- المضاعفات -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">
+                                                <i class="fa-solid fa-triangle-exclamation me-1"></i>هل واجهت أي مضاعفات؟
+                                            </label>
+                                            <div class="d-flex gap-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="comp" id="comp-no" checked />
+                                                    <label class="form-check-label" for="comp-no" style="font-size:13px;">لا، كل شيء سار بشكل طبيعي</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="comp" id="comp-yes" onchange="toggleComp(true)" />
+                                                    <label class="form-check-label" for="comp-yes" style="font-size:13px;">نعم</label>
+                                                </div>
+                                            </div>
+                                            <textarea id="compDetail" rows="2" class="form-control form-control-sm mt-2 d-none" placeholder="اذكر المضاعفات التي واجهتها..." style="font-family:'Tajawal',sans-serif;resize:none;"></textarea>
+                                        </div>
+
+                                        <!-- صور قبل وبعد -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">
+                                                <i class="fa-solid fa-images me-1"></i>صور الحالة
+                                            </label>
+                                            <div class="row g-2">
+                                                <!-- رفع صورة قبل -->
+                                                <div class="col-6">
+                                                    <div class="st-upload-zone" onclick="triggerUpload('before-img')" id="before-zone">
+                                                        <i class="fa-solid fa-camera-retro"></i>
+                                                        <p class="fw-bold mb-1" style="font-size:13px;">صورة قبل العلاج</p>
+                                                        <p>اضغط لرفع الصورة</p>
+                                                        <input type="file" id="before-img" class="d-none" accept="image/*" onchange="previewImg(this,'before-zone','before-preview')" />
+                                                    </div>
+                                                    <img id="before-preview" src="" class="d-none rounded-2 mt-1 w-100" style="height:80px;object-fit:cover;" />
+                                                </div>
+                                                <!-- رفع صورة بعد -->
+                                                <div class="col-6">
+                                                    <div class="st-upload-zone" onclick="triggerUpload('after-img')" id="after-zone">
+                                                        <i class="fa-solid fa-camera"></i>
+                                                        <p class="fw-bold mb-1" style="font-size:13px;">صورة بعد العلاج</p>
+                                                        <p>اضغط لرفع الصورة</p>
+                                                        <input type="file" id="after-img" class="d-none" accept="image/*" onchange="previewImg(this,'after-zone','after-preview')" />
+                                                    </div>
+                                                    <img id="after-preview" src="" class="d-none rounded-2 mt-1 w-100" style="height:80px;object-fit:cover;" />
+                                                </div>
+                                            </div>
+                                            <div class="mt-2">
+                                                <label class="form-label fw-bold" style="font-size:12px;color:var(--st-muted);">صور إضافية (اختياري)</label>
+                                                <div class="st-upload-zone" onclick="triggerUpload('extra-imgs')">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                    <p>إضافة صور إضافية (أشعة، صور جانبية...)</p>
+                                                    <input type="file" id="extra-imgs" class="d-none" accept="image/*" multiple />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- تقييم الطالب لنفسه -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">
+                                                <i class="fa-solid fa-star me-1"></i>تقييمك الذاتي للأداء
+                                            </label>
+                                            <div class="d-flex gap-2 flex-wrap">
+                                                <button class="st-filter-tab" onclick="setSelfGrade(this,'ممتاز')">⭐⭐⭐ ممتاز</button>
+                                                <button class="st-filter-tab" onclick="setSelfGrade(this,'جيد جداً')">⭐⭐ جيد جداً</button>
+                                                <button class="st-filter-tab" onclick="setSelfGrade(this,'جيد')">⭐ جيد</button>
+                                                <button class="st-filter-tab" onclick="setSelfGrade(this,'بحاجة تحسين')">🔄 بحاجة تحسين</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- زر الإرسال -->
+                                        <div class="d-flex gap-2">
+                                            <button class="st-btn flex-grow-1" onclick="submitReport()">
+                                                <i class="fa-solid fa-paper-plane me-2"></i>رفع التقرير وإرساله للدكتور
+                                            </button>
+                                            <button class="st-btn-outline" onclick="showView('reports')">إلغاء</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /upload -->
+                    <!-- ============================================================
+                         VIEW: طلب حالة جديدة
+                    ============================================================ -->
+                    <div class="st-view" id="st-view-request">
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-lg-7">
+                                <div class="st-card">
+                                    <div class="st-card-header">
+                                        <h6><i class="fa-solid fa-hand-point-up me-2 text-warning"></i>طلب تخصيص حالة</h6>
+                                    </div>
+                                    <div class="p-4">
+
+                                        <!-- شرح الخاصية -->
+                                        <div class="alert" style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;font-size:13px;">
+                                            <i class="fa-solid fa-circle-info me-2" style="color:#92400e;"></i>
+                                            <strong style="color:#92400e;">ما هو طلب الحالة؟</strong>
+                                            <p class="mb-0 mt-1" style="color:#78350f;">
+                                                إذا كان لديك شخص (صديق، قريب، أو أي شخص يرغب في العلاج) يمكنك تقديم طلب لتخصيص الحالة لك. سيقوم الدكتور بمراجعة الطلب وتوزيع الحالة عليك.
+                                            </p>
+                                        </div>
+
+                                        <!-- بيانات الشخص -->
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">اسم الشخص</label>
+                                                <input type="text" class="form-control form-control-sm" placeholder="الاسم الكامل" style="font-family:'Tajawal',sans-serif;" id="req-name" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">رقم هاتفه</label>
+                                                <input type="tel" class="form-control form-control-sm" placeholder="07xxxxxxxx" style="font-family:'Tajawal',sans-serif;" id="req-phone" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">صلة القرابة / العلاقة</label>
+                                                <select class="form-select form-select-sm" style="font-family:'Tajawal',sans-serif;" id="req-relation">
+                                                    <option value="">اختر...</option>
+                                                    <option>صديق</option>
+                                                    <option>قريب</option>
+                                                    <option>زميل</option>
+                                                    <option>جار</option>
+                                                    <option>أخرى</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">نوع العلاج المطلوب</label>
+                                                <input type="text" class="form-control form-control-sm" placeholder="مثال: حشو، خلع، تنظيف..." style="font-family:'Tajawal',sans-serif;" id="req-treatment" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold" style="font-size:13px;color:var(--st-muted);">سبب طلبك لهذه الحالة</label>
+                                                <textarea rows="3" class="form-control form-control-sm" placeholder="لماذا تريد هذه الحالة بالتحديد؟ ما الفائدة التعليمية منها؟" style="font-family:'Tajawal',sans-serif;resize:none;" id="req-reason"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex gap-2 mt-3">
+                                            <button class="st-btn flex-grow-1" onclick="submitRequest()">
+                                                <i class="fa-solid fa-paper-plane me-2"></i>إرسال الطلب للدكتور
+                                            </button>
+                                            <button class="st-btn-outline" onclick="showView('requests-list')">عرض طلباتي</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /request -->
+                    <!-- ============================================================
+                         VIEW: قائمة طلباتي
+                    ============================================================ -->
+                    <div class="st-view" id="st-view-requests-list">
+                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                            <h6 class="fw-bold m-0" style="font-size:15px;">طلباتي لحالات</h6>
+                            <button class="st-btn" onclick="showView('request')">
+                                <i class="fa-solid fa-plus me-1"></i>طلب جديد
+                            </button>
+                        </div>
+                        <div class="row g-3" id="requestsListGrid">
+                            <!-- طلب 1 -->
+                            <div class="col-md-6">
+                                <div class="st-card">
+                                    <div class="p-3">
+                                        <div class="d-flex align-items-start justify-content-between mb-3">
+                                            <div class="d-flex gap-2 align-items-center">
+                                                <div class="st-avatar" style="width:40px;height:40px;font-size:15px;background:linear-gradient(135deg,#f59e0b,#ef4444);">ط</div>
+                                                <div>
+                                                    <div style="font-size:14px;font-weight:700;">طارق العمري</div>
+                                                    <div style="font-size:11px;color:var(--st-muted);">صديق</div>
+                                                </div>
+                                            </div>
+                                            <span class="st-badge st-badge-pending">بانتظار الموافقة</span>
+                                        </div>
+                                        <div class="row g-2" style="font-size:12px;">
+                                            <div class="col-6"><span style="color:var(--st-muted);">نوع العلاج:</span> <strong>علاج عصب</strong></div>
+                                            <div class="col-6"><span style="color:var(--st-muted);">الهاتف:</span> <strong>0791234567</strong></div>
+                                            <div class="col-12"><span style="color:var(--st-muted);">تاريخ الطلب:</span> 10 أبريل 2025</div>
+                                            <div class="col-12">
+                                                <div class="p-2 rounded" style="background:#fff7ed;font-size:11px;color:#92400e;">
+                                                    <i class="fa-solid fa-comment me-1"></i>
+                                                    "أريد هذه الحالة لأن علاج العصب يوفر لي تجربة سريرية مهمة في المرحلة الحالية"
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- طلب 2 -->
+                            <div class="col-md-6">
+                                <div class="st-card">
+                                    <div class="p-3">
+                                        <div class="d-flex align-items-start justify-content-between mb-3">
+                                            <div class="d-flex gap-2 align-items-center">
+                                                <div class="st-avatar" style="width:40px;height:40px;font-size:15px;background:linear-gradient(135deg,#ec4899,#f43f5e);">ر</div>
+                                                <div>
+                                                    <div style="font-size:14px;font-weight:700;">ريم سالم</div>
+                                                    <div style="font-size:11px;color:var(--st-muted);">قريبة</div>
+                                                </div>
+                                            </div>
+                                            <span class="st-badge st-badge-done">✓ موافق عليه</span>
+                                        </div>
+                                        <div class="row g-2" style="font-size:12px;">
+                                            <div class="col-6"><span style="color:var(--st-muted);">نوع العلاج:</span> <strong>تبييض أسنان</strong></div>
+                                            <div class="col-6"><span style="color:var(--st-muted);">الهاتف:</span> <strong>0799876543</strong></div>
+                                            <div class="col-12"><span style="color:var(--st-muted);">تاريخ الطلب:</span> 3 أبريل 2025</div>
+                                            <div class="col-12">
+                                                <div class="p-2 rounded" style="background:#f0fdf4;font-size:11px;color:#15803d;">
+                                                    <i class="fa-solid fa-check-circle me-1"></i>
+                                                    تمت الموافقة - ستُحدد موعد الجلسة قريباً
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /requests-list -->
+                    <!-- ============================================================
+                         VIEW: الإشعارات
+                    ============================================================ -->
+                    <div class="st-view" id="st-view-notifications">
+                        <div class="st-card">
+                            <div class="st-card-header">
+                                <h6><i class="fa-solid fa-bell me-2" style="color:var(--st-accent);"></i>الإشعارات</h6>
+                                <button class="st-btn-outline" style="font-size:11px;padding:4px 10px;">تحديد الكل كمقروء</button>
+                            </div>
+                            <div id="notifList">
+                                <!-- إشعار 1 - جديد -->
+                                <div class="st-notif-item">
+                                    <div class="st-notif-dot-big mt-1" style="background:var(--st-primary);flex-shrink:0;"></div>
+                                    <div class="st-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#0d6e5c,#00c9a7);flex-shrink:0;">د</div>
+                                    <div style="flex:1;">
+                                        <div style="font-size:13px;font-weight:600;">تم توزيع حالة جديدة عليك</div>
+                                        <div style="font-size:12px;color:var(--st-muted);margin-top:2px;">المريض: نور محمد الأحمد - تقويم أسنان</div>
+                                        <div style="font-size:11px;color:var(--st-muted);margin-top:3px;"><i class="fa-regular fa-clock me-1"></i>منذ ساعتين</div>
+                                    </div>
+                                    <span class="badge" style="background:#dcfce7;color:#15803d;font-size:10px;">جديد</span>
+                                </div>
+
+                                <!-- إشعار 2 - تقييم -->
+                                <div class="st-notif-item">
+                                    <div class="st-notif-dot-big mt-1" style="background:var(--st-warning);flex-shrink:0;"></div>
+                                    <div class="st-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#f59e0b,#ef4444);flex-shrink:0;">★</div>
+                                    <div style="flex:1;">
+                                        <div style="font-size:13px;font-weight:600;">تم تقييم تقريرك</div>
+                                        <div style="font-size:12px;color:var(--st-muted);margin-top:2px;">تقرير حشو ضرسي - سارة الحسن حصل على علامة 17/20</div>
+                                        <div style="font-size:11px;color:var(--st-muted);margin-top:3px;"><i class="fa-regular fa-clock me-1"></i>أمس</div>
+                                    </div>
+                                    <span class="badge" style="background:#fff7ed;color:#c2410c;font-size:10px;">تقييم</span>
+                                </div>
+
+                                <!-- إشعار 3 - موافقة -->
+                                <div class="st-notif-item" style="opacity:.7;">
+                                    <div class="st-notif-dot-big mt-1" style="background:#d1d5db;flex-shrink:0;"></div>
+                                    <div class="st-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#6366f1,#8b5cf6);flex-shrink:0;">✓</div>
+                                    <div style="flex:1;">
+                                        <div style="font-size:13px;font-weight:600;">تمت الموافقة على طلبك</div>
+                                        <div style="font-size:12px;color:var(--st-muted);margin-top:2px;">طلب حالة ريم سالم - تبييض أسنان تمت الموافقة عليه</div>
+                                        <div style="font-size:11px;color:var(--st-muted);margin-top:3px;"><i class="fa-regular fa-clock me-1"></i>منذ 3 أيام</div>
+                                    </div>
+                                </div>
+
+                                <!-- إشعار 4 - تذكير -->
+                                <div class="st-notif-item" style="opacity:.7;">
+                                    <div class="st-notif-dot-big mt-1" style="background:#d1d5db;flex-shrink:0;"></div>
+                                    <div class="st-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#0ea5e9,#22c55e);flex-shrink:0;"><i class="fa-solid fa-calendar" style="font-size:13px;"></i></div>
+                                    <div style="flex:1;">
+                                        <div style="font-size:13px;font-weight:600;">تذكير بموعد الجلسة</div>
+                                        <div style="font-size:12px;color:var(--st-muted);margin-top:2px;">جلستك مع نور محمد الأحمد الأحد القادم 10:00 صباحاً</div>
+                                        <div style="font-size:11px;color:var(--st-muted);margin-top:3px;"><i class="fa-regular fa-clock me-1"></i>منذ 5 أيام</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /notifications -->
 
                 </div>
+                <!-- /st-body -->
             </div>
-            `;
+            <!-- /st-main -->
+            <!-- ==================== MODALS ==================== -->
+            <!-- مودال كامل بيانات المريض -->
+            <div class="st-modal-overlay" id="patientModal">
+                <div class="st-modal-box">
+                    <div class="st-modal-header">
+                        <h6 class="fw-bold m-0">
+                            <i class="fa-solid fa-hospital-user me-2" style="color:var(--st-accent);"></i>
+                            كامل بيانات المريض
+                        </h6>
+                        <button class="st-close-btn" onclick="closeStModal('patientModal')"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="st-modal-body">
+
+                        <!-- رأس بطاقة المريض -->
+                        <div class="d-flex align-items-center gap-3 p-3 rounded-3 mb-3" style="background:linear-gradient(135deg,#f0fdf9,#dcfce7);border:1px solid #a7f3d0;">
+                            <div class="st-avatar" style="width:56px;height:56px;font-size:20px;background:linear-gradient(135deg,#ec4899,#f43f5e);">ن</div>
+                            <div>
+                                <div style="font-size:17px;font-weight:800;color:var(--st-primary);">نور محمد الأحمد</div>
+                                <div style="font-size:12px;color:var(--st-muted);">ذكر · 28 سنة · تقويم أسنان</div>
+                                <span class="st-badge st-badge-progress mt-1 d-inline-block">مرتبط بجلستك القادمة</span>
+                            </div>
+                        </div>
+
+                        <!-- التبويبات Bootstrap nav-tabs -->
+                        <ul class="nav nav-tabs mb-3" style="font-family:'Tajawal',sans-serif;">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#" onclick="switchTab(this,'pt-personal');return false;" style="font-size:13px;">
+                                    <i class="fa-solid fa-user me-1"></i>البيانات الشخصية
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick="switchTab(this,'pt-medical');return false;" style="font-size:13px;">
+                                    <i class="fa-solid fa-notes-medical me-1"></i>المعلومات الطبية
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick="switchTab(this,'pt-notes');return false;" style="font-size:13px;">
+                                    <i class="fa-solid fa-comment me-1"></i>ملاحظات المريض
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- تبويب البيانات الشخصية -->
+                        <div id="pt-personal">
+                            <div class="st-info-row"><span class="lbl">الاسم الكامل</span><span class="val">نور محمد الأحمد</span></div>
+                            <div class="st-info-row"><span class="lbl">العمر</span><span class="val">28 سنة</span></div>
+                            <div class="st-info-row"><span class="lbl">الجنس</span><span class="val">ذكر</span></div>
+                            <div class="st-info-row"><span class="lbl">رقم الهاتف</span><span class="val">0791234567</span></div>
+                            <div class="st-info-row"><span class="lbl">البريد الإلكتروني</span><span class="val">nour@email.com</span></div>
+                            <div class="st-info-row"><span class="lbl">العنوان</span><span class="val">عمّان - الأردن</span></div>
+                            <div class="st-info-row"><span class="lbl">تاريخ التسجيل</span><span class="val">14 مايو 2025</span></div>
+                        </div>
+                        <div id="pt-medical" class="d-none">
+                            <div class="st-info-row"><span class="lbl">الشكوى الرئيسية</span><span class="val">ألم وتراكم في الأسنان</span></div>
+                            <div class="st-info-row"><span class="lbl">نوع العلاج</span><span class="val">تقويم أسنان</span></div>
+                            <div class="st-info-row"><span class="lbl">أمراض مزمنة</span><span class="val">لا يوجد</span></div>
+                            <div class="st-info-row"><span class="lbl">الأدوية الحالية</span><span class="val">لا يوجد</span></div>
+                            <div class="st-info-row"><span class="lbl">حساسية من أدوية</span><span class="val">لا يوجد</span></div>
+                            <div class="st-info-row"><span class="lbl">حساسية من مواد</span><span class="val">لا يوجد</span></div>
+                            <div class="st-info-row"><span class="lbl">آخر زيارة طبيب أسنان</span><span class="val">منذ سنتين</span></div>
+                            <div class="st-info-row"><span class="lbl">وجود أطراف صناعية</span><span class="val">لا يوجد</span></div>
+                        </div>
+                        <div id="pt-notes" class="d-none">
+                            <div class="p-3 rounded-3 mb-2" style="background:#fffbeb;border:1px solid #fde68a;">
+                                <div style="font-size:12px;font-weight:600;color:#92400e;margin-bottom:6px;"><i class="fa-solid fa-comment me-1"></i>ملاحظات المريض عند التسجيل</div>
+                                <p style="font-size:13px;color:#78350f;margin:0;line-height:1.7;">
+                                    "أعاني من ألم عند مضغ الطعام على الجانب الأيسر منذ شهر تقريباً. لدي قلق من حقن التخدير. أفضل أن يكون الدكتور لطيفاً في التعامل."
+                                </p>
+                            </div>
+                            <div class="p-3 rounded-3" style="background:#f0fdf9;border:1px solid #a7f3d0;">
+                                <div style="font-size:12px;font-weight:600;color:#0d6e5c;margin-bottom:6px;"><i class="fa-solid fa-star me-1"></i>توقعات المريض</div>
+                                <p style="font-size:13px;color:#065f46;margin:0;line-height:1.7;">
+                                    "أرغب في الحصول على ابتسامة جميلة ومنتظمة. لا أمانع في عدة جلسات إذا كانت النتيجة جيدة."
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast الإشعارات السريعة - داخل الكونتينر -->
+            <div class="st-toast-wrap" id="stToastContainer"></div>
+
+        </div>
+        <!-- /st-dashboard -->
+    </div>
+    <!-- /container-fluid -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ============================================================
+        // البيانات الوهمية للتقارير
+        // ============================================================
+        const myReports = [
+          {
+            id: 1,
+            caseType: 'حشو ضرسي',
+            patient: 'سارة الحسن',
+            date: '11 أبريل 2025',
+            grade: 17, maxGrade: 20,
+            status: 'graded',
+            note: 'الطالب أظهر مهارة جيدة في التعامل مع الأدوات.',
+            desc: 'تم إجراء الحشو الضرسي بنجاح باستخدام مادة الكومبوزيت على الضرس السادس السفلي الأيسر.',
+          },
+          {
+            id: 2,
+            caseType: 'خلع ضرس عقل',
+            patient: 'محمد نور',
+            date: '5 أبريل 2025',
+            grade: 16, maxGrade: 20,
+            status: 'graded',
+            note: 'تم الخلع بطريقة صحيحة مع إعطاء إرشادات ما بعد الخلع.',
+            desc: 'تم خلع ضرس العقل السفلي الأيمن بعد التخدير الموضعي بنجاح.',
+          },
+          {
+            id: 3,
+            caseType: 'تنظيف وتلميع',
+            patient: 'ليلى خير',
+            date: '29 مارس 2025',
+            grade: null, maxGrade: 20,
+            status: 'pending',
+            note: null,
+            desc: 'تم إجراء تنظيف شامل للأسنان وإزالة الجير وتلميع السطوح.',
+          },
+        ];
+
+        // ============================================================
+        // التنقل بين الفيوهات
+        // ============================================================
+        function showView(name) {
+          // أخفِ كل الفيوهات
+          document.querySelectorAll('.st-view').forEach(v => v.classList.remove('active'));
+          document.getElementById('st-view-' + name).classList.add('active');
+
+          // حدّث الرابط النشط في السيدبار
+          document.querySelectorAll('.st-nav-link').forEach(l => {
+            l.classList.toggle('active', l.getAttribute('onclick')?.includes("'" + name + "'"));
+          });
+
+          // حدّث عنوان الصفحة
+          const titles = {
+            'dashboard':      'لوحتي',
+            'profile':        'ملفي الشخصي',
+            'session':        'الجلسة القادمة',
+            'reports':        'تقاريري',
+            'upload':         'رفع تقرير جديد',
+            'request':        'طلب حالة',
+            'requests-list':  'طلباتي',
+            'notifications':  'الإشعارات',
+          };
+          document.getElementById('stPageTitle').textContent = titles[name] || '';
+
+          // رسم التقارير عند الانتقال إليها
+          if (name === 'reports') renderMyReports();
+        }
+
+        // ============================================================
+        // رسم كروت التقارير
+        // ============================================================
+        function renderMyReports(filter = 'all') {
+          let data = myReports;
+          if (filter === 'graded')  data = data.filter(r => r.status === 'graded');
+          if (filter === 'pending') data = data.filter(r => r.status === 'pending');
+
+          const bgColors = ['#dcfce7','#dbeafe','#fef9c3'];
+
+          document.getElementById('myReportsGrid').innerHTML = data.map((r, i) => `
+            <div class="col-md-4">
+              <div class="st-report-card">
+
+                <!-- صور قبل/بعد placeholder -->
+                <div class="st-report-imgs">
+                  <div class="st-img-slot" style="background:${bgColors[i % bgColors.length]};">
+                    <div class="text-center" style="color:var(--st-muted);">
+                      <i class="fa-solid fa-image fa-lg d-block mb-1"></i>
+                      <span style="font-size:10px;font-weight:600;">قبل</span>
+                    </div>
+                    <span class="st-img-lbl">قبل</span>
+                  </div>
+                  <div class="st-img-slot" style="background:${bgColors[(i+1) % bgColors.length]};border-right:2px solid white;">
+                    <div class="text-center" style="color:var(--st-muted);">
+                      <i class="fa-solid fa-image fa-lg d-block mb-1"></i>
+                      <span style="font-size:10px;font-weight:600;">بعد</span>
+                    </div>
+                    <span class="st-img-lbl">بعد</span>
+                  </div>
+                </div>
+
+                <!-- معلومات التقرير -->
+                <div class="p-3 border-bottom" style="border-color:#edf2f0 !important;">
+                  <div style="font-size:14px;font-weight:700;margin-bottom:3px;">${r.caseType}</div>
+                  <div style="font-size:11px;color:var(--st-muted);">
+                    <i class="fa-solid fa-user me-1"></i>${r.patient} ·
+                    <i class="fa-solid fa-calendar me-1 ms-1"></i>${r.date}
+                  </div>
+                  <div style="font-size:12px;color:#444;margin-top:8px;line-height:1.6;">
+                    ${r.desc.substring(0, 80)}...
+                  </div>
+                  <!-- ملاحظة الدكتور إن وجدت -->
+                  ${r.note ? `
+                    <div class="mt-2 p-2 rounded" style="background:#f0fdf9;border:1px solid #a7f3d0;font-size:11px;color:#0d6e5c;">
+                      <i class="fa-solid fa-comment me-1"></i><strong>الدكتور:</strong> ${r.note}
+                    </div>
+                  ` : ''}
+                </div>
+
+                <!-- العلامة أو حالة الانتظار -->
+                <div class="d-flex align-items-center justify-content-between p-3">
+                  <div>
+                    <div style="font-size:10px;color:var(--st-muted);margin-bottom:2px;">الحالة</div>
+                    ${r.status === 'graded'
+                      ? `<span class="st-grade-badge grade-excellent"><i class="fa-solid fa-star me-1"></i>مُقيَّم</span>`
+                      : `<span class="st-grade-badge grade-pending"><i class="fa-solid fa-clock me-1"></i>بانتظار الدكتور</span>`
+                    }
+                  </div>
+                  ${r.grade !== null
+                    ? `<div class="st-grade-circle">${r.grade}/${r.maxGrade}</div>`
+                    : `<div class="st-grade-pending">?</div>`
+                  }
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // فلتر التقارير
+        function filterMyReports(f, btn) {
+          document.querySelectorAll('#st-view-reports .st-filter-tab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderMyReports(f);
+        }
+
+        // ============================================================
+        // مودال بيانات المريض + تبويباته
+        // ============================================================
+        function openPatientModal() {
+          document.getElementById('patientModal').classList.add('open');
+        }
+
+        function closeStModal(id) {
+          document.getElementById(id).classList.remove('open');
+        }
+
+        // إغلاق بالنقر على الخلفية
+        document.querySelectorAll('.st-modal-overlay').forEach(m => {
+          m.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+          });
         });
-    }
 
-    function executeFilter() {
-        const type = document.getElementById('typeFilter').value;
-        const ageRange = document.getElementById('ageFilter').value;
+        // تبديل التبويبات في مودال المريض
+        function switchTab(el, tabId) {
+          // أخفِ كل التبويبات
+          ['pt-personal','pt-medical','pt-notes'].forEach(id => {
+            document.getElementById(id).classList.add('d-none');
+          });
+          // أزل active من كل الروابط
+          document.querySelectorAll('#patientModal .nav-link').forEach(l => l.classList.remove('active'));
+          // أظهر المحدد
+          document.getElementById(tabId).classList.remove('d-none');
+          el.classList.add('active');
+        }
 
-        const filtered = patients.filter(p => {
-            const matchType = (type === 'all' || p.type === type);
+        // ============================================================
+        // نموذج رفع التقرير
+        // ============================================================
 
-            let matchAge = true;
-            if (ageRange === '20-25') matchAge = (p.age >= 20 && p.age <= 25);
-            else if (ageRange === '26-30') matchAge = (p.age >= 26 && p.age <= 30);
-            else if (ageRange === '31-40') matchAge = (p.age >= 31 && p.age <= 40);
+        // فتح dialog اختيار الملف
+        function triggerUpload(inputId) {
+          document.getElementById(inputId).click();
+        }
 
-            return matchType && matchAge;
-        });
+        // معاينة الصورة بعد الاختيار
+        function previewImg(input, zoneId, previewId) {
+          if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+              const preview = document.getElementById(previewId);
+              preview.src = e.target.result;
+              preview.classList.remove('d-none');
+              // غيّر لون المنطقة
+              document.getElementById(zoneId).style.borderColor = 'var(--st-accent)';
+              document.getElementById(zoneId).style.background  = '#dcfce7';
+            };
+            reader.readAsDataURL(input.files[0]);
+          }
+        }
 
-        renderPatients(filtered);
-    }
+        // إظهار/إخفاء حقل المضاعفات
+        function toggleComp(show) {
+          document.getElementById('compDetail').classList.toggle('d-none', !show);
+          // إعادة إخفاء عند اختيار "لا"
+          document.getElementById('comp-no').addEventListener('change', () => {
+            document.getElementById('compDetail').classList.add('d-none');
+          });
+        }
 
-    renderPatients(patients);
-</script>
+        // اختيار التقييم الذاتي
+        function setSelfGrade(btn, val) {
+          document.querySelectorAll('#st-view-upload .st-filter-tab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        }
+
+        // إرسال التقرير
+        function submitReport() {
+          showStToast('تم رفع التقرير بنجاح وأُرسل للدكتور! 🎉', 'fa-check-circle');
+          setTimeout(() => showView('reports'), 1200);
+        }
+
+        // ============================================================
+        // نموذج طلب الحالة
+        // ============================================================
+        function submitRequest() {
+          const name = document.getElementById('req-name').value.trim();
+          const phone = document.getElementById('req-phone').value.trim();
+          const relation = document.getElementById('req-relation').value;
+          const treatment = document.getElementById('req-treatment').value.trim();
+
+          // تحقق بسيط
+          if (!name || !phone || !relation || !treatment) {
+            showStToast('يرجى ملء جميع الحقول المطلوبة', 'fa-exclamation-triangle');
+            return;
+          }
+
+          showStToast(`تم إرسال طلب حالة ${name} للدكتور بنجاح!`, 'fa-paper-plane');
+          // مسح الحقول
+          ['req-name','req-phone','req-treatment','req-reason'].forEach(id => {
+            document.getElementById(id).value = '';
+          });
+          document.getElementById('req-relation').value = '';
+          setTimeout(() => showView('requests-list'), 1200);
+        }
+
+        // ============================================================
+        // Toast
+        // ============================================================
+        function showStToast(msg, icon = 'fa-check') {
+          const c = document.getElementById('stToastContainer');
+          const t = document.createElement('div');
+          t.className = 'st-toast-item';
+          t.innerHTML = `<i class="fa-solid ${icon}" style="color:var(--st-accent);"></i>${msg}`;
+          c.appendChild(t);
+          setTimeout(() => {
+            t.style.opacity = '0'; t.style.transition = 'opacity .3s';
+            setTimeout(() => t.remove(), 300);
+          }, 3200);
+        }
+
+        // ============================================================
+        // تشغيل أولي
+        // ============================================================
+        renderMyReports(); // لتكون جاهزة عند أول دخول لصفحة التقارير
+    </script>
