@@ -17,5 +17,7 @@
         public string Time { get; set; }
 
         public string Status { get; set; } // Pending / Approved / Done
+        public string TreatmentType { get; set; }
+        public string Location { get; set; }
     }
 }

@@ -70,6 +70,10 @@ namespace Student_Dental_Clinic.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
@@ -80,7 +84,14 @@ namespace Student_Dental_Clinic.Migrations
                     b.Property<int?>("StudentId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("StudentId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Time")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TreatmentType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -91,6 +102,8 @@ namespace Student_Dental_Clinic.Migrations
                     b.HasIndex("PatientId");
 
                     b.HasIndex("StudentId");
+
+                    b.HasIndex("StudentId1");
 
                     b.ToTable("Cases");
                 });
@@ -456,6 +469,10 @@ namespace Student_Dental_Clinic.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("Student_Dental_Clinic.Models.Student", null)
+                        .WithMany("Cases")
+                        .HasForeignKey("StudentId1");
+
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
@@ -585,6 +602,8 @@ namespace Student_Dental_Clinic.Migrations
 
             modelBuilder.Entity("Student_Dental_Clinic.Models.Student", b =>
                 {
+                    b.Navigation("Cases");
+
                     b.Navigation("Performance")
                         .IsRequired();
 

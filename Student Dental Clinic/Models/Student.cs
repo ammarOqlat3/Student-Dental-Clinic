@@ -14,6 +14,7 @@
         public string PhoneNumber { get; set; }
         public string AcademicYear { get; set; }
         public string Semester { get; set; }
+        public ICollection<Case> Cases { get; set; }   // ✅ هذا المهم
 
         // علاقات
         public List<StudentCourse> StudentCourses { get; set; }

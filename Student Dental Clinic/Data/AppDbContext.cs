@@ -49,7 +49,7 @@ namespace Student_Dental_Clinic.Data
 
             modelBuilder.Entity<Case>()
                 .HasOne(c => c.Student)
-                .WithMany()
+                .WithMany(s => s.Cases)
                 .HasForeignKey(c => c.StudentId)
                 .OnDelete(DeleteBehavior.NoAction);
 

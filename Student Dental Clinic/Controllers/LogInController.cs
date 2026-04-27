@@ -32,10 +32,55 @@ namespace Student_Dental_Clinic.Controllers
 
             return View(patients);
         }
-
         public IActionResult Students()
         {
-            return View();
+            int? userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var student = _context.Students
+                .Include(s => s.User)
+                .Include(s => s.Performance)
+                .Include(s => s.StudentCourses)
+                    .ThenInclude(sc => sc.Course)
+                .Include(s => s.Cases)
+                    .ThenInclude(c => c.Patient)
+                .Include(s => s.Cases)
+                    .ThenInclude(c => c.Doctor)
+                .FirstOrDefault(s => s.UserId == userId);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            var reports = _context.Reports
+                .Where(r => r.StudentId == student.Id)
+                .Include(r => r.Case)
+                    .ThenInclude(c => c.Patient)
+                .OrderByDescending(r => r.Id)
+                .ToList();
+
+            var caseRequests = _context.CaseRequests
+                .Where(r => r.StudentId == student.Id)
+                .OrderByDescending(r => r.RequestDate)
+                .ToList();
+
+            // جلب كل المرضى المرتبطين بالطالب هاض مع كل حالاتهم
+            var myPatients = _context.Patients
+                .Where(p => p.StudentId == student.Id)
+                .Include(p => p.Cases)
+                    .ThenInclude(c => c.Doctor)
+                .ToList();
+
+            ViewBag.Reports = reports;
+            ViewBag.CaseRequests = caseRequests;
+            ViewBag.MyPatients = myPatients;
+
+            return View(student);
         }
         public IActionResult Doctor()
         {
@@ -99,16 +144,37 @@ namespace Student_Dental_Clinic.Controllers
         //لجلب بيانات الكريض
 
 
+
         [HttpPost]
-        public IActionResult AssignStudent(int PatientId, int StudentId)
+        public IActionResult AssignStudent(int PatientId, int StudentId, string SessionDate, string SessionTime, string ChairNumber)
         {
             var patient = _context.Patients.FirstOrDefault(p => p.Id == PatientId);
 
-            if (patient != null)
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var doctor = _context.Doctors.FirstOrDefault(d => d.UserId == userId);
+
+            if (patient != null && doctor != null)
             {
                 patient.StudentId = StudentId;
                 patient.Status = "Assigned";
 
+                DateTime sessionDate = DateTime.TryParse(SessionDate, out DateTime parsedDate)
+                    ? parsedDate
+                    : DateTime.Now;
+
+                var newCase = new Case
+                {
+                    PatientId = PatientId,
+                    StudentId = StudentId,
+                    DoctorId = doctor.Id,
+                    Date = sessionDate,
+                    Time = string.IsNullOrEmpty(SessionTime) ? DateTime.Now.ToString("HH:mm") : SessionTime,
+                    Status = "Pending",
+                    TreatmentType = patient.TreatmentType ?? "General",
+                    Location = string.IsNullOrEmpty(ChairNumber) ? "TBD" : $"Chair {ChairNumber}"
+                };
+
+                _context.Cases.Add(newCase);
                 _context.SaveChanges();
             }
 

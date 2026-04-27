@@ -10,141 +10,142 @@
 }
 @model List<Student_Dental_Clinic.Models.Patient>
 
-    <div class="container-fluid py-4 px-4">
-        <div class="dashboard-container">
+<div class="container-fluid py-4 px-4">
+    <div class="dashboard-container">
 
-            <!-- ===================== SIDEBAR ===================== -->
-            <aside class="db-sidebar">
-                <div class="db-sidebar-logo">
-                    <div class="logo-icon"><i class="fa-solid fa-tooth"></i></div>
-                    <div class="logo-text">
-                        <h6>DentalEdu</h6>
-                        <small>Student System</small>
-                    </div>
+        <!-- ===================== SIDEBAR ===================== -->
+        <aside class="db-sidebar">
+            <div class="db-sidebar-logo">
+                <div class="logo-icon"><i class="fa-solid fa-tooth"></i></div>
+                <div class="logo-text">
+                    <h6>DentalEdu</h6>
+                    <small>Student System</small>
                 </div>
+            </div>
 
-                <nav class="db-sidebar-nav">
-                    <div class="db-nav-section-title">Main</div>
-                    <a class="db-nav-link active" onclick="showView('dashboard')">
-                        <i class="fa-solid fa-chart-pie"></i><span>Dashboard</span>
-                    </a>
-                    <a class="db-nav-link" onclick="showView('profile')">
-                        <i class="fa-solid fa-user-doctor"></i><span>Profile</span>
-                    </a>
+            <nav class="db-sidebar-nav">
+                <div class="db-nav-section-title">Main</div>
+                <a class="db-nav-link active" onclick="showView('dashboard')">
+                    <i class="fa-solid fa-chart-pie"></i><span>Dashboard</span>
+                </a>
+                <a class="db-nav-link" onclick="showView('profile')">
+                    <i class="fa-solid fa-user-doctor"></i><span>Profile</span>
+                </a>
 
-                    <div class="db-nav-section-title">Management</div>
-                    <a class="db-nav-link" onclick="showView('patients')">
-                        <i class="fa-solid fa-hospital-user"></i><span>Patients</span>
+                <div class="db-nav-section-title">Management</div>
+                <a class="db-nav-link" onclick="showView('patients')">
+                    <i class="fa-solid fa-hospital-user"></i><span>Patients</span>
                     <span class="db-badge">@ViewBag.PatientsCount</span>
                 </a>
-                    <a class="db-nav-link" onclick="showView('students')">
-                        <i class="fa-solid fa-user-graduate"></i><span>Students</span>
+                <a class="db-nav-link" onclick="showView('students')">
+                    <i class="fa-solid fa-user-graduate"></i><span>Students</span>
                     <span class="db-badge">@ViewBag.StudentsCount</span>
                 </a>
-                    <a class="db-nav-link" onclick="showView('reports')">
-                        <i class="fa-solid fa-file-medical"></i><span>Reports</span>
-                        <span class="db-badge">5</span>
-                    </a>
+                <a class="db-nav-link" onclick="showView('reports')">
+                    <i class="fa-solid fa-file-medical"></i><span>Reports</span>
+                    <span class="db-badge">5</span>
+                </a>
 
-                    <div class="db-nav-section-title">Settings</div>
-                    <a class="db-nav-link" onclick="showView('settings')">
-                        <i class="fa-solid fa-gear"></i><span>Settings</span>
-                    </a>
-                </nav>
+                <div class="db-nav-section-title">Settings</div>
+                <a class="db-nav-link" onclick="showView('settings')">
+                    <i class="fa-solid fa-gear"></i><span>Settings</span>
+                </a>
+            </nav>
 
-                <div class="db-sidebar-profile">
-                    <div class="db-avatar" style="background:linear-gradient(135deg,#0a4f7a,#00bcd4);font-size:14px;">O</div>
-                    <div class="info">
+            <div class="db-sidebar-profile">
+                <div class="db-avatar" style="background:linear-gradient(135deg,#0a4f7a,#00bcd4);font-size:14px;">O</div>
+                <div class="info">
                     <div class="name">@doctor?.FullName</div>
-                    </div>
                 </div>
-            </aside>
+            </div>
+        </aside>
 
-            <!-- ===================== MAIN ===================== -->
-            <div class="db-main">
-                <div class="db-topbar">
-                    <div class="page-title" id="pageTitle">Dashboard</div>
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="db-search">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" placeholder="Search..." />
-                        </div>
-                        <button class="db-icon-btn">
-                            <i class="fa-solid fa-bell"></i>
-                            <span class="db-notif-dot"></span>
-                        </button>
-                        <button class="db-icon-btn">
-                            <i class="fa-solid fa-envelope"></i>
-                        </button>
+        <!-- ===================== MAIN ===================== -->
+        <div class="db-main">
+            <div class="db-topbar">
+                <div class="page-title" id="pageTitle">Dashboard</div>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="db-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search..." />
                     </div>
+                    <button class="db-icon-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="db-notif-dot"></span>
+                    </button>
+                    <button class="db-icon-btn">
+                        <i class="fa-solid fa-envelope"></i>
+                    </button>
                 </div>
+            </div>
 
-                <div class="db-page-body">
+            <div class="db-page-body">
 
-                    <!-- ===== VIEW: DASHBOARD ===== -->
-                    <div class="db-view active" id="view-dashboard">
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-3 col-sm-6">
-                                <div class="db-stat-card">
-                                    <div class="db-stat-icon" style="background:#e0f2fe;color:#0284c7;"><i class="fa-solid fa-hospital-user"></i></div>
-                                    <div>
+                <!-- ===== VIEW: DASHBOARD ===== -->
+                <div class="db-view active" id="view-dashboard">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="db-stat-card">
+                                <div class="db-stat-icon" style="background:#e0f2fe;color:#0284c7;"><i class="fa-solid fa-hospital-user"></i></div>
+                                <div>
                                     <div class="number">@ViewBag.PatientsCount</div>
-                                        <div class="label">Total Patients</div>
-                                        <div class="change change-up"><i class="fa-solid fa-arrow-up"></i> 3 this week</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="db-stat-card">
-                                    <div class="db-stat-icon" style="background:#f0fdf4;color:#16a34a;"><i class="fa-solid fa-user-graduate"></i></div>
-                                    <div>
-                                    <div class="number">@ViewBag.StudentsCount</div>
-                                        <div class="label">Enrolled Students</div>
-                                        <div class="change change-up"><i class="fa-solid fa-arrow-up"></i> Semester 2025</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="db-stat-card">
-                                    <div class="db-stat-icon" style="background:#fdf4ff;color:#9333ea;"><i class="fa-solid fa-file-medical"></i></div>
-                                    <div>
-                                        <div class="number">5</div>
-                                        <div class="label">Submitted Reports</div>
-                                        <div class="change change-down"><i class="fa-solid fa-clock"></i> 3 awaiting review</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="db-stat-card">
-                                    <div class="db-stat-icon" style="background:#fff7ed;color:#ea580c;"><i class="fa-solid fa-tooth"></i></div>
-                                    <div>
-                                        <div class="number">7</div>
-                                        <div class="label">Assigned Cases</div>
-                                        <div class="change change-up"><i class="fa-solid fa-check"></i> 2 completed</div>
-                                    </div>
+                                    <div class="label">Total Patients</div>
+                                    <div class="change change-up"><i class="fa-solid fa-arrow-up"></i> 3 this week</div>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="db-stat-card">
+                                <div class="db-stat-icon" style="background:#f0fdf4;color:#16a34a;"><i class="fa-solid fa-user-graduate"></i></div>
+                                <div>
+                                    <div class="number">@ViewBag.StudentsCount</div>
+                                    <div class="label">Enrolled Students</div>
+                                    <div class="change change-up"><i class="fa-solid fa-arrow-up"></i> Semester 2025</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="db-stat-card">
+                                <div class="db-stat-icon" style="background:#fdf4ff;color:#9333ea;"><i class="fa-solid fa-file-medical"></i></div>
+                                <div>
+                                    <div class="number">5</div>
+                                    <div class="label">Submitted Reports</div>
+                                    <div class="change change-down"><i class="fa-solid fa-clock"></i> 3 awaiting review</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="db-stat-card">
+                                <div class="db-stat-icon" style="background:#fff7ed;color:#ea580c;"><i class="fa-solid fa-tooth"></i></div>
+                                <div>
+                                    <div class="number">7</div>
+                                    <div class="label">Assigned Cases</div>
+                                    <div class="change change-up"><i class="fa-solid fa-check"></i> 2 completed</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                        <div class="row g-3 mb-3">
-                            <div class="col-lg-7">
-                                <div class="db-card">
-                                    <div class="db-card-header">
-                                        <h6><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Recent Patients</h6>
-                                        <button class="db-btn-outline" onclick="showView('patients')">View All</button>
-                                    </div>
-                                    <table class="db-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Patient</th>
-                                                <th>Condition</th>
-                                                <th>Date</th>
-                                                <th>Status</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
+                    <div class="row g-3 mb-3">
+                        <div class="col-lg-7">
+                            <div class="db-card">
+                                <div class="db-card-header">
+                                    <h6><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Recent Patients</h6>
+                                    <button class="db-btn-outline" onclick="showView('patients')">View All</button>
+                                </div>
+                                <table class="db-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Patient</th>
+                                            <th>Condition</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
-                                       @if (Model != null)                                        {
+                                        @if (Model != null)
+                                        {
                                             int i = 1;
 
                                             foreach (var p in Model)
@@ -209,15 +210,15 @@
                                             }
                                         }
                                     </tbody>
-                                    </table>
-                                </div>
+                                </table>
                             </div>
+                        </div>
 
-                            <div class="col-lg-5">
-                                <div class="db-card h-100">
-                                    <div class="db-card-header">
-                                        <h6><i class="fa-solid fa-ranking-star me-2 text-warning"></i>Student Performance</h6>
-                                    </div>
+                        <div class="col-lg-5">
+                            <div class="db-card h-100">
+                                <div class="db-card-header">
+                                    <h6><i class="fa-solid fa-ranking-star me-2 text-warning"></i>Student Performance</h6>
+                                </div>
                                 <div class="p-3">
                                     @if (students != null)
                                     {
@@ -235,58 +236,58 @@
                                                     @s.UniversityId
                                                 </small>
 
-                                              
+
 
                                             </div>
                                         }
                                     }
                                 </div>
                             </div>
-                            </div>
-                        </div>
-
-                        <div class="db-card">
-                            <div class="db-card-header">
-                                <h6><i class="fa-solid fa-bolt me-2 text-warning"></i>Quick Actions</h6>
-                            </div>
-                            <div class="d-flex flex-wrap gap-2 p-3">
-                                <button class="db-btn-primary" onclick="showView('patients')">
-                                    <i class="fa-solid fa-hospital-user me-1"></i>View Patients
-                                </button>
-                                <button class="db-btn-primary" style="background:linear-gradient(135deg,#16a34a,#22c55e);" onclick="showView('reports')">
-                                    <i class="fa-solid fa-file-medical me-1"></i>Review Reports
-                                </button>
-                                <button class="db-btn-primary" style="background:linear-gradient(135deg,#9333ea,#a855f7);" onclick="showView('students')">
-                                    <i class="fa-solid fa-user-graduate me-1"></i>Manage Students
-                                </button>
-                                <button class="db-btn-outline" onclick="showView('profile')">
-                                    <i class="fa-solid fa-user-doctor me-1"></i>My Profile
-                                </button>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- ===== VIEW: PROFILE ===== -->
-                    <div class="db-view" id="view-profile">
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <div class="db-profile-hero">
-                                    <div class="db-avatar" style="width:80px;height:80px;font-size:28px;background:rgba(255,255,255,0.22);border:3px solid rgba(255,255,255,0.4);border-radius:50%;position:relative;z-index:1;">O</div>
-                                    <div class="info">
+                    <div class="db-card">
+                        <div class="db-card-header">
+                            <h6><i class="fa-solid fa-bolt me-2 text-warning"></i>Quick Actions</h6>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 p-3">
+                            <button class="db-btn-primary" onclick="showView('patients')">
+                                <i class="fa-solid fa-hospital-user me-1"></i>View Patients
+                            </button>
+                            <button class="db-btn-primary" style="background:linear-gradient(135deg,#16a34a,#22c55e);" onclick="showView('reports')">
+                                <i class="fa-solid fa-file-medical me-1"></i>Review Reports
+                            </button>
+                            <button class="db-btn-primary" style="background:linear-gradient(135deg,#9333ea,#a855f7);" onclick="showView('students')">
+                                <i class="fa-solid fa-user-graduate me-1"></i>Manage Students
+                            </button>
+                            <button class="db-btn-outline" onclick="showView('profile')">
+                                <i class="fa-solid fa-user-doctor me-1"></i>My Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== VIEW: PROFILE ===== -->
+                <div class="db-view" id="view-profile">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="db-profile-hero">
+                                <div class="db-avatar" style="width:80px;height:80px;font-size:28px;background:rgba(255,255,255,0.22);border:3px solid rgba(255,255,255,0.4);border-radius:50%;position:relative;z-index:1;">O</div>
+                                <div class="info">
                                     <h4>@doctor?.FullName</h4>
-                                        <p><i class="fa-solid fa-building-columns me-1"></i>Department of Dentistry – Medical Sciences University</p>
-                                        <div class="badges">
-                                            <span><i class="fa-solid fa-star me-1"></i>Assistant Professor</span>
-                                            <span><i class="fa-solid fa-graduation-cap me-1"></i>PhD</span>
-                                            <span><i class="fa-solid fa-award me-1"></i>12 Years Experience</span>
-                                        </div>
+                                    <p><i class="fa-solid fa-building-columns me-1"></i>Department of Dentistry – Medical Sciences University</p>
+                                    <div class="badges">
+                                        <span><i class="fa-solid fa-star me-1"></i>Assistant Professor</span>
+                                        <span><i class="fa-solid fa-graduation-cap me-1"></i>PhD</span>
+                                        <span><i class="fa-solid fa-award me-1"></i>12 Years Experience</span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-md-6">
-                                <div class="db-info-card">
-                                    <h6 class="fw-bold mb-3" style="color:var(--primary);font-size:14px;"><i class="fa-solid fa-circle-info me-2"></i>Personal Information</h6>
+                        <div class="col-md-6">
+                            <div class="db-info-card">
+                                <h6 class="fw-bold mb-3" style="color:var(--primary);font-size:14px;"><i class="fa-solid fa-circle-info me-2"></i>Personal Information</h6>
                                 <div class="db-info-row"><span class="label">Full Name</span><span class="val">@doctor?.FullName</span></div>
                                 <div class="db-info-row"><span class="label">Employee ID</span><span class="val">@doctor?.EmployeeId</span></div>
                                 <div class="db-info-row"><span class="label">Email</span><span class="val">@doctor?.Email</span></div>
@@ -298,76 +299,76 @@
                                         <i class="fa-solid fa-pen-to-square me-1"></i>Update Info
                                     </button>
                                 </div>
-                                </div>
                             </div>
+                        </div>
 
-                            <div class="col-md-6">
-                                <div class="db-info-card">
-                                    <h6 class="fw-bold mb-3" style="color:var(--primary);font-size:14px;"><i class="fa-solid fa-chalkboard me-2"></i>Course Information</h6>
-                                    <div class="db-info-row"><span class="label">Course Name</span><span class="val">Clinical Dentistry 3</span></div>
-                                    <div class="db-info-row"><span class="label">Course Code</span><span class="val">DENT-301</span></div>
-                                    <div class="db-info-row"><span class="label">Semester</span><span class="val">Second Semester 2025</span></div>
-                                    <div class="db-info-row"><span class="label">Students</span><span class="val">8 Students</span></div>
-                                    <div class="db-info-row"><span class="label">Location</span><span class="val">Clinic #5 – Building B</span></div>
-                                    <div class="db-info-row"><span class="label">Schedule</span><span class="val">Sun, Tue & Thu</span></div>
-                                </div>
+                        <div class="col-md-6">
+                            <div class="db-info-card">
+                                <h6 class="fw-bold mb-3" style="color:var(--primary);font-size:14px;"><i class="fa-solid fa-chalkboard me-2"></i>Course Information</h6>
+                                <div class="db-info-row"><span class="label">Course Name</span><span class="val">Clinical Dentistry 3</span></div>
+                                <div class="db-info-row"><span class="label">Course Code</span><span class="val">DENT-301</span></div>
+                                <div class="db-info-row"><span class="label">Semester</span><span class="val">Second Semester 2025</span></div>
+                                <div class="db-info-row"><span class="label">Students</span><span class="val">8 Students</span></div>
+                                <div class="db-info-row"><span class="label">Location</span><span class="val">Clinic #5 – Building B</span></div>
+                                <div class="db-info-row"><span class="label">Schedule</span><span class="val">Sun, Tue & Thu</span></div>
                             </div>
+                        </div>
 
-                            <div class="col-md-4">
-                                <div class="db-stat-card">
-                                    <div class="db-stat-icon" style="background:#e0f2fe;color:#0284c7;"><i class="fa-solid fa-hospital-user"></i></div>
+                        <div class="col-md-4">
+                            <div class="db-stat-card">
+                                <div class="db-stat-icon" style="background:#e0f2fe;color:#0284c7;"><i class="fa-solid fa-hospital-user"></i></div>
                                 <div><div class="number">@ViewBag.PatientsCount</div><div class="label">Registered Patients</div></div>
-                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="db-stat-card">
-                                    <div class="db-stat-icon" style="background:#f0fdf4;color:#16a34a;"><i class="fa-solid fa-file-medical"></i></div>
-                                    <div><div class="number">5</div><div class="label">Submitted Reports</div></div>
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="db-stat-card">
+                                <div class="db-stat-icon" style="background:#f0fdf4;color:#16a34a;"><i class="fa-solid fa-file-medical"></i></div>
+                                <div><div class="number">5</div><div class="label">Submitted Reports</div></div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="db-stat-card">
-                                    <div class="db-stat-icon" style="background:#fdf4ff;color:#9333ea;"><i class="fa-solid fa-star"></i></div>
-                                    <div><div class="number">8.4</div><div class="label">Grade Average</div></div>
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="db-stat-card">
+                                <div class="db-stat-icon" style="background:#fdf4ff;color:#9333ea;"><i class="fa-solid fa-star"></i></div>
+                                <div><div class="number">8.4</div><div class="label">Grade Average</div></div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- ===== VIEW: PATIENTS ===== -->
-                    <div class="db-view" id="view-patients">
-                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-                            <div class="d-flex gap-1 flex-wrap">
+                <!-- ===== VIEW: PATIENTS ===== -->
+                <div class="db-view" id="view-patients">
+                    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                        <div class="d-flex gap-1 flex-wrap">
                             <button class="db-filter-tab active" onclick="filterPatients('all',this)">All (@ViewBag.PatientsCount)</button>
-                                <button class="db-filter-tab" onclick="filterPatients('pending',this)">Awaiting Assignment</button>
-                                <button class="db-filter-tab" onclick="filterPatients('assigned',this)">Assigned</button>
-                                <button class="db-filter-tab" onclick="filterPatients('done',this)">Completed</button>
-                            </div>
-                            <div class="db-search">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <input type="text" placeholder="Search patient..." oninput="searchPatients(this.value)" />
-                            </div>
+                            <button class="db-filter-tab" onclick="filterPatients('pending',this)">Awaiting Assignment</button>
+                            <button class="db-filter-tab" onclick="filterPatients('assigned',this)">Assigned</button>
+                            <button class="db-filter-tab" onclick="filterPatients('done',this)">Completed</button>
                         </div>
-                        <div class="db-card">
-                            <table class="db-table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Patient</th>
-                                        <th>Age/Gender</th>
-                                        <th>Phone</th>
-                                        <th>Condition</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                        <th>Student</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
+                        <div class="db-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" placeholder="Search patient..." oninput="searchPatients(this.value)" />
+                        </div>
+                    </div>
+                    <div class="db-card">
+                        <table class="db-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Patient</th>
+                                    <th>Age/Gender</th>
+                                    <th>Phone</th>
+                                    <th>Condition</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Student</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                @if (Model  != null)
+                                @if (Model != null)
                                 {
                                     int i = 1;
-                                    foreach (var p in Model )
+                                    foreach (var p in Model)
                                     {
                                         <tr>
                                             <td>@i</td>
@@ -388,9 +389,9 @@
                                                 {
                                                     <span class="db-badge-status">@p.Student.FullName</span>
                                                 }
-                                            </td>                                        
+                                            </td>
                                             <td>
-                                                      @if (p.StudentId == null)
+                                                @if (p.StudentId == null)
                                                 {
                                                     <button onclick="openAssignModal(@p.Id)" class="db-btn-icon">
                                                         Assign
@@ -410,18 +411,18 @@
                                 }
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- ===== VIEW: STUDENTS ===== -->
+                <div class="db-view" id="view-students">
+                    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                        <span class="db-filter-tab active">All Students (8)</span>
+                        <div class="db-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" placeholder="Search student..." />
                         </div>
                     </div>
-
-                    <!-- ===== VIEW: STUDENTS ===== -->
-                    <div class="db-view" id="view-students">
-                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-                            <span class="db-filter-tab active">All Students (8)</span>
-                            <div class="db-search">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <input type="text" placeholder="Search student..." />
-                            </div>
-                        </div>
                     <div class="row g-3">
                         @if (students != null)
                         {
@@ -443,211 +444,220 @@
 
                 </div>
 
-                    <!-- ===== VIEW: REPORTS ===== -->
-                    <div class="db-view" id="view-reports">
-                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-                            <div class="d-flex gap-1">
-                                <button class="db-filter-tab active" onclick="filterReports('all',this)">All</button>
-                                <button class="db-filter-tab" onclick="filterReports('pending',this)">Awaiting Review</button>
-                                <button class="db-filter-tab" onclick="filterReports('graded',this)">Graded</button>
-                            </div>
-                        </div>
-                        <div class="row g-3" id="reportsGrid"></div>
-                    </div>
-
-                    <!-- ===== VIEW: SETTINGS ===== -->
-                    <div class="db-view" id="view-settings">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="db-info-card">
-                                    <h6 class="fw-bold mb-3" style="color:var(--primary);font-size:14px;"><i class="fa-solid fa-graduation-cap me-2"></i>Grading Settings</h6>
-                                    <div class="mb-3">
-                                        <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Maximum Grade</label>
-                                        <select class="form-select form-select-sm" style="font-family:'DM Sans',sans-serif;" id="maxGradeSetting">
-                                            <option value="10">Out of 10</option>
-                                            <option value="20" selected>Out of 20</option>
-                                            <option value="100">Out of 100</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Minimum Pass Grade</label>
-                                        <input type="number" class="form-control form-control-sm" value="10" style="font-family:'DM Sans',sans-serif;" />
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Required Cases per Student</label>
-                                        <input type="number" class="form-control form-control-sm" value="2" style="font-family:'DM Sans',sans-serif;" />
-                                    </div>
-                                    <button class="db-btn-primary" onclick="showToast('Settings saved successfully','fa-check')">Save Settings</button>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="db-info-card">
-                                    <h6 class="fw-bold mb-3" style="color:var(--primary);font-size:14px;"><i class="fa-solid fa-bell me-2"></i>Notification Settings</h6>
-                                    <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded" style="background:var(--bg);">
-                                        <span style="font-size:13px;">Notify on report submission</span>
-                                        <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" checked /></div>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded" style="background:var(--bg);">
-                                        <span style="font-size:13px;">Notify on patient registration</span>
-                                        <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" checked /></div>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded" style="background:var(--bg);">
-                                        <span style="font-size:13px;">Reminder for pending reviews</span>
-                                        <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" /></div>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between p-2 rounded" style="background:var(--bg);">
-                                        <span style="font-size:13px;">Weekly email summary</span>
-                                        <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" checked /></div>
-                                    </div>
-                                </div>
-                            </div>
+                <!-- ===== VIEW: REPORTS ===== -->
+                <div class="db-view" id="view-reports">
+                    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                        <div class="d-flex gap-1">
+                            <button class="db-filter-tab active" onclick="filterReports('all',this)">All</button>
+                            <button class="db-filter-tab" onclick="filterReports('pending',this)">Awaiting Review</button>
+                            <button class="db-filter-tab" onclick="filterReports('graded',this)">Graded</button>
                         </div>
                     </div>
-
-                </div><!-- /db-page-body -->
-            </div><!-- /db-main -->
-            <!-- ===================== MODALS ===================== -->
-            <!-- Student Details Modal -->
-            <div class="db-modal-overlay" id="studentModal">
-                <div class="db-modal-box">
-                    <div class="db-modal-header">
-                        <h6 class="fw-bold m-0">Student Details</h6>
-                        <button class="db-close-modal" onclick="closeModal('studentModal')"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                    <div class="db-modal-body" id="studentModalBody"></div>
+                    <div class="row g-3" id="reportsGrid"></div>
                 </div>
-            </div>
 
-            <!-- Assign Case Modal -->
-            <div class="db-modal-overlay" id="assignModal">
-                <div class="db-modal-box">
-                    <div class="db-modal-header">
-                        <h6 class="fw-bold m-0"><i class="fa-solid fa-user-plus me-2 text-primary"></i>Assign Case to Student</h6>
-                        <button class="db-close-modal" onclick="closeModal('assignModal')"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                    <div class="db-modal-body">
-
-                        <form asp-action="AssignStudent" method="post">
-
-                            <!-- نخزن رقم المريض -->
-                            <input type="hidden" name="PatientId" id="patientIdInput" />
-
-                            <p style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:10px;">
-                                Select a student:
-                            </p>
-
-                            <select name="StudentId" class="form-select mb-3">
-                                @if (students != null)
-                                {
-                                    foreach (var s in students)
-                                    {
-                                    <option value="@s.Id">@s.FullName</option>
-                                    }
-                                }
-                            </select>
-
-                            <div class="d-flex gap-2 mt-3">
-                                <button type="submit" class="db-btn-primary flex-grow-1">
-                                    Confirm Assignment
-                                </button>
-
-                                <button type="button" class="db-btn-outline" onclick="closeModal('assignModal')">
-                                    Cancel
-                                </button>
+                <!-- ===== VIEW: SETTINGS ===== -->
+                <div class="db-view" id="view-settings">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="db-info-card">
+                                <h6 class="fw-bold mb-3" style="color:var(--primary);font-size:14px;"><i class="fa-solid fa-graduation-cap me-2"></i>Grading Settings</h6>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Maximum Grade</label>
+                                    <select class="form-select form-select-sm" style="font-family:'DM Sans',sans-serif;" id="maxGradeSetting">
+                                        <option value="10">Out of 10</option>
+                                        <option value="20" selected>Out of 20</option>
+                                        <option value="100">Out of 100</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Minimum Pass Grade</label>
+                                    <input type="number" class="form-control form-control-sm" value="10" style="font-family:'DM Sans',sans-serif;" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Required Cases per Student</label>
+                                    <input type="number" class="form-control form-control-sm" value="2" style="font-family:'DM Sans',sans-serif;" />
+                                </div>
+                                <button class="db-btn-primary" onclick="showToast('Settings saved successfully','fa-check')">Save Settings</button>
                             </div>
-
-                        </form>
-
-                    </div>
-            </div>
-
-            <!-- Grade Modal -->
-            <div class="db-modal-overlay" id="gradeModal">
-                <div class="db-modal-box" style="max-width:380px;">
-                    <div class="db-modal-header">
-                        <h6 class="fw-bold m-0"><i class="fa-solid fa-star me-2 text-warning"></i>Grade Student</h6>
-                        <button class="db-close-modal" onclick="closeModal('gradeModal')"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                    <div class="db-modal-body">
-                        <div id="gradeReportInfo" class="mb-3"></div>
-                        <div class="text-center">
-                            <div class="db-grade-preview" id="gradePreview">15</div>
-                            <div class="db-grade-out-of" id="gradeOutOf">out of 20</div>
                         </div>
-                        <input type="range" class="db-grade-slider" id="gradeSlider" min="0" max="20" value="15" oninput="updateGradePreview(this.value)" />
-                        <div class="d-flex justify-content-between" style="font-size:11px;color:var(--text-muted);">
-                            <span>0</span><span id="gradeMaxLabel">20</span>
-                        </div>
-                        <div class="mt-3">
-                            <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Notes (optional)</label>
-                            <textarea rows="2" class="form-control form-control-sm" placeholder="Add your notes..." style="font-family:'DM Sans',sans-serif;resize:none;"></textarea>
-                        </div>
-                        <div class="d-flex gap-2 mt-3">
-                            <button class="db-btn-primary flex-grow-1" onclick="confirmGrade()">
-                                <i class="fa-solid fa-check me-1"></i>Save Grade
-                            </button>
-                            <button class="db-btn-outline" onclick="closeModal('gradeModal')">Cancel</button>
+                        <div class="col-md-6">
+                            <div class="db-info-card">
+                                <h6 class="fw-bold mb-3" style="color:var(--primary);font-size:14px;"><i class="fa-solid fa-bell me-2"></i>Notification Settings</h6>
+                                <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded" style="background:var(--bg);">
+                                    <span style="font-size:13px;">Notify on report submission</span>
+                                    <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" checked /></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded" style="background:var(--bg);">
+                                    <span style="font-size:13px;">Notify on patient registration</span>
+                                    <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" checked /></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded" style="background:var(--bg);">
+                                    <span style="font-size:13px;">Reminder for pending reviews</span>
+                                    <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" /></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded" style="background:var(--bg);">
+                                    <span style="font-size:13px;">Weekly email summary</span>
+                                    <div class="form-check form-switch m-0"><input class="form-check-input" type="checkbox" checked /></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="db-toast-wrap" id="toastContainer"></div>
-        </div><!-- /dashboard-container -->
-    </div><!-- /container-fluid -->
-
-    // لتعديل معلومات الدكتور من قبل الدكتور
-    <div class="modal fade" id="editModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <form method="post" action="UpdateProfile">
-
-                    <div class="modal-header">
-                        <h5>Edit Personal Info</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-
-                        <input type="hidden" name="Id" value="@doctor?.Id" />
-
-                        <div class="mb-2">
-                            <label>Full Name</label>
-                            <input type="text" name="FullName" class="form-control" value="@doctor?.FullName" />
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Email</label>
-                            <input type="text" name="Email" class="form-control" value="@doctor?.Email" />
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Phone</label>
-                            <input type="text" name="Phone" class="form-control" value="@doctor?.Phone" />
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Department</label>
-                            <input type="text" name="Department" class="form-control" value="@doctor?.Department" />
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Academic Rank</label>
-                            <input type="text" name="AcademicRank" class="form-control" value="@doctor?.AcademicRank" />
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Save</button>
-                    </div>
-
-                </form>
-
+            </div><!-- /db-page-body -->
+        </div><!-- /db-main -->
+        <!-- ===================== MODALS ===================== -->
+        <!-- Student Details Modal -->
+        <div class="db-modal-overlay" id="studentModal">
+            <div class="db-modal-box">
+                <div class="db-modal-header">
+                    <h6 class="fw-bold m-0">Student Details</h6>
+                    <button class="db-close-modal" onclick="closeModal('studentModal')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="db-modal-body" id="studentModalBody"></div>
             </div>
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-   
+        <!-- Assign Case Modal -->
+        <div id="assignModal" class="db-modal-overlay">
+            <div class="db-modal-box">
+                <div class="db-modal-header">
+                    <h5>Assign Patient to Student</h5>
+                    <button class="db-close-btn" onclick="closeModal('assignModal')">&times;</button>
+                </div>
+
+                <form asp-action="AssignStudent" method="post">
+                    <div class="db-modal-body">
+                        <div id="assignPatientInfo" class="mb-3"></div>
+
+                        <input type="hidden" name="PatientId" id="patientIdInput" />
+
+                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Select Student:</label>
+                        <select name="StudentId" class="form-select mb-3" required>
+                            <option value="">-- Choose a Student --</option>
+                            @foreach (var s in (IEnumerable<Student_Dental_Clinic.Models.Student>)ViewBag.Students)
+                            {
+                                <option value="@s.Id">@s.FullName</option>
+                            }
+                        </select>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label" style="font-size: 13px; font-weight: 600;">Session Date:</label>
+                                <input type="date" name="SessionDate" class="form-control form-control-sm" required
+                                       min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" style="font-size: 13px; font-weight: 600;">Session Time:</label>
+                                <input type="time" name="SessionTime" class="form-control form-control-sm" required />
+                            </div>
+                        </div>
+
+                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Chair Number:</label>
+                        <select name="ChairNumber" class="form-select mb-3" required>
+                            <option value="">-- Select Chair --</option>
+                            @for (int c = 1; c <= 20; c++)
+                            {
+                                <option value="@c">Chair @c</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="db-modal-footer">
+                        <button type="button" class="db-btn-outline" onclick="closeModal('assignModal')">Cancel</button>
+                        <button type="submit" class="db-btn-primary">Confirm Assignment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Grade Modal -->
+        <div class="db-modal-overlay" id="gradeModal">
+            <div class="db-modal-box" style="max-width:380px;">
+                <div class="db-modal-header">
+                    <h6 class="fw-bold m-0"><i class="fa-solid fa-star me-2 text-warning"></i>Grade Student</h6>
+                    <button class="db-close-modal" onclick="closeModal('gradeModal')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="db-modal-body">
+                    <div id="gradeReportInfo" class="mb-3"></div>
+                    <div class="text-center">
+                        <div class="db-grade-preview" id="gradePreview">15</div>
+                        <div class="db-grade-out-of" id="gradeOutOf">out of 20</div>
+                    </div>
+                    <input type="range" class="db-grade-slider" id="gradeSlider" min="0" max="20" value="15" oninput="updateGradePreview(this.value)" />
+                    <div class="d-flex justify-content-between" style="font-size:11px;color:var(--text-muted);">
+                        <span>0</span><span id="gradeMaxLabel">20</span>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Notes (optional)</label>
+                        <textarea rows="2" class="form-control form-control-sm" placeholder="Add your notes..." style="font-family:'DM Sans',sans-serif;resize:none;"></textarea>
+                    </div>
+                    <div class="d-flex gap-2 mt-3">
+                        <button class="db-btn-primary flex-grow-1" onclick="confirmGrade()">
+                            <i class="fa-solid fa-check me-1"></i>Save Grade
+                        </button>
+                        <button class="db-btn-outline" onclick="closeModal('gradeModal')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="db-toast-wrap" id="toastContainer"></div>
+    </div><!-- /dashboard-container -->
+</div><!-- /container-fluid -->
+@*  لتعديل معلومات الدكتور من قبل الدكتور *@
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            0
+
+            <form method="post" action="UpdateProfile">
+
+                <div class="modal-header">
+                    <h5>Edit Personal Info</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="hidden" name="Id" value="@doctor?.Id" />
+
+                    <div class="mb-2">
+                        <label>Full Name</label>
+                        <input type="text" name="FullName" class="form-control" value="@doctor?.FullName" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Email</label>
+                        <input type="text" name="Email" class="form-control" value="@doctor?.Email" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Phone</label>
+                        <input type="text" name="Phone" class="form-control" value="@doctor?.Phone" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Department</label>
+                        <input type="text" name="Department" class="form-control" value="@doctor?.Department" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Academic Rank</label>
+                        <input type="text" name="AcademicRank" class="form-control" value="@doctor?.AcademicRank" />
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
