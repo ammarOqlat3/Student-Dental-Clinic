@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="~/css/Student.css" />
 }
 @section Scripts {
-    <script src="~/js/Student.js"></script>
+    <script src="~/js/Student.js?v=1.1"></script>
 }
 
 @{
@@ -18,20 +18,11 @@
     DateTime BuildCaseDateTime(Case c)
     {
         var dateOnly = c.Date.Date;
-
         if (!string.IsNullOrWhiteSpace(c.Time))
         {
-            if (TimeSpan.TryParse(c.Time, out var parsedTime))
-            {
-                return dateOnly.Add(parsedTime);
-            }
-
-            if (DateTime.TryParse(c.Time, out var parsedDateTime))
-            {
-                return dateOnly.Add(parsedDateTime.TimeOfDay);
-            }
+            if (TimeSpan.TryParse(c.Time, out var parsedTime)) return dateOnly.Add(parsedTime);
+            if (DateTime.TryParse(c.Time, out var parsedDateTime)) return dateOnly.Add(parsedDateTime.TimeOfDay);
         }
-
         return c.Date;
     }
 
@@ -50,15 +41,11 @@
         .Where(c => !IsDoneStatus(c.Status) && BuildCaseDateTime(c) >= now)
         .OrderBy(c => BuildCaseDateTime(c))
         .FirstOrDefault()
-        ?? allCases
-            .Where(c => !IsDoneStatus(c.Status))
-            .OrderByDescending(c => BuildCaseDateTime(c))
-            .FirstOrDefault();
+        ?? allCases.Where(c => !IsDoneStatus(c.Status)).OrderByDescending(c => BuildCaseDateTime(c)).FirstOrDefault();
 
     var doctorName = allCases
         .Where(c => c.Doctor != null && !string.IsNullOrWhiteSpace(c.Doctor.FullName))
-        .Select(c => c.Doctor!.FullName)
-        .FirstOrDefault() ?? "—";
+        .Select(c => c.Doctor!.FullName).FirstOrDefault() ?? "—";
 
     var semester = Model.Semester ?? "—";
     var academicYear = Model.AcademicYear ?? "—";
@@ -74,6 +61,9 @@
     int pendingReportsCount = reportsCount - gradedReportsCount;
     int requestCount = caseRequests.Count;
     int pendingRequestCount = caseRequests.Count(r => NormalizeStatus(r.Status) == "pending");
+
+    // حالات الـ Pending التي انرفعلها تقرير
+    var casesWithReport = reports.Select(r => r.CaseId).ToHashSet();
 }
 
 <div class="st-dashboard">
@@ -82,7 +72,6 @@
             <div class="ico">🦷</div>
             <div><h6>DentalEdu</h6><small>Student Portal</small></div>
         </div>
-
         <nav class="st-nav">
             <div class="st-nav-title">Main</div>
             <a class="st-nav-link active" onclick="showView('dashboard')">🏠 <span>Dashboard</span></a>
@@ -103,6 +92,13 @@
                     <span class="st-nav-badge">@totalCasesCount</span>
                 }
             </a>
+            <a class="st-nav-link" onclick="showView('completed-cases')">
+                ✅ <span>Completed Cases</span>
+                @if (doneCasesCount > 0)
+                {
+                    <span class="st-nav-badge" style="background:#16a34a;">@doneCasesCount</span>
+                }
+            </a>
             <a class="st-nav-link" onclick="showView('patients')">
                 👥 <span>My Patients</span>
                 @if (myPatients.Count > 0)
@@ -117,7 +113,6 @@
                     <span class="st-nav-badge">@reportsCount</span>
                 }
             </a>
-            <a class="st-nav-link" onclick="showView('upload')">☁️ <span>Upload Report</span></a>
 
             <div class="st-nav-title">Requests</div>
             <a class="st-nav-link" onclick="showView('request')">✋ <span>Request a Case</span></a>
@@ -138,7 +133,6 @@
                 }
             </a>
         </nav>
-
         <div class="st-sidebar-profile">
             <div class="st-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#0d6e5c,#00c9a7);">
                 @(Model.FullName?.Substring(0, 1).ToUpper() ?? "S")
@@ -159,24 +153,11 @@
         </div>
 
         <div class="st-body">
-            <!-- DEBUG TEMP - شيل هاد البلوك بعد ما تحل المشكلة -->
-            <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px;margin:12px;font-size:12px;font-family:monospace;">
-                <strong>🔍 Debug Info:</strong><br />
-                Student ID: @Model.Id | UserId: @Model.UserId<br />
-                allCases.Count: @allCases.Count<br />
-                upcomingSession is null: @(upcomingSession == null)<br />
-                DateTime.Now: @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")<br />
-                @foreach (var c in allCases)
-                {
-                    <span>
-                        Case #@c.Id — Date: @c.Date.ToString("yyyy-MM-dd") — Time: "@c.Time" — BuildDateTime: @BuildCaseDateTime(c).ToString("yyyy-MM-dd HH:mm") — Status: "@c.Status" — Patient: @(c.Patient?.FirstName ?? "NULL") — Doctor: @(c.Doctor?.FullName ?? "NULL")<br />
-                    </span>
-                }
-            </div>
-            <!-- END DEBUG -->
+
+            <!-- ===== DASHBOARD ===== -->
             <div class="st-view active" id="st-view-dashboard">
                 <div class="st-hero mb-3">
-                    <div class="st-avatar" style="width:72px;height:72px;font-size:26px;background:rgba(255,255,255,0.2);border:3px solid rgba(255,255,255,0.35);position:relative;z-index:1;">
+                    <div class="st-avatar" style="width:72px;height:72px;font-size:26px;background:rgba(255,255,255,0.2);border:3px solid rgba(255,255,255,0.35);">
                         @(Model.FullName?.Substring(0, 1).ToUpper() ?? "S")
                     </div>
                     <div class="hero-info">
@@ -186,9 +167,7 @@
                             <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;">✅ @doneCasesCount Cases Done</span>
                             @if (upcomingSession != null)
                             {
-                                <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;">
-                                    🕐 Next: @BuildCaseDateTime(upcomingSession).ToString("ddd, MMM dd - hh:mm tt")
-                                </span>
+                                <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;">🕐 Next: @BuildCaseDateTime(upcomingSession).ToString("ddd, MMM dd - hh:mm tt")</span>
                             }
                         </div>
                     </div>
@@ -247,9 +226,7 @@
                                             </div>
                                             <div>
                                                 <div class="patient-name">@upcomingSession.Patient?.FirstName @upcomingSession.Patient?.LastName</div>
-                                                <div style="font-size:11px;color:var(--st-muted);">
-                                                    @upcomingSession.Patient?.PhoneNumber · @upcomingSession.Patient?.Gender · @upcomingSession.Patient?.Age yrs
-                                                </div>
+                                                <div style="font-size:11px;color:var(--st-muted);">@upcomingSession.Patient?.PhoneNumber · @upcomingSession.Patient?.Gender · @upcomingSession.Patient?.Age yrs</div>
                                             </div>
                                         </div>
                                         <div class="d-flex flex-wrap gap-2 mb-2">
@@ -258,19 +235,18 @@
                                             <span class="st-badge" style="background:#e0f2fe;color:#0369a1;">📍 @upcomingSession.Location</span>
                                         </div>
                                         <div style="font-size:12px;color:var(--st-muted);">👨‍⚕️ Dr. @upcomingSession.Doctor?.FullName</div>
-                                        <button class="st-btn w-100 mt-2" onclick="openPatientModal()">👁️ View Full Patient Data</button>
+                                        <button class="st-btn w-100 mt-2" onclick="openMarkCompleteModal(@upcomingSession.Id, '@upcomingSession.Patient?.FirstName @upcomingSession.Patient?.LastName')">✅ Mark as Complete</button>
                                     </div>
                                 }
                                 else
                                 {
                                     <div class="text-center py-4">
-                                        <p style="font-size:13px; color:var(--st-muted);">No upcoming sessions scheduled.</p>
+                                        <p style="font-size:13px;color:var(--st-muted);">No upcoming sessions scheduled.</p>
                                     </div>
                                 }
                             </div>
                         </div>
                     </div>
-
                     <div class="col-7">
                         <div class="st-card h-100">
                             <div class="st-card-header">
@@ -303,9 +279,7 @@
                                     }
                                     else
                                     {
-                                        <tr>
-                                            <td colspan="4" class="text-center" style="color:var(--st-muted);padding:20px;">No reports uploaded yet.</td>
-                                        </tr>
+                                        <tr><td colspan="4" class="text-center" style="color:var(--st-muted);padding:20px;">No reports uploaded yet.</td></tr>
                                     }
                                 </tbody>
                             </table>
@@ -314,20 +288,17 @@
                 </div>
             </div>
 
+            <!-- ===== PROFILE ===== -->
             <div class="st-view" id="st-view-profile">
                 <div class="row">
                     <div class="col-12 mb-3">
                         <div class="st-hero">
-                            <div class="st-avatar" style="width:80px;height:80px;font-size:30px;background:rgba(255,255,255,0.2);border:3px solid rgba(255,255,255,0.35);position:relative;z-index:1;">
+                            <div class="st-avatar" style="width:80px;height:80px;font-size:30px;background:rgba(255,255,255,0.2);border:3px solid rgba(255,255,255,0.35);">
                                 @(Model.FullName?.Substring(0, 1).ToUpper() ?? "S")
                             </div>
                             <div class="hero-info">
                                 <h3>@Model.FullName</h3>
                                 <p>🪪 @Model.UniversityId · @academicYear</p>
-                                <div class="d-flex gap-2 mt-2 flex-wrap">
-                                    <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;">✅ @doneCasesCount/@requiredCases Cases Done</span>
-                                    <span class="badge" style="background:rgba(255,255,255,0.18);font-size:11px;">👨‍⚕️ Dr. @doctorName</span>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -365,6 +336,7 @@
                 </div>
             </div>
 
+            <!-- ===== NEXT SESSION ===== -->
             <div class="st-view" id="st-view-session">
                 <div class="row">
                     <div class="col-12 mb-3">
@@ -399,6 +371,7 @@
                                                 <div class="st-info-row"><span class="lbl">Location</span><span class="val">@upcomingSession.Location</span></div>
                                                 <div class="st-info-row"><span class="lbl">Supervisor</span><span class="val">Dr. @upcomingSession.Doctor?.FullName</span></div>
                                                 <div class="st-info-row"><span class="lbl">Status</span><span class="val">@upcomingSession.Status</span></div>
+                                                <button class="st-btn w-100 mt-3" onclick="openMarkCompleteModal(@upcomingSession.Id, '@upcomingSession.Patient?.FirstName @upcomingSession.Patient?.LastName')">✅ Mark as Complete</button>
                                             </div>
                                         </div>
                                     </div>
@@ -417,6 +390,164 @@
                 </div>
             </div>
 
+            <!-- ===== ALL MY CASES ===== -->
+            <div class="st-view" id="st-view-cases">
+                <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                    <div class="d-flex gap-1 flex-wrap">
+                        <button class="st-filter-tab active" onclick="filterCases('all',this)">All (@totalCasesCount)</button>
+                        <button class="st-filter-tab" onclick="filterCases('pending',this)">Active (@pendingCases.Count)</button>
+                        <button class="st-filter-tab" onclick="filterCases('done',this)">Completed (@doneCasesCount)</button>
+                    </div>
+                </div>
+                <div class="st-card">
+                    <table class="st-table" id="casesTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Patient</th>
+                                <th>Age/Gender</th>
+                                <th>Phone</th>
+                                <th>Treatment</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Chair</th>
+                                <th>Supervisor</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (allCases.Any())
+                            {
+                                int i = 1;
+                                foreach (var c in allCases.OrderByDescending(x => BuildCaseDateTime(x)))
+                                {
+                                    var isDone = IsDoneStatus(c.Status);
+                                    <tr data-status="@(isDone ? "done" : "pending")">
+                                        <td>@i</td>
+                                        <td>@c.Patient?.FirstName @c.Patient?.LastName</td>
+                                        <td>@c.Patient?.Age / @c.Patient?.Gender</td>
+                                        <td>@c.Patient?.PhoneNumber</td>
+                                        <td>@c.TreatmentType</td>
+                                        <td>@c.Date.ToString("MMM dd, yyyy")</td>
+                                        <td>@c.Time</td>
+                                        <td>@c.Location</td>
+                                        <td>Dr. @c.Doctor?.FullName</td>
+                                        <td>
+                                            @if (isDone)
+                                            {
+                                                <span class="st-badge st-badge-done">✓ Completed</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="st-badge st-badge-pending">⏳ @(string.IsNullOrWhiteSpace(c.Status) ? "Pending" : c.Status)</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!isDone)
+                                            {
+                                                <button class="st-btn-outline" style="font-size:11px;padding:4px 10px;"
+                                                        onclick="openMarkCompleteModal(@c.Id, '@c.Patient?.FirstName @c.Patient?.LastName')">
+                                                    ✅ Complete
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button class="st-btn-outline" style="font-size:11px;padding:4px 10px;border-color:#16a34a;color:#16a34a;"
+                                                        onclick="openReportModal(@c.Id, '@c.Patient?.FirstName @c.Patient?.LastName', @casesWithReport.Contains(c.Id).ToString().ToLower())">
+                                                    📄 @(casesWithReport.Contains(c.Id) ? "View/Edit Report" : "Upload Report")
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="11" class="text-center" style="padding:40px;color:var(--st-muted);">No cases assigned yet.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== COMPLETED CASES ===== -->
+            <div class="st-view" id="st-view-completed-cases">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="fw-bold" style="margin:0;font-size:15px;">✅ Completed Cases (@doneCasesCount)</h6>
+                </div>
+                @if (doneCases.Any())
+                {
+                    <div class="row g-3">
+                        @foreach (var c in doneCases.OrderByDescending(x => x.Date))
+                        {
+                            var hasReport = casesWithReport.Contains(c.Id);
+                            var caseReport = reports.FirstOrDefault(r => r.CaseId == c.Id);
+                            <div class="col-6">
+                                <div class="st-card">
+                                    <div class="p-3">
+                                        <div class="d-flex align-items-start justify-content-between mb-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="st-avatar" style="width:42px;height:42px;font-size:16px;background:linear-gradient(135deg,#16a34a,#22c55e);">
+                                                    @(c.Patient?.FirstName?.Substring(0, 1).ToUpper() ?? "P")
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight:700;font-size:14px;">@c.Patient?.FirstName @c.Patient?.LastName</div>
+                                                    <div style="font-size:11px;color:var(--st-muted);">@c.Patient?.Age yrs · @c.Patient?.Gender</div>
+                                                </div>
+                                            </div>
+                                            <span class="st-badge st-badge-done">✓ Completed</span>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                            <span class="st-badge st-badge-progress">🦷 @c.TreatmentType</span>
+                                            <span class="st-badge" style="background:#e0f2fe;color:#0369a1;">📅 @c.Date.ToString("MMM dd, yyyy")</span>
+                                            <span class="st-badge" style="background:#f3f4f6;color:#374151;">📍 @c.Location</span>
+                                        </div>
+                                        <div style="font-size:12px;color:var(--st-muted);">👨‍⚕️ Dr. @(c.Doctor?.FullName ?? "—")</div>
+
+                                        @if (hasReport)
+                                        {
+                                            <div class="mt-2 p-2 rounded-2" style="background:#dcfce7;border:1px solid #86efac;font-size:12px;color:#15803d;">
+                                                📄 Report submitted on @caseReport?.SubmittedAt.ToString("MMM dd, yyyy")
+                                                @if (caseReport?.Rating.HasValue == true)
+                                                {
+                                                    <span class="ms-2">⭐ Grade: @caseReport.Rating/20</span>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="mt-2 p-2 rounded-2" style="background:#fff7ed;border:1px solid #fed7aa;font-size:12px;color:#c2410c;">
+                                                ⚠️ No report submitted yet
+                                            </div>
+                                        }
+
+                                        <div class="d-flex gap-2 mt-3">
+                                            <button class="st-btn flex-grow-1"
+                                                    onclick="openReportModal(@c.Id, '@c.Patient?.FirstName @c.Patient?.LastName', @hasReport.ToString().ToLower())"
+                                                    style="font-size:12px;">
+                                                📄 @(hasReport ? "View / Edit Report" : "Upload Report")
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="st-card">
+                        <div class="p-5 text-center">
+                            <div style="font-size:40px;margin-bottom:12px;">🦷</div>
+                            <p style="font-size:14px;color:var(--st-muted);">No completed cases yet. Mark a case as complete to see it here.</p>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- ===== MY PATIENTS ===== -->
             <div class="st-view" id="st-view-patients">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <h6 class="fw-bold" style="margin:0;font-size:15px;">👥 My Patients (@myPatients.Count)</h6>
@@ -429,17 +560,14 @@
                             var lastCase = p.Cases?.OrderByDescending(c => c.Date).FirstOrDefault();
                             var patientStatus = lastCase?.Status ?? "—";
                             <div class="col-4">
-                                <div class="st-card" style="cursor:pointer;transition:box-shadow .2s;"
-                                     onclick="openPatientDetailModal(@p.Id)"
-                                     onmouseenter="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.12)'"
-                                     onmouseleave="this.style.boxShadow=''">
+                                <div class="st-card" style="cursor:pointer;" onclick="openPatientDetailModal(@p.Id)">
                                     <div class="p-3">
                                         <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="st-avatar" style="width:50px;height:50px;font-size:20px;background:linear-gradient(135deg,#6366f1,#8b5cf6);flex-shrink:0;">
+                                            <div class="st-avatar" style="width:50px;height:50px;font-size:20px;background:linear-gradient(135deg,#6366f1,#8b5cf6);">
                                                 @(p.FirstName?.Substring(0, 1).ToUpper() ?? "P")
                                             </div>
                                             <div>
-                                                <div style="font-weight:700;font-size:14px;color:var(--st-text);">@p.FirstName @p.LastName</div>
+                                                <div style="font-weight:700;font-size:14px;">@p.FirstName @p.LastName</div>
                                                 <div style="font-size:11px;color:var(--st-muted);">@p.Age yrs · @p.Gender</div>
                                             </div>
                                         </div>
@@ -466,20 +594,13 @@
                                 </div>
                             </div>
 
-                            <!-- Modal لكل مريض -->
                             <div class="st-modal-overlay" id="patientDetailModal-@p.Id" style="display:none;">
                                 <div class="st-modal-box" style="max-width:620px;">
                                     <div class="st-modal-header">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="st-avatar" style="width:40px;height:40px;font-size:16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);">
-                                                @(p.FirstName?.Substring(0, 1).ToUpper() ?? "P")
-                                            </div>
-                                            <h6 class="fw-bold mb-0" style="font-size:15px;">🏥 @p.FirstName @p.MiddleName @p.LastName</h6>
-                                        </div>
+                                        <h6 class="fw-bold mb-0" style="font-size:15px;">🏥 @p.FirstName @p.MiddleName @p.LastName</h6>
                                         <button class="st-close-btn" onclick="closePatientDetailModal(@p.Id)">✕</button>
                                     </div>
                                     <div class="st-modal-body" style="max-height:70vh;overflow-y:auto;">
-                                        <!-- معلومات المريض -->
                                         <div class="p-3 rounded-3 mb-3" style="background:var(--st-bg);">
                                             <h6 class="fw-bold mb-3" style="color:var(--st-primary);font-size:13px;">👤 Patient Info</h6>
                                             <div class="st-info-row"><span class="lbl">Full Name</span><span class="val">@p.FirstName @p.MiddleName @p.LastName</span></div>
@@ -489,20 +610,10 @@
                                             <div class="st-info-row"><span class="lbl">Email</span><span class="val">@p.Email</span></div>
                                             <div class="st-info-row">
                                                 <span class="lbl">Allergies</span>
-                                                <span class="val">@(p.HasAllergy ? (p.AllergyDetails ?? "Yes — no details") : "None")</span>
+                                                <span class="val">@(p.HasAllergy ? (p.AllergyDetails ?? "Yes") : "None")</span>
                                             </div>
                                             <div class="st-info-row"><span class="lbl">Treatment</span><span class="val">@p.TreatmentType</span></div>
-                                            @if (!string.IsNullOrWhiteSpace(p.ToothImagePath))
-                                            {
-                                                <div class="mt-2">
-                                                    <span class="lbl" style="font-size:12px;color:var(--st-muted);">🦷 Tooth Image</span>
-                                                    <div class="mt-1">
-                                                        <img src="/images/@p.ToothImagePath" style="max-width:100%;border-radius:8px;border:1px solid #e5e7eb;" />
-                                                    </div>
-                                                </div>
-                                            }
                                         </div>
-                                        <!-- حالات المريض -->
                                         @if (p.Cases != null && p.Cases.Any())
                                         {
                                             <div class="p-3 rounded-3" style="background:var(--st-bg);">
@@ -513,8 +624,7 @@
                                                         <div class="d-flex justify-content-between align-items-start">
                                                             <div>
                                                                 <div style="font-size:13px;font-weight:600;">🦷 @c.TreatmentType</div>
-                                                                <div style="font-size:11px;color:var(--st-muted);">📅 @c.Date.ToString("MMM dd, yyyy") · 🕐 @c.Time · 📍 @c.Location</div>
-                                                                <div style="font-size:11px;color:var(--st-muted);">👨‍⚕️ Dr. @(c.Doctor?.FullName ?? "—")</div>
+                                                                <div style="font-size:11px;color:var(--st-muted);">📅 @c.Date.ToString("MMM dd, yyyy") · 📍 @c.Location</div>
                                                             </div>
                                                             <span class="st-badge @(IsDoneStatus(c.Status) ? "st-badge-done" : "st-badge-pending")">
                                                                 @(IsDoneStatus(c.Status) ? "✓ Done" : "⏳ " + (string.IsNullOrWhiteSpace(c.Status) ? "Pending" : c.Status))
@@ -523,10 +633,6 @@
                                                     </div>
                                                 }
                                             </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="text-center p-3" style="color:var(--st-muted);font-size:13px;">No sessions recorded yet.</div>
                                         }
                                     </div>
                                 </div>
@@ -545,71 +651,7 @@
                 }
             </div>
 
-            <div class="st-view" id="st-view-cases">
-                <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-                    <div class="d-flex gap-1 flex-wrap">
-                        <button class="st-filter-tab active" onclick="filterCases('all',this)">All (@totalCasesCount)</button>
-                        <button class="st-filter-tab" onclick="filterCases('pending',this)">Pending (@pendingCases.Count)</button>
-                        <button class="st-filter-tab" onclick="filterCases('done',this)">Done (@doneCasesCount)</button>
-                    </div>
-                </div>
-                <div class="st-card">
-                    <table class="st-table" id="casesTable">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Patient</th>
-                                <th>Age / Gender</th>
-                                <th>Phone</th>
-                                <th>Treatment</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Chair</th>
-                                <th>Supervisor</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (allCases.Any())
-                            {
-                                int i = 1;
-                                foreach (var c in allCases.OrderByDescending(x => BuildCaseDateTime(x)))
-                                {
-                                    <tr data-status="@(IsDoneStatus(c.Status) ? "done" : "pending")">
-                                        <td>@i</td>
-                                        <td>@c.Patient?.FirstName @c.Patient?.LastName</td>
-                                        <td>@c.Patient?.Age / @c.Patient?.Gender</td>
-                                        <td>@c.Patient?.PhoneNumber</td>
-                                        <td>@c.TreatmentType</td>
-                                        <td>@c.Date.ToString("MMM dd, yyyy")</td>
-                                        <td>@c.Time</td>
-                                        <td>@c.Location</td>
-                                        <td>Dr. @c.Doctor?.FullName</td>
-                                        <td>
-                                            @if (IsDoneStatus(c.Status))
-                                            {
-                                                <span class="st-badge st-badge-done">✓ Done</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="st-badge st-badge-pending">⏳ @(string.IsNullOrWhiteSpace(c.Status) ? "Pending" : c.Status)</span>
-                                            }
-                                        </td>
-                                    </tr>
-                                    i++;
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="10" class="text-center" style="padding:40px;color:var(--st-muted);">No cases assigned yet.</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+            <!-- ===== MY REPORTS ===== -->
             <div class="st-view" id="st-view-reports">
                 <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
                     <div class="d-flex gap-1 flex-wrap">
@@ -617,7 +659,6 @@
                         <button class="st-filter-tab" onclick="filterMyReports('graded',this)">Graded (@gradedReportsCount)</button>
                         <button class="st-filter-tab" onclick="filterMyReports('pending',this)">Pending (@pendingReportsCount)</button>
                     </div>
-                    <button class="st-btn" onclick="showView('upload')">+ Upload New Report</button>
                 </div>
                 <div class="row" id="myReportsGrid">
                     @if (reports.Any())
@@ -630,7 +671,41 @@
                                     <div class="p-3" style="border-bottom:1px solid #edf2f0;">
                                         <div style="font-size:14px;font-weight:700;margin-bottom:3px;">@report.Case?.TreatmentType</div>
                                         <div style="font-size:11px;color:var(--st-muted);">👤 @report.Case?.Patient?.FirstName @report.Case?.Patient?.LastName · 📅 @report.Case?.Date.ToString("MMM dd, yyyy")</div>
-                                        <div style="font-size:12px;color:#444;margin-top:8px;line-height:1.6;">@(string.IsNullOrWhiteSpace(report.Content) ? "No report content available." : report.Content)</div>
+                                        <div style="font-size:11px;color:var(--st-muted);margin-top:2px;">📤 Submitted: @report.SubmittedAt.ToString("MMM dd, yyyy")</div>
+
+                                        @if (!string.IsNullOrWhiteSpace(report.Content))
+                                        {
+                                            <div style="font-size:12px;color:#444;margin-top:8px;line-height:1.6;">@report.Content</div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(report.ChiefComplaint))
+                                        {
+                                            <div class="mt-1" style="font-size:11px;"><strong>Chief Complaint:</strong> @report.ChiefComplaint</div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(report.TreatmentDone))
+                                        {
+                                            <div style="font-size:11px;"><strong>Treatment Done:</strong> @report.TreatmentDone</div>
+                                        }
+
+                                        @if (!string.IsNullOrWhiteSpace(report.BeforeImagePath) || !string.IsNullOrWhiteSpace(report.AfterImagePath))
+                                        {
+                                            <div class="d-flex gap-2 mt-2">
+                                                @if (!string.IsNullOrWhiteSpace(report.BeforeImagePath))
+                                                {
+                                                    <div style="flex:1;">
+                                                        <div style="font-size:10px;color:var(--st-muted);margin-bottom:2px;">📷 Before</div>
+                                                        <img src="/images/@report.BeforeImagePath" style="width:100%;border-radius:6px;border:1px solid #e5e7eb;max-height:100px;object-fit:cover;" />
+                                                    </div>
+                                                }
+                                                @if (!string.IsNullOrWhiteSpace(report.AfterImagePath))
+                                                {
+                                                    <div style="flex:1;">
+                                                        <div style="font-size:10px;color:var(--st-muted);margin-bottom:2px;">📷 After</div>
+                                                        <img src="/images/@report.AfterImagePath" style="width:100%;border-radius:6px;border:1px solid #e5e7eb;max-height:100px;object-fit:cover;" />
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+
                                         @if (!string.IsNullOrWhiteSpace(report.DoctorFeedback))
                                         {
                                             <div class="mt-2 p-2 rounded-2" style="background:#f0fdf9;border:1px solid #a7f3d0;font-size:11px;color:#0d6e5c;">
@@ -649,14 +724,20 @@
                                                 <span class="st-grade-badge grade-pending">🕐 Awaiting Review</span>
                                             }
                                         </div>
-                                        @if (isGraded)
-                                        {
-                                            <div class="st-grade-circle">@report.Rating/20</div>
-                                        }
-                                        else
-                                        {
-                                            <div class="st-grade-pending">?</div>
-                                        }
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (isGraded)
+                                            {
+                                                <div class="st-grade-circle">@report.Rating/20</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="st-grade-pending">?</div>
+                                            }
+                                            @if (!isGraded)
+                                            {
+                                                <button onclick="deleteReport(@report.Id)" style="background:none;border:none;color:#dc2626;font-size:18px;cursor:pointer;padding:0 4px;" title="Delete Report">🗑️</button>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -665,48 +746,13 @@
                     else
                     {
                         <div class="col-12">
-                            <div class="st-card p-4 text-center" style="color:var(--st-muted);">No reports found.</div>
+                            <div class="st-card p-4 text-center" style="color:var(--st-muted);">No reports found. Go to a completed case and upload a report.</div>
                         </div>
                     }
                 </div>
             </div>
 
-            <div class="st-view" id="st-view-upload">
-                <div class="d-flex justify-content-center">
-                    <div style="max-width:640px;width:100%;">
-                        <div class="st-card">
-                            <div class="st-card-header"><h6>☁️ Upload New Case Report</h6></div>
-                            <div class="p-4">
-                                <div class="mb-3">
-                                    <label class="form-label">🏥 Patient linked to this report</label>
-                                    <select class="form-select">
-                                        @if (allCases.Any())
-                                        {
-                                            foreach (var c in allCases.OrderByDescending(x => BuildCaseDateTime(x)))
-                                            {
-                                                <option>@c.Patient?.FirstName @c.Patient?.LastName — @c.TreatmentType</option>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <option>No assigned cases</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">📝 Description</label>
-                                    <textarea rows="4" class="form-control" placeholder="Describe what was done..." style="resize:none;"></textarea>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <button class="st-btn flex-grow-1" onclick="submitReport()">✉️ Submit Report to Doctor</button>
-                                    <button class="st-btn-outline" onclick="showView('reports')">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <!-- ===== REQUESTS ===== -->
             <div class="st-view" id="st-view-request">
                 <div class="d-flex justify-content-center">
                     <div style="max-width:560px;width:100%;">
@@ -778,10 +824,6 @@
                                         <div style="font-size:12px;">Treatment: <strong>@request.TreatmentType</strong></div>
                                         <div style="font-size:12px;">Phone: <strong>@request.PhoneNumber</strong></div>
                                         <div style="font-size:12px;color:var(--st-muted);">Requested: @request.RequestDate.ToString("MMM dd, yyyy")</div>
-                                        @if (!string.IsNullOrWhiteSpace(request.Description))
-                                        {
-                                            <div class="mt-2 p-2 rounded-2" style="background:#fff7ed;font-size:11px;color:#92400e;">💬 @request.Description</div>
-                                        }
                                     </div>
                                 </div>
                             </div>
@@ -796,6 +838,7 @@
                 </div>
             </div>
 
+            <!-- ===== NOTIFICATIONS ===== -->
             <div class="st-view" id="st-view-notifications">
                 <div class="st-card">
                     <div class="st-card-header"><h6>🔔 Notifications</h6></div>
@@ -805,15 +848,12 @@
                             foreach (var c in allCases.OrderByDescending(x => BuildCaseDateTime(x)).Take(5))
                             {
                                 <div class="st-notif-item">
-                                    <div class="st-notif-dot-big" style="background:var(--st-primary);"></div>
                                     <div class="st-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#0d6e5c,#00c9a7);">
                                         @(c.Patient?.FirstName?.Substring(0, 1).ToUpper() ?? "P")
                                     </div>
                                     <div style="flex:1;">
                                         <div style="font-size:13px;font-weight:600;">Case: @c.Patient?.FirstName @c.Patient?.LastName</div>
-                                        <div style="font-size:12px;color:var(--st-muted);margin-top:2px;">
-                                            🦷 @c.TreatmentType · 📍 @c.Location · ⏰ @BuildCaseDateTime(c).ToString("MMM dd, yyyy - hh:mm tt")
-                                        </div>
+                                        <div style="font-size:12px;color:var(--st-muted);margin-top:2px;">🦷 @c.TreatmentType · 📍 @c.Location · ⏰ @BuildCaseDateTime(c).ToString("MMM dd, yyyy - hh:mm tt")</div>
                                     </div>
                                     <span class="badge" style="background:#dcfce7;color:#15803d;font-size:10px;">@c.Status</span>
                                 </div>
@@ -826,63 +866,257 @@
                     </div>
                 </div>
             </div>
+
+        </div><!-- st-body -->
+    </div><!-- st-main -->
+    <!-- ===== MODAL: Mark as Complete ===== -->
+    <div class="st-modal-overlay" id="markCompleteModal" style="display:none;">
+        <div class="st-modal-box" style="max-width:420px;">
+            <div class="st-modal-header">
+                <h6 class="fw-bold mb-0">✅ Mark Case as Complete</h6>
+                <button class="st-close-btn" onclick="closeStModal('markCompleteModal')">✕</button>
+            </div>
+            <div class="st-modal-body">
+                <p style="font-size:14px;">Are you sure you want to mark the case for <strong id="completePatientName"></strong> as <strong>Completed</strong>?</p>
+                <p style="font-size:12px;color:#ca8a04;background:#fef9c3;padding:10px;border-radius:8px;">⚠️ This will move the case to Completed Cases and remove it from active sessions.</p>
+            </div>
+            <div class="d-flex gap-2 p-3" style="border-top:1px solid #e5e7eb;">
+                <button class="st-btn flex-grow-1" onclick="confirmMarkComplete()">✅ Yes, Mark Complete</button>
+                <button class="st-btn-outline" onclick="closeStModal('markCompleteModal')">Cancel</button>
+            </div>
         </div>
     </div>
 
-    @if (upcomingSession != null)
-    {
-        <div class="st-modal-overlay" id="patientModal">
-            <div class="st-modal-box">
-                <div class="st-modal-header">
-                    <h6 class="fw-bold" style="font-size:15px;">🏥 Full Patient Record</h6>
-                    <button class="st-close-btn" onclick="closeStModal('patientModal')">✕</button>
-                </div>
-                <div class="st-modal-body">
-                    <div class="st-info-row"><span class="lbl">Full Name</span><span class="val">@upcomingSession.Patient?.FirstName @upcomingSession.Patient?.MiddleName @upcomingSession.Patient?.LastName</span></div>
-                    <div class="st-info-row"><span class="lbl">Age</span><span class="val">@upcomingSession.Patient?.Age</span></div>
-                    <div class="st-info-row"><span class="lbl">Gender</span><span class="val">@upcomingSession.Patient?.Gender</span></div>
-                    <div class="st-info-row"><span class="lbl">Phone</span><span class="val">@upcomingSession.Patient?.PhoneNumber</span></div>
-                    <div class="st-info-row"><span class="lbl">Email</span><span class="val">@upcomingSession.Patient?.Email</span></div>
-                    <div class="st-info-row"><span class="lbl">Allergy Details</span><span class="val">@(upcomingSession.Patient?.HasAllergy == true ? upcomingSession.Patient?.AllergyDetails : "None")</span></div>
-                    <div class="st-info-row"><span class="lbl">Treatment Needed</span><span class="val">@upcomingSession.TreatmentType</span></div>
+    <!-- ===== MODAL: Upload / Edit Report ===== -->
+    <div class="st-modal-overlay" id="reportModal" style="display:none;">
+        <div class="st-modal-box" style="max-width:640px;max-height:90vh;overflow-y:auto;">
+            <div class="st-modal-header">
+                <h6 class="fw-bold mb-0" id="reportModalTitle">📄 Upload Case Report</h6>
+                <button class="st-close-btn" onclick="closeStModal('reportModal')">✕</button>
+            </div>
+            <div class="st-modal-body">
+                <form id="reportForm" enctype="multipart/form-data">
+                    <input type="hidden" id="reportCaseId" name="CaseId" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-600">📝 General Notes / Summary</label>
+                        <textarea class="form-control" name="Content" id="rContent" rows="3" style="resize:none;" placeholder="General summary of the session..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600">🩺 Chief Complaint</label>
+                        <input type="text" class="form-control" name="ChiefComplaint" id="rChiefComplaint" placeholder="What was the patient's main complaint?" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600">🔍 Diagnosis Notes</label>
+                        <textarea class="form-control" name="DiagnosisNotes" id="rDiagnosis" rows="2" style="resize:none;" placeholder="Diagnosis findings..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600">🦷 Treatment Done</label>
+                        <textarea class="form-control" name="TreatmentDone" id="rTreatment" rows="2" style="resize:none;" placeholder="Describe the treatment performed..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600">📋 Follow-up Plan</label>
+                        <input type="text" class="form-control" name="FollowUpPlan" id="rFollowUp" placeholder="Next appointment or instructions..." />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-600">⚠️ Complications (if any)</label>
+                        <input type="text" class="form-control" name="Complications" id="rComplications" placeholder="Leave empty if none..." />
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-600">📷 Before Image</label>
+                            <input type="file" class="form-control" name="BeforeImage" id="rBeforeImage" accept="image/*" onchange="previewImg(this,'beforePreview')" />
+                            <div id="beforePreview" class="mt-2" style="display:none;">
+                                <img style="width:100%;border-radius:8px;max-height:120px;object-fit:cover;" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-600">📷 After Image</label>
+                            <input type="file" class="form-control" name="AfterImage" id="rAfterImage" accept="image/*" onchange="previewImg(this,'afterPreview')" />
+                            <div id="afterPreview" class="mt-2" style="display:none;">
+                                <img style="width:100%;border-radius:8px;max-height:120px;object-fit:cover;" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div id="reportAlreadyNote" style="display:none;" class="mb-2 p-2 rounded-2" style="background:#fff7ed;border:1px solid #fed7aa;font-size:12px;color:#c2410c;">
+                    📝 A report already exists for this case. Submitting will replace it.
                 </div>
             </div>
+            <div class="d-flex gap-2 p-3" style="border-top:1px solid #e5e7eb;">
+                <button class="st-btn flex-grow-1" onclick="submitReport()">📤 Submit Report</button>
+                <button class="st-btn-outline" onclick="closeStModal('reportModal')">Cancel</button>
+            </div>
         </div>
-    }
+    </div>
 
     <div class="st-toast-wrap" id="stToastContainer"></div>
 </div>
 
 <script>
+    // ===== Navigation =====
+    function showView(name) {
+        document.querySelectorAll('.st-view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.st-nav-link').forEach(a => a.classList.remove('active'));
+        const el = document.getElementById('st-view-' + name);
+        if (el) el.classList.add('active');
+        const titles = {
+            dashboard: 'Dashboard', profile: 'My Profile', session: 'Next Session',
+            cases: 'All My Cases', 'completed-cases': 'Completed Cases', patients: 'My Patients',
+            reports: 'My Reports', request: 'Request a Case', 'requests-list': 'My Requests',
+            notifications: 'Notifications'
+        };
+        document.getElementById('stPageTitle').textContent = titles[name] || name;
+    }
+
     function filterCases(status, btn) {
         document.querySelectorAll('.st-filter-tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         document.querySelectorAll('#casesTable tbody tr').forEach(row => {
-            if (status === 'all') {
-                row.style.display = '';
-            } else {
-                row.style.display = row.dataset.status === status ? '' : 'none';
-            }
+            row.style.display = (status === 'all' || row.dataset.status === status) ? '' : 'none';
         });
     }
 
-    function openPatientDetailModal(patientId) {
-        document.getElementById('patientDetailModal-' + patientId).style.display = 'flex';
+    function filterMyReports(status, btn) {
+        document.querySelectorAll('.st-filter-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.st-report-col').forEach(col => {
+            col.style.display = (status === 'all' || col.dataset.status === status) ? '' : 'none';
+        });
+    }
+
+    // ===== Modals =====
+    function closeStModal(id) {
+        document.getElementById(id).style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    function openModal(id) {
+        document.getElementById(id).style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
 
-    function closePatientDetailModal(patientId) {
-        document.getElementById('patientDetailModal-' + patientId).style.display = 'none';
-        document.body.style.overflow = '';
+    function openPatientDetailModal(pid) { openModal('patientDetailModal-' + pid); }
+    function closePatientDetailModal(pid) { closeStModal('patientDetailModal-' + pid); }
+
+    // ===== Mark Complete =====
+    let _markCaseId = null;
+    function openMarkCompleteModal(caseId, patientName) {
+        _markCaseId = caseId;
+        document.getElementById('completePatientName').textContent = patientName;
+        openModal('markCompleteModal');
     }
 
-    // إغلاق المودال بالكبس على الخلفية
-    document.querySelectorAll('[id^="patientDetailModal-"]').forEach(overlay => {
-        overlay.addEventListener('click', function (e) {
-            if (e.target === this) {
-                this.style.display = 'none';
-                document.body.style.overflow = '';
+    async function confirmMarkComplete() {
+        if (!_markCaseId) return;
+        try {
+            const res = await fetch('/LogIn/MarkCaseComplete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'RequestVerificationToken': getAntiForgeryToken() },
+                body: 'caseId=' + _markCaseId
+            });
+            const data = await res.json();
+            if (data.success) {
+                closeStModal('markCompleteModal');
+                showToast('✅ Case marked as completed!', 'success');
+                setTimeout(() => location.reload(), 1200);
+            } else {
+                showToast('❌ Error: ' + (data.message || 'Could not update case'), 'error');
             }
-        });
+        } catch (e) {
+            showToast('❌ Network error', 'error');
+        }
+    }
+
+    // ===== Report Modal =====
+    let _reportCaseId = null;
+    function openReportModal(caseId, patientName, hasReport) {
+        _reportCaseId = caseId;
+        document.getElementById('reportCaseId').value = caseId;
+        document.getElementById('reportModalTitle').textContent = hasReport ? '📄 Edit Case Report' : '📄 Upload Case Report';
+        document.getElementById('reportAlreadyNote').style.display = hasReport ? 'block' : 'none';
+        // reset form
+        document.getElementById('reportForm').reset();
+        document.getElementById('beforePreview').style.display = 'none';
+        document.getElementById('afterPreview').style.display = 'none';
+        openModal('reportModal');
+    }
+
+    function previewImg(input, previewId) {
+        const div = document.getElementById(previewId);
+        const img = div.querySelector('img');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => { img.src = e.target.result; div.style.display = 'block'; };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    async function submitReport() {
+        const form = document.getElementById('reportForm');
+        const formData = new FormData(form);
+
+        const token = getAntiForgeryToken();
+        if (token) formData.append('__RequestVerificationToken', token);
+
+        try {
+            const res = await fetch('/LogIn/SubmitReport', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (data.success) {
+                closeStModal('reportModal');
+                showToast('📄 Report submitted successfully!', 'success');
+                setTimeout(() => location.reload(), 1200);
+            } else {
+                showToast('❌ Failed to submit report', 'error');
+            }
+        } catch (e) {
+            showToast('❌ Network error', 'error');
+        }
+    }
+
+    async function deleteReport(reportId) {
+        if (!confirm('Are you sure you want to delete this report? You can re-upload it later.')) return;
+        try {
+            const res = await fetch('/LogIn/DeleteReport', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'RequestVerificationToken': getAntiForgeryToken() },
+                body: 'reportId=' + reportId
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast('🗑️ Report deleted.', 'success');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showToast('❌ Could not delete report', 'error');
+            }
+        } catch (e) {
+            showToast('❌ Network error', 'error');
+        }
+    }
+
+    // ===== Helpers =====
+    function getAntiForgeryToken() {
+        const el = document.querySelector('input[name="__RequestVerificationToken"]');
+        return el ? el.value : '';
+    }
+
+    function showToast(msg, type) {
+        const wrap = document.getElementById('stToastContainer');
+        const t = document.createElement('div');
+        t.className = 'st-toast st-toast-' + (type || 'info');
+        t.textContent = msg;
+        wrap.appendChild(t);
+        setTimeout(() => t.remove(), 3500);
+    }
+
+    function submitRequest() {
+        showToast('✉️ Request sent to doctor!', 'success');
+    }
+
+    // Close modals on overlay click
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('st-modal-overlay')) {
+            e.target.style.display = 'none';
+            document.body.style.overflow = '';
+        }
     });
 </script>

@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\ammar\\onedrive\\desktop\\asp.netorange\\student dental clinic\\student dental clinic\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\ammar\\onedrive\\desktop\\asp.netorange\\student dental clinic\\student dental clinic\\views\\login\\doctor.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\views\\login\\doctor.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\ammar\\onedrive\\desktop\\asp.netorange\\student dental clinic\\student dental clinic\\views\\login\\students.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\views\\login\\students.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\ammar\\onedrive\\desktop\\asp.netorange\\student dental clinic\\student dental clinic\\wwwroot\\js\\doctor.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\wwwroot\\js\\doctor.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\ammar\\onedrive\\desktop\\asp.netorange\\student dental clinic\\student dental clinic\\models\\report.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\models\\report.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\ammar\\onedrive\\desktop\\asp.netorange\\student dental clinic\\student dental clinic\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|c:\\users\\ammar\\onedrive\\desktop\\asp.netorange\\student dental clinic\\student dental clinic\\wwwroot\\css\\doctor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{93BA2727-B21C-4B2B-B8D1-A84FAA679D84}|Student Dental Clinic\\Student Dental Clinic.csproj|solutionrelative:student dental clinic\\wwwroot\\css\\doctor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,45 +30,71 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Data\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "Student Dental Clinic\\Data\\AppDbContext.cs",
-              "ToolTip": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Data\\AppDbContext.cs",
-              "RelativeToolTip": "Student Dental Clinic\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAiwEYAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T00:33:07.667Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Students.cshtml",
-              "DocumentMoniker": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Views\\LogIn\\Students.cshtml",
-              "RelativeDocumentMoniker": "Student Dental Clinic\\Views\\LogIn\\Students.cshtml",
-              "ToolTip": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Views\\LogIn\\Students.cshtml",
-              "RelativeToolTip": "Student Dental Clinic\\Views\\LogIn\\Students.cshtml",
-              "ViewState": "AgIAAF4DAAAAAAAAAAAYwGgDAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-26T23:05:20.89Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Report.cs",
+              "DocumentMoniker": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Models\\Report.cs",
+              "RelativeDocumentMoniker": "Student Dental Clinic\\Models\\Report.cs",
+              "ToolTip": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Models\\Report.cs",
+              "RelativeToolTip": "Student Dental Clinic\\Models\\Report.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-04T01:03:08.677Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "doctor.css",
+              "DocumentMoniker": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\wwwroot\\css\\doctor.css",
+              "RelativeDocumentMoniker": "Student Dental Clinic\\wwwroot\\css\\doctor.css",
+              "ToolTip": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\wwwroot\\css\\doctor.css",
+              "RelativeToolTip": "Student Dental Clinic\\wwwroot\\css\\doctor.css",
+              "ViewState": "AgIAAGwDAAAAAAAAAAAIwIcDAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-05-04T01:02:01.78Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "doctor.cshtml",
+              "DocumentMoniker": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Views\\LogIn\\doctor.cshtml",
+              "RelativeDocumentMoniker": "Student Dental Clinic\\Views\\LogIn\\doctor.cshtml",
+              "ToolTip": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Views\\LogIn\\doctor.cshtml",
+              "RelativeToolTip": "Student Dental Clinic\\Views\\LogIn\\doctor.cshtml",
+              "ViewState": "AgIAAPgCAAAAAAAAAAAtwAgDAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-04T01:01:02.105Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "LogInController.cs",
               "DocumentMoniker": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Controllers\\LogInController.cs",
               "RelativeDocumentMoniker": "Student Dental Clinic\\Controllers\\LogInController.cs",
               "ToolTip": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\Controllers\\LogInController.cs",
               "RelativeToolTip": "Student Dental Clinic\\Controllers\\LogInController.cs",
-              "ViewState": "AgIAALAAAAAAAAAAAAAowM4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADMBAAAAAAAAAAAAwD4BAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-24T17:13:32.848Z",
+              "WhenOpened": "2026-05-04T00:44:45.35Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "doctor.js",
+              "DocumentMoniker": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\wwwroot\\js\\doctor.js",
+              "RelativeDocumentMoniker": "Student Dental Clinic\\wwwroot\\js\\doctor.js",
+              "ToolTip": "C:\\Users\\ammar\\OneDrive\\Desktop\\asp.netOrange\\Student Dental Clinic\\Student Dental Clinic\\wwwroot\\js\\doctor.js",
+              "RelativeToolTip": "Student Dental Clinic\\wwwroot\\js\\doctor.js",
+              "ViewState": "AgIAAHQBAAAAAAAAAAAiwJIBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-05-04T00:44:13.398Z",
               "EditorCaption": ""
             }
           ]

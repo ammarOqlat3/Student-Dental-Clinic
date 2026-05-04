@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="~/css/doctor.css" />
 }
 @section Scripts {
-    <script src="~/js/doctor.js?v=1.1"></script>
+    <script src="~/js/doctor.js?v=1.3"></script>
 }
 @{
     var students = ViewBag.Students as List<Student>;
@@ -574,24 +574,36 @@
 
         <!-- Grade Modal -->
         <div class="db-modal-overlay" id="gradeModal">
-            <div class="db-modal-box" style="max-width:380px;">
+            <div class="db-modal-box" style="max-width:420px;">
                 <div class="db-modal-header">
-                    <h6 class="fw-bold m-0"><i class="fa-solid fa-star me-2 text-warning"></i>Grade Student</h6>
+                    <h6 class="fw-bold m-0"><i class="fa-solid fa-star me-2 text-warning"></i>Grade Student Report</h6>
                     <button class="db-close-modal" onclick="closeModal('gradeModal')"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="db-modal-body">
                     <div id="gradeReportInfo" class="mb-3"></div>
-                    <div class="text-center">
-                        <div class="db-grade-preview" id="gradePreview">15</div>
-                        <div class="db-grade-out-of" id="gradeOutOf">out of 20</div>
+
+                    <!-- اختيار الدرجة القصوى -->
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Grade out of</label>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="db-max-grade-btn active" onclick="setMaxGrade(10, this)">Out of 10</button>
+                            <button type="button" class="db-max-grade-btn" onclick="setMaxGrade(20, this)">Out of 20</button>
+                            <button type="button" class="db-max-grade-btn" onclick="setMaxGrade(100, this)">Out of 100</button>
+                        </div>
                     </div>
-                    <input type="range" class="db-grade-slider" id="gradeSlider" min="0" max="20" value="15" oninput="updateGradePreview(this.value)" />
+
+                    <div class="text-center mb-2">
+                        <div class="db-grade-preview" id="gradePreview">8</div>
+                        <div class="db-grade-out-of" id="gradeOutOf">out of 10</div>
+                    </div>
+                    <input type="range" class="db-grade-slider" id="gradeSlider" min="0" max="10" value="8" oninput="updateGradePreview(this.value)" />
                     <div class="d-flex justify-content-between" style="font-size:11px;color:var(--text-muted);">
-                        <span>0</span><span id="gradeMaxLabel">20</span>
+                        <span>0</span><span id="gradeMaxLabel">10</span>
                     </div>
+
                     <div class="mt-3">
-                        <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Notes (optional)</label>
-                        <textarea rows="2" class="form-control form-control-sm" placeholder="Add your notes..." style="font-family:'DM Sans',sans-serif;resize:none;"></textarea>
+                        <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-muted);">Doctor Notes (optional)</label>
+                        <textarea id="gradeFeedback" rows="2" class="form-control form-control-sm" placeholder="Add feedback for the student..." style="font-family:'DM Sans',sans-serif;resize:none;"></textarea>
                     </div>
                     <div class="d-flex gap-2 mt-3">
                         <button class="db-btn-primary flex-grow-1" onclick="confirmGrade()">
@@ -604,6 +616,18 @@
         </div>
 
         <div class="db-toast-wrap" id="toastContainer"></div>
+
+        <!-- ===== Report Detail Modal ===== -->
+        <div id="reportDetailModal" style="display:none;position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;padding:16px;">
+            <div style="background:white;border-radius:16px;width:100%;max-width:640px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #f0f0f0;flex-shrink:0;">
+                    <h6 id="rdmTitle" class="fw-bold m-0" style="font-size:15px;color:var(--text-dark);"></h6>
+                    <button onclick="closeReportDetailModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#999;line-height:1;">&times;</button>
+                </div>
+                <div id="reportDetailBody" style="overflow-y:auto;padding:20px 22px;flex:1;"></div>
+            </div>
+        </div>
+
     </div><!-- /dashboard-container -->
 </div><!-- /container-fluid -->
 @*  لتعديل معلومات الدكتور من قبل الدكتور *@
@@ -659,5 +683,108 @@
         </div>
     </div>
 </div>
+
+@using System.Text.Json
+@{
+    var _reports = (ViewBag.Reports as List<Student_Dental_Clinic.Models.Report>) ?? new();
+    var _patients = (Model as List<Student_Dental_Clinic.Models.Patient>) ?? new();
+    var _students = (ViewBag.Students as List<Student_Dental_Clinic.Models.Student>) ?? new();
+
+    // ── build reports JSON ──────────────────────────────────────────────
+    var rList = new System.Text.StringBuilder();
+    rList.Append('[');
+    for (int ri = 0; ri < _reports.Count; ri++)
+    {
+        var r = _reports[ri];
+        if (ri > 0) rList.Append(',');
+        rList.Append('{');
+        rList.Append($"\"id\":{r.Id},");
+        rList.Append($"\"student\":{JsonSerializer.Serialize(r.Student?.FullName ?? "")},");
+        rList.Append($"\"studentId\":{r.StudentId},");
+        var patName = ((r.Case?.Patient?.FirstName ?? "") + " " + (r.Case?.Patient?.LastName ?? "")).Trim();
+        rList.Append($"\"patient\":{JsonSerializer.Serialize(patName)},");
+        rList.Append($"\"caseType\":{JsonSerializer.Serialize(r.Case?.TreatmentType ?? "")},");
+        rList.Append($"\"caseId\":{r.CaseId},");
+        rList.Append($"\"date\":{JsonSerializer.Serialize(r.SubmittedAt.ToString("MMM dd, yyyy"))},");
+        rList.Append($"\"chiefComplaint\":{JsonSerializer.Serialize(r.ChiefComplaint)},");
+        rList.Append($"\"diagnosisNotes\":{JsonSerializer.Serialize(r.DiagnosisNotes)},");
+        rList.Append($"\"treatmentDone\":{JsonSerializer.Serialize(r.TreatmentDone)},");
+        rList.Append($"\"followUpPlan\":{JsonSerializer.Serialize(r.FollowUpPlan)},");
+        rList.Append($"\"complications\":{JsonSerializer.Serialize(r.Complications)},");
+        rList.Append($"\"content\":{JsonSerializer.Serialize(r.Content)},");
+        rList.Append($"\"beforeImage\":{JsonSerializer.Serialize(r.BeforeImagePath)},");
+        rList.Append($"\"afterImage\":{JsonSerializer.Serialize(r.AfterImagePath)},");
+        rList.Append($"\"grade\":{(r.Rating.HasValue ? r.Rating.Value.ToString() : "null")},");
+        rList.Append($"\"maxGrade\":{(r.MaxGrade.HasValue ? r.MaxGrade.Value.ToString() : "10")},");
+        rList.Append($"\"feedback\":{JsonSerializer.Serialize(r.DoctorFeedback)},");
+        rList.Append($"\"status\":{JsonSerializer.Serialize(r.Rating.HasValue ? "graded" : "pending")}");
+        rList.Append('}');
+    }
+    rList.Append(']');
+
+    // ── build patients JSON ─────────────────────────────────────────────
+    var pList = new System.Text.StringBuilder();
+    pList.Append('[');
+    for (int pi = 0; pi < _patients.Count; pi++)
+    {
+        var p = _patients[pi];
+        if (pi > 0) pList.Append(',');
+        pList.Append('{');
+        var pName = ((p.FirstName ?? "") + " " + (p.LastName ?? "")).Trim();
+        pList.Append($"\"id\":{p.Id},");
+        pList.Append($"\"name\":{JsonSerializer.Serialize(pName)},");
+        pList.Append($"\"age\":{p.Age},");
+        pList.Append($"\"gender\":{JsonSerializer.Serialize(p.Gender ?? "")},");
+        pList.Append($"\"phone\":{JsonSerializer.Serialize(p.PhoneNumber ?? "")},");
+        pList.Append($"\"case\":{JsonSerializer.Serialize(p.TreatmentType ?? "")},");
+        pList.Append($"\"date\":{JsonSerializer.Serialize(p.CreatedAt.ToString("MMM dd, yyyy"))},");
+        pList.Append($"\"status\":{JsonSerializer.Serialize((p.Status ?? "pending").ToLower())},");
+        pList.Append($"\"student\":{JsonSerializer.Serialize(p.Student?.FullName ?? "")}");
+        pList.Append('}');
+    }
+    pList.Append(']');
+
+    // ── build students JSON ─────────────────────────────────────────────
+    var sList = new System.Text.StringBuilder();
+    sList.Append('[');
+    for (int si = 0; si < _students.Count; si++)
+    {
+        var s = _students[si];
+        if (si > 0) sList.Append(',');
+        var sCases = s.Cases?.ToList() ?? new List<Student_Dental_Clinic.Models.Case>();
+        var sGraded = _reports.Where(rp => rp.StudentId == s.Id && rp.Rating.HasValue).ToList();
+        var sAvg = sGraded.Any() ? Math.Round(sGraded.Average(rp => (double)rp.Rating!.Value), 1) : (double?)null;
+
+        var casesArr = new System.Text.StringBuilder();
+        casesArr.Append('[');
+        for (int ci = 0; ci < sCases.Count; ci++)
+        {
+            if (ci > 0) casesArr.Append(',');
+            var cLabel = (sCases[ci].TreatmentType ?? "") + " - " +
+                         (sCases[ci].Patient?.FirstName ?? "") + " " +
+                         (sCases[ci].Patient?.LastName ?? "");
+            casesArr.Append(JsonSerializer.Serialize(cLabel));
+        }
+        casesArr.Append(']');
+
+        sList.Append('{');
+        sList.Append($"\"id\":{s.Id},");
+        sList.Append($"\"name\":{JsonSerializer.Serialize(s.FullName ?? "")},");
+        sList.Append($"\"number\":{JsonSerializer.Serialize(s.UniversityId ?? "")},");
+        sList.Append($"\"email\":{JsonSerializer.Serialize(s.Email ?? "")},");
+        sList.Append($"\"phone\":{JsonSerializer.Serialize(s.PhoneNumber ?? "")},");
+        sList.Append($"\"year\":{JsonSerializer.Serialize(s.AcademicYear ?? "")},");
+        sList.Append($"\"casesCount\":{sCases.Count},");
+        sList.Append($"\"graded\":{sGraded.Count},");
+        sList.Append($"\"avg\":{(sAvg.HasValue ? sAvg.Value.ToString() : "null")},");
+        sList.Append($"\"cases\":{casesArr}");
+        sList.Append('}');
+    }
+    sList.Append(']');
+}
+
+<script id="dbReportsData" type="application/json">@Html.Raw(rList.ToString())</script>
+<script id="dbPatientsData" type="application/json">@Html.Raw(pList.ToString())</script>
+<script id="dbStudentsData" type="application/json">@Html.Raw(sList.ToString())</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

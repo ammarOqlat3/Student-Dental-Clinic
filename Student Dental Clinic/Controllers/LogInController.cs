@@ -2,13 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Student_Dental_Clinic.Data;
 using Student_Dental_Clinic.Models;
-using System.Security.Claims;
-
 
 namespace Student_Dental_Clinic.Controllers
 {
     public class LogInController : Controller
-
     {
         private readonly AppDbContext _context;
         public LogInController(AppDbContext context)
@@ -16,30 +13,21 @@ namespace Student_Dental_Clinic.Controllers
             _context = context;
         }
 
-
         public IActionResult Index()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
-
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "LogIn");
-            }
+            if (userId == null) return RedirectToAction("Login", "LogIn");
 
             var patients = _context.Patients
                                    .Where(p => p.UserId == userId)
                                    .ToList();
-
             return View(patients);
         }
+
         public IActionResult Students()
         {
             int? userId = HttpContext.Session.GetInt32("UserId");
-
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            if (userId == null) return RedirectToAction("Login", "Account");
 
             var student = _context.Students
                 .Include(s => s.User)
@@ -52,16 +40,13 @@ namespace Student_Dental_Clinic.Controllers
                     .ThenInclude(c => c.Doctor)
                 .FirstOrDefault(s => s.UserId == userId);
 
-            if (student == null)
-            {
-                return NotFound();
-            }
+            if (student == null) return NotFound();
 
             var reports = _context.Reports
                 .Where(r => r.StudentId == student.Id)
                 .Include(r => r.Case)
                     .ThenInclude(c => c.Patient)
-                .OrderByDescending(r => r.Id)
+                .OrderByDescending(r => r.SubmittedAt)
                 .ToList();
 
             var caseRequests = _context.CaseRequests
@@ -69,7 +54,6 @@ namespace Student_Dental_Clinic.Controllers
                 .OrderByDescending(r => r.RequestDate)
                 .ToList();
 
-            // جلب كل المرضى المرتبطين بالطالب هاض مع كل حالاتهم
             var myPatients = _context.Patients
                 .Where(p => p.StudentId == student.Id)
                 .Include(p => p.Cases)
@@ -82,74 +66,85 @@ namespace Student_Dental_Clinic.Controllers
 
             return View(student);
         }
+
         public IActionResult Doctor()
         {
             int userId = HttpContext.Session.GetInt32("UserId").Value;
 
             var patients = _context.Patients
-                .Include(p => p.Student) // 🔥 مهم
+                .Include(p => p.Student)
                 .ToList();
 
             var doctor = _context.Doctors
-            .Include(d => d.User)
-            .FirstOrDefault(d => d.UserId == userId);
+                .Include(d => d.User)
+                .FirstOrDefault(d => d.UserId == userId);
 
-            var students = _context.Users
-                .Where(u => u.Role == "Student")
+            var reports = _context.Reports
+                .Include(r => r.Student)
+                .Include(r => r.Case)
+                    .ThenInclude(c => c.Patient)
+                .OrderByDescending(r => r.SubmittedAt)
                 .ToList();
 
+            var allStudents = _context.Students
+                .Include(s => s.Cases)
+                    .ThenInclude(c => c.Patient)
+                .ToList();
 
             ViewBag.Doctor = doctor;
-            ViewBag.Students = _context.Students.ToList();
-            ViewBag.PatientsCount = _context.Patients.Count();   // عدد المرضى
-            ViewBag.StudentsCount = _context.Students.Count();   // عدد الطلاب
-            return View(patients); // 🔥 نبعث المرضى مباشرة
+            ViewBag.Students = allStudents;
+            ViewBag.PatientsCount = patients.Count;
+            ViewBag.StudentsCount = allStudents.Count;
+            ViewBag.Reports = reports;
+            ViewBag.ReportsCount = reports.Count;
+            ViewBag.PendingReportsCount = reports.Count(r => !r.Rating.HasValue);
+            return View(patients);
         }
 
         [HttpPost]
+        public IActionResult RateReport(int reportId, int rating, string? feedback, int maxGrade = 20)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return Unauthorized();
 
+            var report = _context.Reports.FirstOrDefault(r => r.Id == reportId);
+            if (report == null) return Json(new { success = false, message = "Report not found" });
+
+            report.Rating = rating;
+            report.MaxGrade = maxGrade;
+            report.DoctorFeedback = feedback ?? "";
+            _context.SaveChanges();
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
         public IActionResult Create(Patient patient, string hasAllergy, IFormFile ToothImage)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
-
-            if (userId == null)
-            {
-                return RedirectToAction("Login");
-            }
+            if (userId == null) return RedirectToAction("Login");
 
             patient.UserId = userId.Value;
-
-            // تحويل yes/no → true/false
             patient.HasAllergy = hasAllergy == "yes";
 
-            // رفع الصورة
             if (ToothImage != null)
             {
                 string fileName = Guid.NewGuid().ToString() + Path.GetExtension(ToothImage.FileName);
                 string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
                 using (var stream = new FileStream(path, FileMode.Create))
-                {
                     ToothImage.CopyTo(stream);
-                }
-
                 patient.ToothImagePath = fileName;
             }
 
-            // حفظ في الداتا بيس
             _context.Patients.Add(patient);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-        //لجلب بيانات الكريض
-
-
 
         [HttpPost]
         public IActionResult AssignStudent(int PatientId, int StudentId, string SessionDate, string SessionTime, string ChairNumber)
         {
             var patient = _context.Patients.FirstOrDefault(p => p.Id == PatientId);
-
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             var doctor = _context.Doctors.FirstOrDefault(d => d.UserId == userId);
 
@@ -159,8 +154,7 @@ namespace Student_Dental_Clinic.Controllers
                 patient.Status = "Assigned";
 
                 DateTime sessionDate = DateTime.TryParse(SessionDate, out DateTime parsedDate)
-                    ? parsedDate
-                    : DateTime.Now;
+                    ? parsedDate : DateTime.Now;
 
                 var newCase = new Case
                 {
@@ -180,11 +174,11 @@ namespace Student_Dental_Clinic.Controllers
 
             return RedirectToAction("Doctor");
         }
+
         [HttpPost]
         public IActionResult UpdateProfile(Doctor doctor)
         {
             var existingDoctor = _context.Doctors.Find(doctor.Id);
-
             if (existingDoctor != null)
             {
                 existingDoctor.FullName = doctor.FullName;
@@ -192,15 +186,134 @@ namespace Student_Dental_Clinic.Controllers
                 existingDoctor.Phone = doctor.Phone;
                 existingDoctor.Department = doctor.Department;
                 existingDoctor.AcademicRank = doctor.AcademicRank;
-
                 _context.SaveChanges();
             }
-
-            return RedirectToAction("Doctor"); // أو نفس الصفحة
+            return RedirectToAction("Doctor");
         }
 
+        // ✅ تحديث حالة الكيس إلى Completed
+        [HttpPost]
+        public IActionResult MarkCaseComplete(int caseId)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return Unauthorized();
 
+            var student = _context.Students.FirstOrDefault(s => s.UserId == userId);
+            if (student == null) return NotFound();
 
+            var theCase = _context.Cases
+                .FirstOrDefault(c => c.Id == caseId && c.StudentId == student.Id);
+
+            if (theCase != null)
+            {
+                theCase.Status = "Completed";
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            return Json(new { success = false, message = "Case not found" });
+        }
+
+        // ✅ رفع تقرير جديد
+        [HttpPost]
+        public async Task<IActionResult> SubmitReport(
+            int CaseId,
+            string Content,
+            string? ChiefComplaint,
+            string? DiagnosisNotes,
+            string? TreatmentDone,
+            string? FollowUpPlan,
+            string? Complications,
+            IFormFile? BeforeImage,
+            IFormFile? AfterImage)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return Unauthorized();
+
+            var student = _context.Students.FirstOrDefault(s => s.UserId == userId);
+            if (student == null) return NotFound();
+
+            // حذف التقرير القديم لنفس الكيس إذا موجود
+            var existingReport = _context.Reports.FirstOrDefault(r => r.CaseId == CaseId && r.StudentId == student.Id);
+            if (existingReport != null)
+            {
+                // احذف الصور القديمة إذا موجودة
+                DeleteReportImages(existingReport);
+                _context.Reports.Remove(existingReport);
+            }
+
+            var report = new Report
+            {
+                StudentId = student.Id,
+                CaseId = CaseId,
+                Content = Content ?? "",
+                ChiefComplaint = ChiefComplaint,
+                DiagnosisNotes = DiagnosisNotes,
+                TreatmentDone = TreatmentDone,
+                FollowUpPlan = FollowUpPlan,
+                Complications = Complications,
+                SubmittedAt = DateTime.Now
+            };
+
+            // رفع صورة قبل
+            if (BeforeImage != null && BeforeImage.Length > 0)
+            {
+                string fileName = "before_" + Guid.NewGuid() + Path.GetExtension(BeforeImage.FileName);
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                using var stream = new FileStream(path, FileMode.Create);
+                await BeforeImage.CopyToAsync(stream);
+                report.BeforeImagePath = fileName;
+            }
+
+            // رفع صورة بعد
+            if (AfterImage != null && AfterImage.Length > 0)
+            {
+                string fileName = "after_" + Guid.NewGuid() + Path.GetExtension(AfterImage.FileName);
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                using var stream = new FileStream(path, FileMode.Create);
+                await AfterImage.CopyToAsync(stream);
+                report.AfterImagePath = fileName;
+            }
+
+            _context.Reports.Add(report);
+            _context.SaveChanges();
+
+            return Json(new { success = true });
+        }
+
+        // ✅ حذف تقرير
+        [HttpPost]
+        public IActionResult DeleteReport(int reportId)
+        {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return Unauthorized();
+
+            var student = _context.Students.FirstOrDefault(s => s.UserId == userId);
+            if (student == null) return NotFound();
+
+            var report = _context.Reports.FirstOrDefault(r => r.Id == reportId && r.StudentId == student.Id);
+            if (report != null)
+            {
+                DeleteReportImages(report);
+                _context.Reports.Remove(report);
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
+        }
+
+        private void DeleteReportImages(Report report)
+        {
+            var wwwroot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+            if (!string.IsNullOrEmpty(report.BeforeImagePath))
+            {
+                var path = Path.Combine(wwwroot, report.BeforeImagePath);
+                if (System.IO.File.Exists(path)) System.IO.File.Delete(path);
+            }
+            if (!string.IsNullOrEmpty(report.AfterImagePath))
+            {
+                var path = Path.Combine(wwwroot, report.AfterImagePath);
+                if (System.IO.File.Exists(path)) System.IO.File.Delete(path);
+            }
+        }
     }
 }
-

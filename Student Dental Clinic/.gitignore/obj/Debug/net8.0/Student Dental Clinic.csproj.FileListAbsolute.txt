@@ -131,10 +131,10 @@ C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dent
 C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\Student .CB6A2515.Up2Date
 C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.dll
 C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\refint\Student Dental Clinic.dll
 C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.pdb
 C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\Student Dental Clinic.genruntimeconfig.cache
 C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\ref\Student Dental Clinic.dll
-C:\Users\ammar\OneDrive\Desktop\asp.netOrange\Student Dental Clinic\Student Dental Clinic\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

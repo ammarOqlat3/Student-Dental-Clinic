@@ -8,6 +8,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSession();
+// ÇáÓãÇÍ ÈÜ AntiForgery ãÚ AJAX
+builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
+
 
 var app = builder.Build();
 

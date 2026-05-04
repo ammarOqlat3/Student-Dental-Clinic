@@ -39,24 +39,23 @@ function filterMyReports(status, btn) {
 
 function openPatientModal() {
     const modal = document.getElementById("patientModal");
-    if (modal) modal.classList.add("open");
+    if (modal) { modal.style.display = "flex"; document.body.style.overflow = "hidden"; }
 }
 
 function closeStModal(id) {
     const modal = document.getElementById(id);
-    if (modal) modal.classList.remove("open");
+    if (modal) { modal.style.display = "none"; document.body.style.overflow = ""; }
 }
 
-document.querySelectorAll(".st-modal-overlay").forEach(m => {
-    m.addEventListener("click", function (e) {
-        if (e.target === this) this.classList.remove("open");
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".st-modal-overlay").forEach(m => {
+        m.addEventListener("click", function (e) {
+            if (e.target === this) { this.style.display = "none"; document.body.style.overflow = ""; }
+        });
     });
 });
 
-function submitReport() {
-    showStToast("Report submission UI is ready. Backend endpoint can be connected next.");
-    setTimeout(() => showView("reports"), 900);
-}
+// submitReport is defined in the page script (Students.cshtml) and handles the real backend call
 
 function submitRequest() {
     const name = (document.getElementById("req-name")?.value || "").trim();

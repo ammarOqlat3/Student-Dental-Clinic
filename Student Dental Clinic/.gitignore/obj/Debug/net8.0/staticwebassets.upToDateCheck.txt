@@ -3,7 +3,11 @@ wwwroot\css\index.css
 wwwroot\css\infoPatient.css
 wwwroot\css\loginPage.css
 wwwroot\css\site.css
+wwwroot\css\Student.css
 wwwroot\favicon.ico
+wwwroot\images\80a6085a-6863-4dee-8487-5855e9d127fa.jpg
+wwwroot\images\after_388b6834-276b-43d9-8d1a-786278a2709f.png
+wwwroot\images\before_c3660f45-7b74-47f3-82e4-ae61694b7be0.png
 wwwroot\images\de1eef6e-4414-4ba4-ae04-3a868eec44d1.jpg
 wwwroot\images\dent.jpg
 wwwroot\images\e101d16b-bb67-4b67-ac70-0a24db2c7e4c.jpg
@@ -11,12 +15,12 @@ wwwroot\images\ff64b0ea-6aa6-4ea8-8d14-ab7b5587e245.png
 wwwroot\images\infoimage.jpg
 wwwroot\images\infoimage1.jpg
 wwwroot\images\loginPage.jpg
-wwwroot\js\doctor.js
 wwwroot\js\HomePage.js
 wwwroot\js\infoPatient.js
 wwwroot\js\JavaScript.js
 wwwroot\js\lang.js
 wwwroot\js\loginPage.js
+wwwroot\js\Student.js
 wwwroot\js\student_lang.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -75,6 +79,4 @@ wwwroot\lib\jquery\dist\jquery.js
 wwwroot\lib\jquery\dist\jquery.min.js
 wwwroot\lib\jquery\dist\jquery.min.map
 wwwroot\lib\jquery\LICENSE.txt
-wwwroot\css\Student.css
-wwwroot\images\80a6085a-6863-4dee-8487-5855e9d127fa.jpg
-wwwroot\js\Student.js
+wwwroot\js\doctor.js
